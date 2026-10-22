@@ -1,4 +1,3 @@
-
 window.MERCY_CONFIG = {
   firebase: {
     apiKey: "AIzaSyCnp4ELvTgLSugITbrZoasnK8Az7oM1emg",
