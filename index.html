@@ -2,9 +2,9 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MERCY | NEXUS — PO Command Center</title>
-<meta name="theme-color" content="#071320">
-<meta name="description" content="Dashboard MERCY untuk memantau desain, edit PO, serta import dan export CSV langsung ke Firebase." />
+<title>MERCY | Pusat Kendali PO</title>
+<meta name="theme-color" content="#06141B">
+<meta name="description" content="Dashboard MERCY untuk memantau desain, mengubah PO, serta mengimpor dan mengekspor CSV melalui Firebase." />
 <style>
 :root{--bg:#f7f7fc;--ink:#252541;--muted:#88899e;--purple:#7363d8;--border:#ebecf4;--white:#fff;--green:#50b499;--orange:#f3ae5e;--red:#ef8893;--blue:#6895e7;--pink:#c38fe1;--shadow:0 10px 35px rgba(43,38,94,.035)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}button,select,input{font:inherit}a{color:inherit;text-decoration:none}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #b2a6ff;outline-offset:2px}
@@ -92,21 +92,188 @@ html{background:#06101c;scroll-behavior:smooth}body{color:var(--ink);font-family
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
 </style>
+<style>
+\n/* MERCY SLATE & PEARL: enam warna dari referensi pengguna */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root {
+  --bg:#e8ecec;--ink:#11212D;--muted:#4A5C6A;--purple:#4A5C6A;
+  --border:#d3dbdd;--white:#f8faf9;--green:#486f68;--orange:#bf8a4d;
+  --red:#c9525c;--blue:#4A5C6A;--pink:#9BA8AB;
+  --shadow:0 14px 38px rgba(17,33,45,.075);
+  --panel:#f6f8f7;--cyan:#9BA8AB;--cyanSoft:rgba(155,168,171,.20);
+  --navy:#06141B;--navy2:#11212D;--slate:#253745;--steel:#4A5C6A;
+  --silver:#9BA8AB;--pearl:#CCD0CF;--paper:#F5F7F6;
+}
+html {background:#e5eaea}
+body {color:var(--ink);background:radial-gradient(ellipse 850px 460px at 83% -10%,rgba(155,168,171,.34),transparent 76%),
+    radial-gradient(ellipse 700px 540px at 8% 65%,rgba(204,208,207,.68),transparent 78%),
+    linear-gradient(135deg,#eff2f1 0%,#e5eaea 58%,#e9edeb 100%);
+  font-family:'DM Sans','Manrope',system-ui,-apple-system,sans-serif;font-size:13px}
+body:before {background-image:linear-gradient(rgba(37,55,69,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(37,55,69,.028) 1px,transparent 1px);background-size:55px 55px;opacity:.48}
+::selection {background:#4A5C6A;color:#fff}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible {outline:3px solid #9BA8AB;outline-offset:2px}
+::-webkit-scrollbar-track{background:#e6ebeb}::-webkit-scrollbar-thumb{background:#9BA8AB}::-webkit-scrollbar-thumb:hover{background:#4A5C6A}
+.layout{max-width:1980px;grid-template-columns:244px minmax(0,1fr)}
+/* Rangka kiri: warna gelap digunakan hanya di area yang memang perlu kontras */
+.sidebar {background:linear-gradient(167deg,#06141B 0%,#11212D 51%,#253745 100%);border-right:1px solid #4A5C6A;
+  box-shadow:11px 0 38px rgba(6,20,27,.09);gap:64px;color:#f2f5f4}
+.brandmark {background:linear-gradient(145deg,#CCD0CF 0%,#9BA8AB 60%,#4A5C6A 100%);color:#06141B;
+  box-shadow:0 0 0 1px rgba(204,208,207,.7),0 0 27px rgba(204,208,207,.25)}
+.brandname{color:#f5f7f7}.brand-dot{color:#CCD0CF}.brand-sub{color:#a8b7bb}
+.navlabel{color:#9BA8AB}.navsvg{color:#b7c3c5}.navlinks a{color:#b8c4c7;border-color:transparent}
+.navlinks a:hover,.navlinks a.active {background:linear-gradient(110deg,rgba(204,208,207,.17),rgba(155,168,171,.075));
+  border-color:rgba(204,208,207,.21);color:#fff;box-shadow:inset 3px 0 0 #CCD0CF,0 10px 24px rgba(6,20,27,.08)}
+.navlinks a.active .navsvg{color:#fff}
+.sidebar-bottom{background:linear-gradient(145deg,rgba(74,92,106,.48),rgba(17,33,45,.64));border-color:rgba(204,208,207,.23);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.085),0 15px 35px rgba(0,0,0,.08)}
+.side-live{color:#d5dfdf}.live-pulse{background:#CCD0CF;box-shadow:0 0 0 4px rgba(204,208,207,.13),0 0 14px rgba(204,208,207,.5)}
+.sidebar-bottom strong{color:#f8faf9}.sidebar-bottom small{color:#b8c2c3}.side-art{color:rgba(204,208,207,.17)}
+/* Area utama: terang, tidak gelap bertemu gelap */
+.main{padding-top:31px}.breadcrumb{color:#4A5C6A}.crumb-mark{color:#253745}.breadcrumb .crumb-slash{color:#9BA8AB}.breadcrumb b{color:#11212D}
+.tag-date{background:rgba(255,255,255,.79);border:1px solid #d2d9da;color:#314452;box-shadow:0 4px 16px rgba(37,55,69,.04)}
+.tag-date .dot{background:#4A5C6A;box-shadow:0 0 0 4px rgba(74,92,106,.09)}
+/* Banner dark mengkilap, bukan seluruh halaman dark */
+.hero{background:linear-gradient(115deg,#06141B 0%,#11212D 47%,#253745 78%,#4A5C6A 115%);
+  border:1px solid rgba(204,208,207,.36);min-height:255px;
+  box-shadow:0 30px 60px rgba(6,20,27,.17),0 0 0 1px rgba(255,255,255,.17),inset 0 1px 0 rgba(204,208,207,.16)}
+.hero:before{background:linear-gradient(112deg,transparent 22%,rgba(204,208,207,.065) 56%,transparent 80%),
+  repeating-linear-gradient(90deg,transparent 0 32px,rgba(204,208,207,.035) 33px 34px)}
+.hero:after{border:1px solid rgba(204,208,207,.24);background:radial-gradient(circle,rgba(204,208,207,.22),rgba(155,168,171,.11) 42%,transparent 69%)}
+.hero small{color:#d2dede}.pulse-pin{background:#CCD0CF;box-shadow:0 0 0 5px rgba(204,208,207,.16),0 0 13px #CCD0CF}
+.hero h1{font-family:'Manrope',sans-serif;color:#f9fbfa;font-weight:800;font-size:clamp(32px,3.5vw,48px)}
+.hero h1 em{background:linear-gradient(95deg,#fff 0%,#CCD0CF 55%,#9BA8AB 100%);background-clip:text;-webkit-background-clip:text;color:transparent}
+.hero p{color:#d0d9d9;max-width:610px;font-size:13px}.hero-tags span{color:#e1e7e7;border-color:rgba(204,208,207,.25);background:rgba(6,20,27,.22)}
+.orbital{filter:drop-shadow(0 0 23px rgba(204,208,207,.26))}
+.orbital-ring{border-color:rgba(204,208,207,.35);box-shadow:0 0 22px rgba(204,208,207,.14)}
+.ring-two{border-color:rgba(204,208,207,.14);box-shadow:inset 0 0 28px rgba(204,208,207,.21),0 0 31px rgba(204,208,207,.1)}
+.ring-three{border-color:rgba(204,208,207,.6);box-shadow:0 0 20px rgba(204,208,207,.19)}
+.orbit-core{background:linear-gradient(145deg,#CCD0CF,#9BA8AB 60%,#4A5C6A);border-color:#e2e6e5;
+  box-shadow:0 0 0 11px rgba(204,208,207,.09),0 0 40px rgba(204,208,207,.3)}
+.orbit-core strong{color:#06141B}.orbit-core span{color:#253745}
+.orbit-particle{background:#CCD0CF;box-shadow:0 0 18px #CCD0CF}.particle-b{background:#9BA8AB;box-shadow:0 0 18px #9BA8AB}
+.orbit-label{color:#f4f5f5;background:#253745;border-color:rgba(204,208,207,.31)}
+/* Kartu status sambungan dan tombol utama */
+.source-strip{background:rgba(250,251,250,.88);border:1px solid rgba(155,168,171,.4);box-shadow:0 10px 30px rgba(37,55,69,.056);backdrop-filter:blur(12px)}
+.source-left strong{color:#253745}.source-left small{color:#5b707c}.source-dot{background:#9BA8AB;box-shadow:0 0 0 4px rgba(155,168,171,.15)}
+.source-strip.live .source-dot{background:#446e66;box-shadow:0 0 0 4px rgba(68,110,102,.15),0 0 12px rgba(68,110,102,.22)}
+.source-strip.error .source-dot{background:#ba4e5b;box-shadow:0 0 0 4px rgba(186,78,91,.12)}
+.admin-label{background:#e9eeee;color:#253745;border:1px solid #cbd5d6}
+.btn{background:#f7f9f8;color:#253745;border:1px solid #cdd6d7;box-shadow:0 3px 13px rgba(37,55,69,.04)}
+.btn:hover{background:#e8eded;color:#06141B;border-color:#9BA8AB;box-shadow:0 5px 17px rgba(37,55,69,.13);transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(116deg,#253745,#4A5C6A);border-color:#4A5C6A;color:white;box-shadow:0 8px 20px rgba(37,55,69,.19)}
+.btn-primary:hover{background:linear-gradient(110deg,#06141B,#253745);border-color:#253745;color:#fff;box-shadow:0 10px 27px rgba(37,55,69,.27)}
+/* Peringatan tetap merah / oranye untuk keamanan operasional */
+.age-alert{background:linear-gradient(105deg,#fff5f3,#f8edeb 66%,#f5f3f1);border:1px solid #e9bbb9;
+  box-shadow:inset 4px 0 0 #c9525c,0 8px 25px rgba(120,54,64,.07)}
+.age-alert-icon{background:#fae2e2;color:#a63845;border-color:#efc4c4;box-shadow:none}
+.age-alert-copy strong{color:#8b2f3b}.age-alert-copy span{color:#9a535a}.age-alert .btn-alert{background:#a94451;color:#fff;border-color:#9f3645}
+.age-alert .btn-alert:hover{background:#913442;color:#fff}
+.section-header h2{color:#11212D;font-family:'Manrope',sans-serif;font-size:16px;font-weight:800}.section-line{background:#4A5C6A!important;box-shadow:0 0 0 4px rgba(74,92,106,.09)}
+.section-header .mini{color:#607481}.mini-dot{color:#4A5C6A}
+/* KPI terang dengan aksen garis dan efek bercahaya abu-silver */
+.kpis{gap:14px}.kpi{background:linear-gradient(145deg,rgba(255,255,255,.97),rgba(244,247,246,.96));border:1px solid #d3dadb;
+  border-radius:18px;box-shadow:0 9px 29px rgba(17,33,45,.065),inset 0 1px 0 #fff;min-height:151px;
+  overflow:hidden;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.kpi:before{background:linear-gradient(90deg,transparent,rgba(155,168,171,.44),transparent)!important;height:2px;opacity:.65}
+.kpi:after{background:radial-gradient(circle at top right,rgba(155,168,171,.25),transparent 70%);opacity:1}
+.kpi:hover{transform:translateY(-4px);border-color:#9BA8AB;box-shadow:0 18px 33px rgba(17,33,45,.12),0 0 23px rgba(155,168,171,.12)}
+.kpi:nth-child(5){background:linear-gradient(145deg,#fff8f7,#f6f6f4);border-color:#e8c8c7}
+.kpi-label{color:#4A5C6A;letter-spacing:.6px}.kpi-icon{background:#e7eceb!important;color:#253745!important;border:1px solid #dce3e2;box-shadow:none!important}
+.kpi .num{font-family:'Manrope',sans-serif;color:#11212D;font-size:clamp(25px,2.8vw,34px)}
+.kpi:nth-child(5) .num{color:#a94451}.kpi .hint{color:#72818a}
+/* Semua grafik dan panel terang */
+.panel{background:linear-gradient(155deg,rgba(255,255,255,.95),rgba(247,249,248,.94));border:1px solid #d4dcdd;
+  box-shadow:0 9px 28px rgba(17,33,45,.07);border-radius:19px}
+.panel-head h3{color:#11212D;font-family:'Manrope',sans-serif}.header-accent{color:#4A5C6A}.panel-head .sub{color:#687a84}
+.panel-head .pill{background:#e8edec;color:#314957;border:1px solid #d8e0df}
+.donut{box-shadow:0 0 0 5px rgba(155,168,171,.07),0 9px 27px rgba(37,55,69,.10)}
+.donut-center{background:linear-gradient(135deg,#ffffff,#f3f6f5);color:#11212D;border:1px solid #e2e7e6;box-shadow:0 2px 14px rgba(37,55,69,.07)}
+.donut-center b{font-family:'Manrope',sans-serif}.donut-center span{color:#627681}.leg{color:#4A5C6A}.leg strong{color:#11212D}.leg .swatch{box-shadow:none}
+.panel-foot{color:#6c7d86}.chart{border-bottom:1px solid #c8d3d5}
+.chart:before{background:repeating-linear-gradient(to top,transparent 0 36px,rgba(74,92,106,.09) 37px 38px)}
+.bar-col .bar-number{color:#253745}.bar-col .bar{background:linear-gradient(to top,#253745,#9BA8AB);box-shadow:0 -4px 15px rgba(74,92,106,.11)}
+.bar-col.highlight .bar{background:linear-gradient(to top,#06141B,#4A5C6A);box-shadow:0 -4px 17px rgba(74,92,106,.2)}
+.month-labels{color:#72848e}
+.task-row{border-color:#e3e8e7}.task-row strong{color:#11212D}.task-row span{color:#677a85}
+.task-avatar{background:#e6eceb;color:#253745;border-color:#d4dfde}.task-row.is-aged .task-avatar{background:#fce6e4;color:#b44755;border-color:#ecc0be}
+.task-row.is-aged .task-id strong{color:#9a3945}
+.chip{border-radius:7px}.chip-wait{background:#e6ebea;border-color:#d6dfde;color:#4A5C6A}
+.chip-revise{background:#e2e8e9;border-color:#cdd8dc;color:#253745}.chip-so{background:#edf0f0;border-color:#d5dcdd;color:#4A5C6A}
+.chip-acc{background:#e7ebea;border-color:#d2dddd;color:#355e57}.chip-repeat{background:#dde5e7;border-color:#c8d3d8;color:#253745}
+.insights{background:linear-gradient(144deg,#eff3f2,#f9fbfa);border-color:#cbd7d7}
+.idea-icon{background:#dee6e5;color:#253745;border-color:#cedad8}.big-idea strong{font-family:'Manrope',sans-serif;color:#11212D}.big-idea span{color:#4A5C6A}
+.insight-text{color:#4A5C6A}.warn{background:#e9efed;border:1px solid #d0ddda;color:#4A5C6A}
+.soft-tag{background:#fff;color:#4A5C6A;border:1px solid #d3dcdd}
+/* Tabel dan filter putih-silver, supaya PO panjang nyaman dibaca */
+.list-panel{background:#f8faf9;border:1px solid #d2dbdc;box-shadow:0 16px 42px rgba(17,33,45,.09)}
+.list-top{border-color:#e2e8e8}.eyebrow-top{color:#566d79}.list-top h2{color:#11212D;font-family:'Manrope',sans-serif}
+.database-star{color:#9BA8AB}.list-top .sub{color:#73828b}
+.filterbar input,.filterbar select{color:#253745;color-scheme:light;background:#fff;border:1px solid #cdd8da}
+.filterbar input::placeholder{color:#87969d}.filterbar input:focus,.filterbar select:focus{border-color:#4A5C6A;box-shadow:0 0 0 3px rgba(155,168,171,.25)}
+.age-legend{color:#536c76}.age-legend-note{color:#6d7d86!important}
+.signal-red{background:#c9525c;box-shadow:0 0 6px rgba(201,82,92,.28)}
+.signal-amber{background:#bf8a4d;box-shadow:0 0 6px rgba(191,138,77,.28)}
+.signal-green{background:#5c8179;box-shadow:0 0 6px rgba(92,129,121,.3)}
+.table-wrap{background:#fff;scrollbar-color:#9BA8AB #ecf1f1}
+.table-wrap table{min-width:1280px}thead{background:#e9eeed}
+.table-wrap th{background:#e9eeed;color:#536b77;border-bottom:1px solid #d2dddd;border-top:1px solid #e0e6e6}
+.table-wrap td{color:#364c59;border-color:#e7eded;background-color:transparent}
+.table-wrap tbody tr:nth-child(even):not(.row-aged):not(.row-watch){background:#f9fbfa}
+.table-wrap tbody tr:hover{background:#ecf1f1}
+.design-name{color:#11212D}.code{color:#516976}.qty{color:#253745;font-family:'Manrope',sans-serif}
+.po-date-main{color:#253745}.arrival-ok{color:#326f60}.arrival-note{color:#657b85}.empty{color:#697c86}
+.row-aged{background:linear-gradient(90deg,#fff0ef 0%,#fff8f7 48%,#fff 100%);box-shadow:inset 4px 0 0 #c9525c}
+.row-aged:hover{background:linear-gradient(90deg,#ffe7e4,#fff4f3 80%)}.row-aged .design-name{color:#953342}.row-aged .po-date-main{color:#9d3f4a}
+.row-watch{background:linear-gradient(90deg,#fff7ec,#fff 90%);box-shadow:inset 4px 0 0 #bf8a4d}
+.row-watch:hover{background:#fff0df}
+.age-flag.flag-aged{background:#fae0de;color:#a43f4b;border:1px solid #e7b1af}.age-flag.flag-watch{background:#faedd9;color:#90622e;border-color:#efd6b4}
+.actionbtn{background:#e6eceb;color:#253745;border-color:#c7d5d7}.actionbtn:hover{background:#d6e0e0;color:#06141B;border-color:#9BA8AB}
+.actionbtn.delete{background:#fff0ef;color:#a53a49;border-color:#efd1cf}.actionbtn.delete:hover{background:#f9dddd;color:#8f2537}
+.count-row{background:#f4f7f6;color:#5b707c;border-color:#dce4e4}.data-note{color:#637784}.footer{color:#71818a}.footer b{color:#4A5C6A}
+/* Form edit dan impor: tetap terang, kalender terbaca */
+.modal-backdrop{background:rgba(6,20,27,.67);backdrop-filter:blur(12px)}
+.edit-modal{color:#11212D;background:linear-gradient(145deg,#fcfdfc,#edf1f0);border:1px solid #d7dfdf;
+  box-shadow:0 38px 95px rgba(6,20,27,.36),0 0 40px rgba(204,208,207,.25)}
+.modal-head h2{font-family:'Manrope',sans-serif;color:#11212D}.modal-head p{color:#637782}.modal-kicker{color:#4A5C6A}
+.modal-close{background:#e7edeb;color:#253745;border-color:#d3dedc}.modal-close:hover{background:#d8e2e0}
+.field label{color:#253745}.field label b{color:#a44855}.field input,.field select{color:#11212D;color-scheme:light;background:#fff;border:1px solid #cbd7d9}
+.field input::placeholder{color:#8b9aa1}.field input:focus,.field select:focus{border-color:#4A5C6A;box-shadow:0 0 0 3px rgba(155,168,171,.22)}
+.field-optional{color:#6e818b}.field-help{color:#627581}
+#fieldArrived::-webkit-calendar-picker-indicator{filter:none;opacity:.75;cursor:pointer;padding:7px}
+.modal-help{background:#e8eeec;border:1px solid #d1dfdc;color:#4A5C6A}.modal-footer{border-color:#d7e0df}
+.csv-filebox{background:#f0f4f2;border:2px dashed #9BA8AB}.csv-filebox input{color:#253745}.csv-filebox input::file-selector-button{background:#253745;color:#fff;border-radius:8px}
+.csv-example{color:#607680}.csv-error,.import-danger{background:#fceae9;color:#913b47;border-color:#e9b9ba}
+.import-preview{background:#f7faf9;border:1px solid #d3dddd}.import-counts{color:#4A5C6A}.import-counts strong{color:#11212D}
+.import-table-wrap{background:#fff;border-color:#d3dddd}.import-table th{background:#e7eeee;color:#4A5C6A}.import-table td{color:#253745;border-color:#e2e9e8}
+.import-options label{background:#f7f9f8;border-color:#d1dcdb}.import-options label:has(input:checked){background:#e9eeed;border-color:#4A5C6A}
+.import-options small{color:#637782}.import-options input{accent-color:#253745}.import-danger p{color:#8a3a46}.import-danger input{background:#fff;color:#11212D;border-color:#dba4a5}
+.import-progress{color:#4A5C6A}.toast{background:#253745;color:#fff;border-color:#9BA8AB;box-shadow:0 15px 45px rgba(6,20,27,.24)}
+.toast.error{background:#7f3440;border-color:#c87e85;color:#fff}
+@keyframes pinPulse {0%,100%{box-shadow:0 0 0 5px rgba(204,208,207,.16),0 0 13px #CCD0CF}50%{box-shadow:0 0 0 8px rgba(204,208,207,.08),0 0 22px #CCD0CF}}
+@media(max-width:510px){
+ .sidebar{background:linear-gradient(120deg,#06141B,#253745);box-shadow:0 5px 16px rgba(6,20,27,.17)}
+ .main{padding-top:18px}.hero{border-radius:17px}.hero h1{font-size:32px}
+ .kpi{border-radius:14px}.panel{border-radius:15px}
+ .source-actions .btn{flex:1}
+ .table-wrap{background:#fff}
+}
+
+</style>
 </head>
 <body>
 <div class="layout">
 <aside class="sidebar" aria-label="Navigasi">
- <a class="brand" href="#overview"><span class="brandmark">✳</span><div><div class="brandname">MERCY<span class="brand-dot">.</span></div><div class="brand-sub">NEXUS / PO INTELLIGENCE</div></div></a>
- <div class="navgroup"><div class="navlabel">WORKSPACE</div><nav class="navlinks"><a href="#overview" class="active"><span class="navsvg">▦</span><span class="navtext">Overview</span></a><a href="#followups"><span class="navsvg">◷</span><span class="navtext">Tindak lanjut</span></a><a href="#database"><span class="navsvg">▤</span><span class="navtext">Data desain</span></a></nav></div>
- <div class="sidebar-bottom"><div class="side-live"><span class="live-pulse"></span> OPERATIONS ONLINE</div><strong>Your production, in focus.</strong><small>Every order. Every detail. One control center.</small><span class="side-art" aria-hidden="true">◈</span></div>
+ <a class="brand" href="#overview"><span class="brandmark">✳</span><div><div class="brandname">MERCY<span class="brand-dot">.</span></div><div class="brand-sub">NEXUS / PENGELOLAAN PO</div></div></a>
+ <div class="navgroup"><div class="navlabel">MENU UTAMA</div><nav class="navlinks"><a href="#overview" class="active"><span class="navsvg">▦</span><span class="navtext">Ringkasan</span></a><a href="#followups"><span class="navsvg">◷</span><span class="navtext">Tindak lanjut</span></a><a href="#database"><span class="navsvg">▤</span><span class="navtext">Data desain</span></a></nav></div>
+ <div class="sidebar-bottom"><div class="side-live"><span class="live-pulse"></span> SISTEM TERSAMBUNG</div><strong>Semua PO lebih terpantau.</strong><small>Satu tempat untuk melihat dan mengelola seluruh pesanan.</small><span class="side-art" aria-hidden="true">◈</span></div>
 </aside>
 <main class="main" id="overview">
- <div class="topbar"><div class="breadcrumb"><span class="crumb-mark">M /</span> WORKSPACE <span class="crumb-slash">/</span> <b>COMMAND CENTER</b></div><div class="tag-date" id="lastDate"><span class="dot"></span>Menyiapkan data…</div></div>
+ <div class="topbar"><div class="breadcrumb"><span class="crumb-mark">M /</span> RUANG KERJA <span class="crumb-slash">/</span> <b>PUSAT KENDALI</b></div><div class="tag-date" id="lastDate"><span class="dot"></span>Menyiapkan data…</div></div>
  <section class="hero">
-  <div class="hero-copy"><small><span class="pulse-pin"></span> MERCY / DESIGN OPERATIONS / 2026</small><h1>All orders.<br><em>One command center.</em></h1><p>Kelola PO dan desain lebih cepat. Pantau progres, temukan order lama, dan update data langsung secara real-time.</p>
-    <div class="hero-tags"><span>◆ LIVE SYNC</span><span>◆ PRODUCTION TRACKER</span><span>◆ ONE CLICK CONTROL</span></div>
+  <div class="hero-copy"><small><span class="pulse-pin"></span> MERCY / PENGELOLAAN DESAIN / 2026</small><h1>Semua PO.<br><em>Satu tempat kendali.</em></h1><p>Kelola pesanan dan desain dalam satu tempat. Pantau kemajuan, temukan PO lama, serta perbarui data secara langsung.</p>
+    <div class="hero-tags"><span>◆ SINKRON OTOMATIS</span><span>◆ PANTAU PRODUKSI</span><span>◆ KELOLA PRAKTIS</span></div>
   </div>
-  <div class="hero-illustration" aria-hidden="true"><div class="orbital"><div class="orbital-ring ring-one"></div><div class="orbital-ring ring-two"></div><div class="orbital-ring ring-three"></div><div class="orbit-core"><span>✳</span><strong>M</strong></div><span class="orbit-particle particle-a"></span><span class="orbit-particle particle-b"></span><span class="orbit-label">SYSTEM / ACTIVE</span></div></div>
+  <div class="hero-illustration" aria-hidden="true"><div class="orbital"><div class="orbital-ring ring-one"></div><div class="orbital-ring ring-two"></div><div class="orbital-ring ring-three"></div><div class="orbit-core"><span>✳</span><strong>M</strong></div><span class="orbit-particle particle-a"></span><span class="orbit-particle particle-b"></span><span class="orbit-label">SISTEM AKTIF</span></div></div>
 </section>
  <section class="source-strip" id="sourceStrip" aria-live="polite">
   <div class="source-left"><span class="source-dot" aria-hidden="true"></span><div><strong id="sourceLabel">Mode pratinjau</strong><small id="sourceDetail">Sedang membuka dashboard dan menyiapkan koneksi…</small></div></div>
@@ -123,66 +290,66 @@ html{background:#06101c;scroll-behavior:smooth}body{color:var(--ink);font-family
   <div class="age-alert-copy"><strong id="ageAlertTitle">PO butuh perhatian</strong><span id="ageAlertDetail">PO lama belum tercatat tanggal Barang Datang</span></div>
   <button type="button" class="btn btn-alert" id="viewAgedBtn">Lihat PO lama <span aria-hidden="true">↗</span></button>
  </section>
- <div class="section-header"><h2><span class="section-line"></span> Performance overview</h2><div class="mini">LIVE OPERATIONAL METRICS <span class="mini-dot">●</span></div></div>
+ <div class="section-header"><h2><span class="section-line"></span> Ringkasan kinerja</h2><div class="mini">DATA TERKINI <span class="mini-dot">●</span></div></div>
  <section class="kpis" id="kpis" aria-label="Ringkasan data"></section>
  <div class="panels">
-  <section class="panel"><div class="panel-head"><h3><span class="header-accent">◈</span> Status distribution</h3><span class="sub">Seluruh desain</span></div><div class="status-main"><div class="donut" id="donut"><div class="donut-center"><b id="donutTotal">0</b><span>DESAIN</span></div></div><div class="legend" id="legend"></div></div><div class="panel-foot">Status yang perlu ditindaklanjuti terlihat lebih jelas.</div></section>
-  <section class="panel"><div class="panel-head"><h3><span class="header-accent">◈</span> Order activity</h3><span class="pill" id="monthRange">Periode desain</span></div><div class="chart" id="monthChart" aria-label="Grafik jumlah desain per bulan"></div><div class="month-labels" id="monthLabels"></div><div class="panel-foot"><span id="trendFoot">Aktivitas dihitung dari tanggal setiap baris.</span></div></section>
+  <section class="panel"><div class="panel-head"><h3><span class="header-accent">◈</span> Sebaran status</h3><span class="sub">Seluruh desain</span></div><div class="status-main"><div class="donut" id="donut"><div class="donut-center"><b id="donutTotal">0</b><span>DESAIN</span></div></div><div class="legend" id="legend"></div></div><div class="panel-foot">Status yang perlu ditindaklanjuti terlihat lebih jelas.</div></section>
+  <section class="panel"><div class="panel-head"><h3><span class="header-accent">◈</span> Aktivitas pesanan</h3><span class="pill" id="monthRange">Periode desain</span></div><div class="chart" id="monthChart" aria-label="Grafik jumlah desain per bulan"></div><div class="month-labels" id="monthLabels"></div><div class="panel-foot"><span id="trendFoot">Aktivitas dihitung dari tanggal setiap baris.</span></div></section>
  </div>
  <div class="two-wide" id="followups">
-  <section class="panel tasks"><div class="panel-head"><h3><span class="header-accent">◈</span> Priority follow-ups</h3><button class="btn" type="button" id="seeAllWaiting">Lihat semuanya ↗</button></div><div class="task-items" id="taskItems"></div></section>
-  <section class="panel insights"><div class="panel-head"><h3><span class="header-accent">◈</span> Production intelligence</h3><span class="pill">SUMMARY</span></div><div class="big-idea"><div class="idea-icon">◈</div><div><strong id="qtyTotal">0</strong><span>Total unit pada semua baris QTY terisi</span></div></div><p class="insight-text" id="insights"></p><div class="warn" id="qtyNote">ℹ️ QTY kosong tidak masuk total unit. Login admin untuk mengisi atau mengubah QTY.</div><div class="insight-footer" id="colorTags"></div></section>
+  <section class="panel tasks"><div class="panel-head"><h3><span class="header-accent">◈</span> Prioritas tindak lanjut</h3><button class="btn" type="button" id="seeAllWaiting">Lihat semuanya ↗</button></div><div class="task-items" id="taskItems"></div></section>
+  <section class="panel insights"><div class="panel-head"><h3><span class="header-accent">◈</span> Ringkasan produksi</h3><span class="pill">RINGKASAN</span></div><div class="big-idea"><div class="idea-icon">◈</div><div><strong id="qtyTotal">0</strong><span>Total unit pada semua baris QTY terisi</span></div></div><p class="insight-text" id="insights"></p><div class="warn" id="qtyNote">ℹ️ QTY kosong tidak masuk total unit. Masuk sebagai admin untuk mengisi atau mengubah QTY.</div><div class="insight-footer" id="colorTags"></div></section>
  </div>
  <section class="list-panel" id="database">
-  <div class="list-top"><div><span class="eyebrow-top">MASTER DATA / LIVE FIRESTORE</span><h2>Database PO <span class="database-star">✳</span></h2><span class="sub">Tabel real-time, data lama otomatis ditandai warna merah.</span></div><div class="source-actions"><button class="btn btn-primary" id="addBtnSecondary" type="button" hidden>＋ Tambah PO</button><button class="btn btn-primary" id="csvImportBtn" type="button" hidden>↑ Import CSV</button><button class="btn" id="exportBtn" type="button">↓ Export CSV</button></div></div>
-  <div class="filterbar"><input type="search" id="q" aria-label="Cari desain" placeholder="⌕  Cari desain, kode, warna, customer..."><select id="status" aria-label="Filter status"><option value="">Semua status</option><option>TUNGGU ACC</option><option>REV SO</option><option>SO</option><option>ACC</option><option>REPEAT</option></select><select id="month" aria-label="Filter bulan"><option value="">Semua bulan</option></select><select id="customer" aria-label="Filter customer"><option value="">Semua customer</option></select><select id="ageFilter" aria-label="Filter usia PO"><option value="">Semua usia PO</option><option value="aged">🔴 Lama ≥30 hari</option><option value="watch">🟠 14–29 hari</option><option value="new">Baru &lt;14 hari</option><option value="arrived">Barang sudah tercatat datang</option></select><button class="btn" id="clearBtn" type="button">↺ Reset</button></div>
+  <div class="list-top"><div><span class="eyebrow-top">DATA UTAMA / FIRESTORE</span><h2>Daftar PO <span class="database-star">✳</span></h2><span class="sub">Daftar diperbarui langsung; PO lama otomatis diberi tanda merah.</span></div><div class="source-actions"><button class="btn btn-primary" id="addBtnSecondary" type="button" hidden>＋ Tambah PO</button><button class="btn btn-primary" id="csvImportBtn" type="button" hidden>↑ Impor CSV</button><button class="btn" id="exportBtn" type="button">↓ Ekspor CSV</button></div></div>
+  <div class="filterbar"><input type="search" id="q" aria-label="Cari desain" placeholder="⌕  Cari desain, kode, warna, pelanggan..."><select id="status" aria-label="Filter status"><option value="">Semua status</option><option>TUNGGU ACC</option><option>REV SO</option><option>SO</option><option>ACC</option><option>REPEAT</option></select><select id="month" aria-label="Filter bulan"><option value="">Semua bulan</option></select><select id="customer" aria-label="Filter customer"><option value="">Semua pelanggan</option></select><select id="ageFilter" aria-label="Filter usia PO"><option value="">Semua usia PO</option><option value="aged">🔴 Lama ≥30 hari</option><option value="watch">🟠 14–29 hari</option><option value="new">Baru &lt;14 hari</option><option value="arrived">Barang sudah datang</option></select><button class="btn" id="clearBtn" type="button">↺ Atur ulang</button></div>
   <div class="age-legend"><span><i class="signal signal-red"></i> ≥30 hari, tanpa tanggal datang</span><span><i class="signal signal-amber"></i> 14–29 hari, tanpa tanggal datang</span><span><i class="signal signal-green"></i> Tanggal datang tercatat</span><span class="age-legend-note">Warna berdasarkan usia PO, bukan tanggal jatuh tempo.</span></div>
-  <div class="table-wrap"><table><thead><tr><th>TANGGAL</th><th>DESIGN</th><th>WARNA</th><th>QTY</th><th>CUSTOMER</th><th>BARANG DATANG</th><th>KODE</th><th>STATUS</th><th>HARGA</th><th>JUMLAH</th><th>TURUN</th><th id="actionsHead" hidden>AKSI</th></tr></thead><tbody id="tbody"></tbody></table></div><div class="count-row"><span id="showCount">Menampilkan 0 data</span><span>↕ Diurutkan: tanggal terbaru</span></div>
+  <div class="table-wrap"><table><thead><tr><th>TANGGAL</th><th>DESAIN</th><th>WARNA</th><th>QTY</th><th>PELANGGAN</th><th>BARANG DATANG</th><th>KODE</th><th>STATUS</th><th>HARGA</th><th>JUMLAH</th><th>TURUN</th><th id="actionsHead" hidden>AKSI</th></tr></thead><tbody id="tbody"></tbody></table></div><div class="count-row"><span id="showCount">Menampilkan 0 data</span><span>↕ Diurutkan: tanggal terbaru</span></div>
  </section>
- <div class="data-note" id="dataNote">◈ Dashboard menandai PO berumur ≥30 hari dengan warna merah jika belum ada tanggal Barang Datang. Penanda usia bukan bukti PO terlambat karena tanggal target belum tersedia. Admin tetap bisa tambah/edit/hapus, Import CSV, Export CSV, dan sinkronisasi Firebase. Excel lokal tidak otomatis berubah.</div>
- <div class="footer"><span>© 2026 MERCY / NEXUS — DESIGN OPERATIONS</span><span>PRECISION IN EVERY ORDER <b>✳</b></span></div>
+ <div class="data-note" id="dataNote">◈ Dashboard menandai PO berumur ≥30 hari dengan warna merah jika belum ada tanggal Barang Datang. Penanda usia bukan bukti PO terlambat karena tanggal target belum tersedia. Admin dapat menambah, mengubah, menghapus, mengimpor dan mengekspor data CSV. Berkas Excel di komputer tidak otomatis berubah.</div>
+ <div class="footer"><span>© 2026 MERCY / NEXUS — PENGELOLAAN DESAIN</span><span>SETIAP PO LEBIH TERPANTAU <b>✳</b></span></div>
 </main>
 </div>
 
 <div id="poBackdrop" class="modal-backdrop" hidden>
  <section class="edit-modal" role="dialog" aria-modal="true" aria-labelledby="poTitle">
-  <div class="modal-head"><div><span class="modal-kicker">MERCY · PO MANAGER</span><h2 id="poTitle">Tambah PO baru</h2><p>Isi detail desain, lalu simpan ke database online.</p></div><button class="modal-close" id="closeModalBtn" type="button" aria-label="Tutup">×</button></div>
+  <div class="modal-head"><div><span class="modal-kicker">MERCY · KELOLA PO</span><h2 id="poTitle">Tambah PO baru</h2><p>Isi detail desain, lalu simpan ke penyimpanan daring.</p></div><button class="modal-close" id="closeModalBtn" type="button" aria-label="Tutup">×</button></div>
   <form id="poForm">
     <div class="fields-grid">
       <div class="field"><label for="fieldDate">Tanggal <b>*</b></label><input type="date" id="fieldDate" required></div>
-      <div class="field"><label for="fieldCustomer">Customer <b>*</b></label><input id="fieldCustomer" maxlength="100" placeholder="Contoh: MERCY" required></div>
-      <div class="field span2"><label for="fieldDesign">Nama desain / PO <b>*</b></label><input id="fieldDesign" maxlength="180" placeholder="Contoh: ROSE GARDEN" required></div>
-      <div class="field"><label for="fieldColor">Warna</label><input id="fieldColor" maxlength="100" placeholder="PINK / KREM / ..."></div>
-      <div class="field"><label for="fieldQty">QTY (pcs)</label><input id="fieldQty" type="number" min="0" max="999999999" step="1" inputmode="numeric" placeholder="Boleh dikosongkan"></div>
+      <div class="field"><label for="fieldCustomer">Pelanggan <b>*</b></label><input id="fieldCustomer" maxlength="100" placeholder="Contoh: MERCY" required></div>
+      <div class="field span2"><label for="fieldDesign">Nama desain / PO <b>*</b></label><input id="fieldDesign" maxlength="180" placeholder="Contoh: TAMAN MAWAR" required></div>
+      <div class="field"><label for="fieldColor">Warna</label><input id="fieldColor" maxlength="100" placeholder="MERAH / KREM / ..."></div>
+      <div class="field"><label for="fieldQty">Jumlah (pcs)</label><input id="fieldQty" type="number" min="0" max="999999999" step="1" inputmode="numeric" placeholder="Boleh dikosongkan"></div>
       <div class="field"><label for="fieldCode">Kode PO</label><input id="fieldCode" maxlength="150" placeholder="DGT#..."></div>
-      <div class="field span2"><label for="fieldArrived">Tanggal Barang Datang <span class="field-optional">(pilih lewat kalender)</span></label><input id="fieldArrived" type="date" aria-describedby="arrivalHelp"><small class="field-help" id="arrivalHelp">Pilih tanggal dari kalender. Kosongkan kalau belum datang.</small></div>
+      <div class="field span2"><label for="fieldArrived">Tanggal Barang Datang <span class="field-optional">(pilih lewat kalender)</span></label><input id="fieldArrived" type="date" aria-describedby="arrivalHelp"><small class="field-help" id="arrivalHelp">Pilih tanggal melalui kalender. Biarkan kosong jika barang belum datang.</small></div>
       <div class="field span2"><label for="fieldArrivalNote">Catatan barang datang <span class="field-optional">(opsional)</span></label><input id="fieldArrivalNote" maxlength="220" placeholder="Contoh: SISA 500 / diterima sebagian"></div>
       <div class="field"><label for="fieldPrice">Harga (Rp / unit)</label><input id="fieldPrice" type="number" min="0" max="999999999" step="1" placeholder="15000"></div>
-      <div class="field"><label for="fieldJumlah">Jumlah (kolom Excel)</label><input id="fieldJumlah" type="number" min="0" max="999999999" step="1" placeholder="Sesuai kolom JUMLAH"></div>
-      <div class="field span2"><label for="fieldTurun">Turun (catatan Excel)</label><input id="fieldTurun" maxlength="200" placeholder="Opsional"></div>
+      <div class="field"><label for="fieldJumlah">Jumlah (sesuai kolom Excel)</label><input id="fieldJumlah" type="number" min="0" max="999999999" step="1" placeholder="Sesuai kolom JUMLAH"></div>
+      <div class="field span2"><label for="fieldTurun">Turun (catatan dari Excel)</label><input id="fieldTurun" maxlength="200" placeholder="Opsional"></div>
       <div class="field"><label for="fieldStatus">Status <b>*</b></label><select id="fieldStatus"><option value="">TANPA STATUS</option><option>TUNGGU ACC</option><option>REV SO</option><option>SO</option><option>ACC</option><option>REPEAT</option></select></div>
     </div>
-    <div class="modal-help">Perubahan akan tampil otomatis di semua perangkat setelah berhasil tersimpan.</div>
+    <div class="modal-help">Perubahan tersinkron di semua perangkat setelah berhasil disimpan.</div>
     <div class="modal-footer"><button class="btn" id="cancelModalBtn" type="button">Batal</button><button class="btn btn-primary" id="saveBtn" type="submit">Simpan PO</button></div>
   </form>
  </section>
 </div>
 <div id="csvBackdrop" class="modal-backdrop" hidden>
  <section class="edit-modal import-modal" role="dialog" aria-modal="true" aria-labelledby="csvTitle">
-  <div class="modal-head"><div><span class="modal-kicker">MERCY · DATA MANAGER</span><h2 id="csvTitle">Import PO dari CSV</h2><p>Pilih CSV dari Excel, periksa preview, lalu simpan ke Firebase. Hanya admin yang bisa melakukan import.</p></div><button class="modal-close" id="closeCsvBtn" type="button" aria-label="Tutup">×</button></div>
-  <div class="csv-filebox"><input id="csvFile" type="file" accept=".csv,text/csv" aria-label="Pilih file CSV"/><span class="csv-example">Kolom: TGL, DESIGN, WARNA, QTY, CUSTOMER, BARANG DATANG, KODE, KET, HARGA, JUMLAH, TURUN, CATATAN DATANG.<br>CSV dari Excel menggunakan koma atau titik koma juga didukung.</span></div>
+  <div class="modal-head"><div><span class="modal-kicker">MERCY · KELOLA DATA</span><h2 id="csvTitle">Impor PO dari CSV</h2><p>Pilih CSV dari Excel, periksa pratinjau, lalu simpan ke Firebase. Hanya admin yang boleh mengimpor.</p></div><button class="modal-close" id="closeCsvBtn" type="button" aria-label="Tutup">×</button></div>
+  <div class="csv-filebox"><input id="csvFile" type="file" accept=".csv,text/csv" aria-label="Pilih berkas CSV"/><span class="csv-example">Kolom: TGL, DESIGN (DESAIN), WARNA, QTY, CUSTOMER (PELANGGAN), BARANG DATANG, KODE, KET, HARGA, JUMLAH, TURUN, CATATAN DATANG.<br>Berkas CSV dari Excel dapat menggunakan pemisah koma atau titik koma.</span></div>
   <div id="csvError" class="csv-error" hidden></div>
   <div id="csvPreview" class="import-preview" hidden>
    <p id="csvSummary" class="import-counts"></p>
    <div class="import-table-wrap"><table class="import-table"><thead><tr><th>Tanggal</th><th>Desain</th><th>Warna</th><th>QTY</th><th>Status</th><th>Harga</th></tr></thead><tbody id="csvPreviewBody"></tbody></table></div>
    <div class="import-options">
-    <label><input type="radio" name="csvMode" value="merge" checked><span><strong>Gabungkan dengan PO lama</strong><small>Menambahkan baris yang belum ada. Tidak menghapus PO saat ini. File yang sama tidak akan digandakan jika diimpor ulang.</small></span></label>
-    <label><input type="radio" name="csvMode" value="replace"><span><strong>Ganti seluruh data dengan CSV</strong><small>Seluruh PO di Firebase saat ini akan diganti oleh isi CSV. Sistem mengunduh backup CSV sebelum mulai.</small></span></label>
+    <label><input type="radio" name="csvMode" value="merge" checked><span><strong>Gabungkan dengan PO lama</strong><small>Menambahkan baris yang belum ada. Tidak menghapus PO saat ini. Berkas yang sama tidak akan digandakan saat diimpor ulang.</small></span></label>
+    <label><input type="radio" name="csvMode" value="replace"><span><strong>Ganti seluruh data dengan CSV</strong><small>Seluruh PO di Firebase saat ini akan diganti oleh isi CSV. Sistem mengunduh salinan cadangan CSV sebelum mulai.</small></span></label>
    </div>
-   <div id="replaceWarning" class="import-danger" hidden><p><b>Perhatian:</b> data lama di Firebase akan dihapus dan diganti dengan isi CSV, termasuk perubahan yang pernah kamu edit dari website. Backup otomatis akan diunduh terlebih dahulu. Untuk melanjutkan, ketik <b>GANTI</b>:</p><input id="replaceKeyword" placeholder="Ketik GANTI" autocomplete="off"></div>
+   <div id="replaceWarning" class="import-danger" hidden><p><b>Perhatian:</b> data lama di Firebase akan dihapus dan diganti dengan isi CSV, termasuk perubahan yang pernah kamu edit dari website. Salinan cadangan otomatis akan diunduh terlebih dahulu. Untuk melanjutkan, ketik <b>GANTI</b>:</p><input id="replaceKeyword" placeholder="Ketik GANTI" autocomplete="off"></div>
   </div>
   <p class="import-progress" id="csvProgress" role="status" aria-live="polite"></p>
-  <div class="modal-footer"><button class="btn" id="cancelCsvBtn" type="button">Batal</button><button class="btn btn-primary" id="importConfirmBtn" type="button" disabled>Import ke Firebase</button></div>
+  <div class="modal-footer"><button class="btn" id="cancelCsvBtn" type="button">Batal</button><button class="btn btn-primary" id="importConfirmBtn" type="button" disabled>Impor ke Firebase</button></div>
  </section>
 </div>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
@@ -211,8 +378,8 @@ window.MERCY_CONFIG = {
   const el = (id) => document.getElementById(id);
   const fmt = (v) => new Intl.NumberFormat('id-ID').format(v);
   const PALETTE = {
-    'TUNGGU ACC': '#e9b46b', 'REV SO': '#ff7581', 'SO': '#59b8e2',
-    'ACC': '#42e3aa', 'REPEAT': '#83b9e2'
+    'TUNGGU ACC': '#9BA8AB', 'REV SO': '#607583', 'SO': '#253745',
+    'ACC': '#CCD0CF', 'REPEAT': '#4A5C6A'
   };
   const CHIPS = {
     'TUNGGU ACC': 'chip-wait', 'REV SO': 'chip-revise', 'SO': 'chip-so',
@@ -328,7 +495,7 @@ window.MERCY_CONFIG = {
   function rowsToRecords(headers, rawRows) {
     const col = new Map(headers.map((h, i) => [normalizeHeader(h), i]));
     if (!col.has('DESIGN') && !col.has('DESAIN')) {
-      throw new Error('Header DESIGN tidak ada. Pastikan CSV memiliki kolom TGL, DESIGN, QTY, CUSTOMER, KODE, KET.');
+      throw new Error('Header DESIGN tidak ada. Pastikan CSV memiliki kolom TGL, DESIGN, QTY, CUSTOMER atau PELANGGAN, KODE, KET.');
     }
     const get = (r, names) => {
       for (const name of names) if (col.has(name)) return r[col.get(name)] ?? '';
@@ -364,9 +531,9 @@ window.MERCY_CONFIG = {
         harga, jumlah, turun:String(get(r, ['TURUN']) || '').trim()
       });
     });
-    if (invalid.length) throw new Error(`CSV memiliki ${invalid.length} baris salah (${invalid.slice(0,3).join('; ')}). Perbaiki di Excel, simpan CSV, lalu import ulang.`);
+    if (invalid.length) throw new Error(`CSV memiliki ${invalid.length} baris salah (${invalid.slice(0,3).join('; ')}). Perbaiki di Excel, simpan CSV, lalu impor ulang.`);
     if (!result.length) throw new Error('Tidak ada baris desain yang terbaca dari CSV.');
-    if (result.length > 2000) throw new Error('Maksimal 2.000 baris per proses import. Bagi menjadi beberapa file CSV.');
+    if (result.length > 2000) throw new Error('Maksimal 2.000 baris per proses impor. Bagi menjadi beberapa berkas CSV.');
     return result;
   }
 
@@ -424,8 +591,8 @@ window.MERCY_CONFIG = {
 
   function renderKpis() {
     const kpis = [
-      ['Total desain / PO', fmt(DATA.length), 'Jumlah seluruh baris order', '▦'],
-      ['Menunggu ACC', fmt(statusCount('TUNGGU ACC')), 'Perlu follow-up customer', '◷'],
+      ['Total desain / PO', fmt(DATA.length), 'Jumlah seluruh baris PO', '▦'],
+      ['Menunggu ACC', fmt(statusCount('TUNGGU ACC')), 'Perlu tindak lanjut pelanggan', '◷'],
       ['Revisi SO', fmt(statusCount('REV SO')), 'Memerlukan revisi', '✎'],
       ['Total QTY', fmt(qtyTotal()), `${fmt(DATA.filter(x => x.qty !== null).length)} baris berisi QTY`, '◈'],
       ['PO USIA ≥30 HARI', fmt(DATA.filter(r => ageKind(r) === 'aged').length), 'Tanpa tanggal barang datang', '⚑']
@@ -438,12 +605,12 @@ window.MERCY_CONFIG = {
     let offset = 0;
     const slices = statuses.map(status => {
       const next = offset + (DATA.length ? statusCount(status) / DATA.length * 100 : 0);
-      const slice = `${PALETTE[status] || '#b8b7c9'} ${offset}% ${next}%`;
+      const slice = `${PALETTE[status] || '#DDE5E5'} ${offset}% ${next}%`;
       offset = next; return slice;
     });
-    el('donut').style.background = DATA.length ? `conic-gradient(${slices.join(',')})` : '#efedf6';
+    el('donut').style.background = DATA.length ? `conic-gradient(${slices.join(',')})` : '#E3E9E8';
     el('donutTotal').textContent = fmt(DATA.length);
-    el('legend').innerHTML = statuses.map(status => `<div class="leg"><span class="swatch" style="background:${PALETTE[status] || '#b8b7c9'}"></span><span>${escapeHtml(status)}</span><strong>${fmt(statusCount(status))}</strong></div>`).join('');
+    el('legend').innerHTML = statuses.map(status => `<div class="leg"><span class="swatch" style="background:${PALETTE[status] || '#DDE5E5'}"></span><span>${escapeHtml(status)}</span><strong>${fmt(statusCount(status))}</strong></div>`).join('');
   }
 
   function renderMonthly() {
@@ -486,7 +653,7 @@ window.MERCY_CONFIG = {
     const months = [...new Set(DATA.map(r => r.tgl.slice(0, 7)).filter(v => /^\d{4}-\d{2}$/.test(v)))].sort().reverse();
     setOptions(el('month'), months.map(m => ({ value: m, label: `${MONTHS_ID[Number(m.slice(5, 7)) - 1]} ${m.slice(0, 4)}` })), 'Semua bulan');
     const customers = [...new Set(DATA.map(r => r.customer).filter(Boolean))].sort();
-    setOptions(el('customer'), customers.map(c => ({ value: c, label: c })), 'Semua customer');
+    setOptions(el('customer'), customers.map(c => ({ value: c, label: c })), 'Semua pelanggan');
   }
 
   function filtered() {
@@ -561,22 +728,22 @@ window.MERCY_CONFIG = {
 
   function refreshBanner(meta = {}) {
     if (!isConfigured()) {
-      sourceState('pending', 'Mode contoh · belum terhubung', '61 data awal dapat dilihat. Isi Firebase dan email admin di config.js supaya tombol Tambah/Edit PO berfungsi.');
+      sourceState('pending', 'Mode contoh · belum tersambung', '61 data awal dapat dilihat. Isi Firebase dan email admin di config.js supaya tombol Tambah/Edit PO berfungsi.');
     } else if (meta.cache) {
-      sourceState('error', 'Data sementara (offline/cache)', 'Menampilkan cache. Login dan edit tersedia setelah koneksi server aktif.');
+      sourceState('error', 'Data sementara (belum tersambung)', 'Menampilkan data sementara. Masuk dan ubah data setelah tersambung ke server.');
     } else if (!REMOTE_READY) {
-      sourceState('pending', 'Menghubungkan Firebase…', 'Menyiapkan data live. Data Firebase akan menggantikan tampilan contoh saat berhasil dibaca.');
+      sourceState('pending', 'Menghubungkan Firebase…', 'Menyiapkan data terbaru. Data dari Firebase akan menggantikan tampilan contoh setelah tersambung.');
     } else if (DATA.length === 0) {
-      sourceState('live', 'Firebase terhubung · database kosong', ADMIN ? 'Klik “Impor 61 data awal” untuk memindahkan semua data awal ke database.' : 'Login menggunakan email admin untuk mengimpor data awal.');
+      sourceState('live', 'Firebase terhubung · database kosong', ADMIN ? 'Klik “Impor 61 data awal” untuk memindahkan semua data awal ke database.' : 'Masuk menggunakan email admin untuk mengimpor data awal.');
     } else {
-      sourceState('live', 'Online · tersinkron otomatis ✓', `${fmt(DATA.length)} PO / desain tersimpan di Firebase. Perubahan dari perangkat lain tampil otomatis.`);
+      sourceState('live', 'Tersambung · sinkron otomatis ✓', `${fmt(DATA.length)} PO / desain tersimpan di Firebase. Perubahan dari perangkat lain tampil otomatis.`);
     }
   }
 
   function openModal(id = null) {
-    if (!ADMIN || !REMOTE_READY || !CLOUD) { showToast('Login sebagai admin dan pastikan database online sebelum mengedit.', true); return; }
+    if (!ADMIN || !REMOTE_READY || !CLOUD) { showToast('Masuk sebagai admin dan pastikan penyimpanan sudah tersambung sebelum mengubah data.', true); return; }
     const existing = id === null ? null : DATA.find(r => String(r.id) === String(id));
-    if (id !== null && !existing) { showToast('Data sudah berubah. Coba lagi.', true); return; }
+    if (id !== null && !existing) { showToast('Data telah berubah. Silakan coba lagi.', true); return; }
     CURRENT_ID = existing ? String(existing.id) : null;
     el('poForm').reset();
     el('poTitle').textContent = existing ? 'Edit PO / desain' : 'Tambah PO baru';
@@ -649,7 +816,7 @@ window.MERCY_CONFIG = {
     if (!ADMIN || !REMOTE_READY || !CLOUD) return;
     const item = DATA.find(r => String(r.id) === String(id));
     if (!item) return;
-    if (!confirm(`Hapus PO “${item.design}” dari database?\n\nIni akan hilang untuk semua pengguna dan tidak bisa di-undo.`)) return;
+    if (!confirm(`Hapus PO “${item.design}” dari database?\n\nIni akan hilang untuk semua pengguna dan tidak bisa dibatalkan.`)) return;
     try { await CLOUD.remove(String(id)); showToast('PO berhasil dihapus ✓'); }
     catch (err) { showToast('Gagal menghapus: ' + String(err.message || err), true); }
   }
@@ -664,12 +831,12 @@ window.MERCY_CONFIG = {
   }
 
   async function login() {
-    if (!CLOUD) { showToast('Belum bisa login. Pastikan konfigurasi Firebase dan aturan Firestore sudah aktif.', true); return; }
+    if (!CLOUD) { showToast('Belum bisa masuk. Periksa sambungan Firebase dan aturan Firestore.', true); return; }
     el('loginBtn').disabled = true;
     try { await CLOUD.login(); }
     catch (err) {
       const code = String(err.code || err.message || err);
-      showToast('Login gagal: ' + code + (code.includes('unauthorized-domain') ? '. Tambahkan nuryads.github.io di Authorized domains Firebase.' : ''), true);
+      showToast('Gagal masuk: ' + code + (code.includes('unauthorized-domain') ? '. Tambahkan nuryads.github.io di Authorized domains Firebase.' : ''), true);
     }
     finally { el('loginBtn').disabled = false; }
   }
@@ -682,7 +849,7 @@ window.MERCY_CONFIG = {
     if (!ADMIN && !el('csvBackdrop').hidden) closeCsvModal();
     renderAll();
     refreshBanner();
-    if (email && !ADMIN) showToast('Akun ini hanya bisa melihat. Login menggunakan email admin yang dipasang di config.js.', true);
+    if (email && !ADMIN) showToast('Akun ini hanya bisa melihat data. Masuk menggunakan email admin yang sudah didaftarkan.', true);
   }
 
   function cloudDataChanged(rows, info = {}) {
@@ -708,7 +875,7 @@ window.MERCY_CONFIG = {
     const tip = /permission-denied/i.test(msg) ? 'Buka Firebase Console → Firestore Database → Rules, lalu Publish aturan yang diberikan.'
       : /unauthorized-domain/i.test(msg) ? 'Buka Authentication → Settings → Authorized domains, tambahkan nuryads.github.io.'
       : 'Periksa Firestore Database, Authentication, dan koneksi internet.';
-    sourceState('error', 'Gagal tersambung ke Firebase', msg + ' · ' + tip + ' Data di tabel saat ini hanya contoh jika belum tersinkron.');
+    sourceState('error', 'Gagal tersambung ke Firebase', msg + ' · ' + tip + ' Tabel masih menampilkan data contoh jika belum tersinkron.');
     showToast('Firebase: ' + msg, true);
     renderAll();
   }
@@ -744,7 +911,7 @@ window.MERCY_CONFIG = {
       remove: (id) => fbDb.deleteDoc(fbDb.doc(db, 'mercy_orders', id)),
       bulkImport: async (records, mode) => {
         if (!Array.isArray(records) || !records.length || !['merge', 'replace'].includes(mode))
-          throw new Error('Berkas atau pilihan import tidak valid.');
+          throw new Error('Berkas atau pilihan impor tidak valid.');
         const live = await fbDb.getDocsFromServer(orders);
         const now = fbDb.serverTimestamp;
         if (mode === 'replace') {
@@ -792,7 +959,7 @@ window.MERCY_CONFIG = {
     };
   }
 
-  // Import CSV — baca dan preview lokal dahulu, lalu simpan ke Firestore jika admin mengonfirmasi.
+  // Impor CSV — baca dan preview lokal dahulu, lalu simpan ke Firestore jika admin mengonfirmasi.
   let CSV_RECORDS = null;
   let IMPORT_BUSY = false;
 
@@ -834,13 +1001,13 @@ window.MERCY_CONFIG = {
     const file = el('csvFile').files?.[0];
     if (!file) { csvValidation(); return; }
     try {
-      if (!/\.csv$/i.test(file.name)) throw new Error('Pilih file .csv. File Excel .xlsx perlu disimpan sebagai CSV UTF-8 dulu.');
-      if (file.size > 4_000_000) throw new Error('File maksimal 4 MB per import.');
+      if (!/\.csv$/i.test(file.name)) throw new Error('Pilih berkas .csv. Berkas Excel .xlsx harus disimpan sebagai CSV UTF-8 terlebih dahulu.');
+      if (file.size > 4_000_000) throw new Error('Ukuran berkas maksimal 4 MB untuk setiap impor.');
       const text = await file.text();
       const records = parseCSV(text);
       CSV_RECORDS = records;
       const totalQty = records.reduce((sum, r) => sum + (r.qty ?? 0), 0);
-      el('csvSummary').innerHTML = `<strong>${fmt(records.length)} PO</strong> terbaca dari ${escapeHtml(file.name)} · Total QTY <strong>${fmt(totalQty)} pcs</strong><br>Database sekarang ${fmt(DATA.length)} PO. Preview 5 baris pertama di bawah ini. Tanggal serta QTY sudah dicek.`;
+      el('csvSummary').innerHTML = `<strong>${fmt(records.length)} PO</strong> terbaca dari ${escapeHtml(file.name)} · Total QTY <strong>${fmt(totalQty)} pcs</strong><br>Data tersimpan sekarang ${fmt(DATA.length)} PO. Pratinjau 5 baris pertama di bawah ini. Tanggal serta QTY sudah dicek.`;
       el('csvPreviewBody').innerHTML = records.slice(0,5).map(r => `<tr><td>${escapeHtml(r.tgl)}</td><td>${escapeHtml(r.design)}</td><td>${escapeHtml(r.warna)}</td><td>${r.qty === null ? '—' : fmt(r.qty)}</td><td>${escapeHtml(r.status || '—')}</td><td>${r.harga === null ? '—' : 'Rp ' + fmt(r.harga)}</td></tr>`).join('');
       el('csvPreview').hidden = false;
     } catch (error) {
@@ -856,7 +1023,7 @@ window.MERCY_CONFIG = {
     if (mode === 'replace' && el('replaceKeyword').value.trim() !== 'GANTI') return;
     const records = CSV_RECORDS.map(r => ({...r}));
     if (mode === 'replace') {
-      if (!confirm(`Yakin GANTI semua ${fmt(DATA.length)} PO di database dengan ${fmt(records.length)} PO dari file CSV?\n\nSemua data lama akan dihapus (termasuk hasil edit di web). Backup CSV akan diunduh lebih dahulu.`)) return;
+      if (!confirm(`Yakin GANTI semua ${fmt(DATA.length)} PO di database dengan ${fmt(records.length)} PO dari file CSV?\n\nSemua data lama akan dihapus (termasuk hasil edit di web). Salinan cadangan CSV akan diunduh lebih dahulu.`)) return;
       // Download backup untuk seluruh data, bukan hanya hasil filter tabel.
       csvDownload(DATA, 'MERCY_BACKUP_SEBELUM_IMPORT');
     }
@@ -873,7 +1040,7 @@ window.MERCY_CONFIG = {
       showToast(message);
     } catch (error) {
       el('csvProgress').textContent = '';
-      el('csvError').textContent = 'Import gagal: ' + String(error.message || error) + '. Database tidak diubah jika gagal sebelum commit.';
+      el('csvError').textContent = 'Gagal mengimpor: ' + String(error.message || error) + '. Database tidak diubah jika gagal sebelum penyimpanan.';
       el('csvError').hidden = false;
     } finally {
       IMPORT_BUSY = false;
@@ -933,7 +1100,7 @@ window.MERCY_CONFIG = {
     const watchdog = setTimeout(() => {
       if (!REMOTE_READY) {
         sourceState('error', 'Koneksi Firebase belum berhasil',
-          'Data contoh tetap terlihat. Periksa Firestore Database dan koneksi internet. Jika sudah aktif, coba refresh.');
+          'Data contoh tetap terlihat. Periksa Firestore Database dan koneksi internet. Jika sudah aktif, muat ulang halaman.');
       }
     }, 12000);
     startFirebase(CONFIG, {
