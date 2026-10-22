@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MERCY — Live PO & Design Manager</title>
+<meta name="theme-color" content="#222343">
+<meta name="description" content="Dashboard MERCY untuk memantau desain, edit PO, serta import dan export CSV langsung ke Firebase." />
 <style>
 :root{--bg:#f7f7fc;--ink:#252541;--muted:#88899e;--purple:#7363d8;--border:#ebecf4;--white:#fff;--green:#50b499;--orange:#f3ae5e;--red:#ef8893;--blue:#6895e7;--pink:#c38fe1;--shadow:0 10px 35px rgba(43,38,94,.035)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}button,select,input{font:inherit}a{color:inherit;text-decoration:none}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #b2a6ff;outline-offset:2px}
@@ -38,6 +40,33 @@
 .actionbtn{font-size:11px;border-radius:8px;border:1px solid #e6e3f3;background:white;color:#655ab2;padding:7px 10px;margin-right:5px}.actionbtn:hover{background:#f4f0ff}.actionbtn.delete{color:#c96c73;border-color:#f2e0e1}.actionbtn.delete:hover{background:#fff0f2}
 .modal-backdrop{position:fixed;inset:0;background:rgba(22,19,48,.60);z-index:30;display:grid;place-items:center;padding:16px;backdrop-filter:blur(5px)}.modal-backdrop[hidden],.toast[hidden]{display:none!important}.edit-modal{background:white;border-radius:25px;width:min(580px,100%);max-height:min(92vh,850px);overflow-y:auto;box-shadow:0 36px 90px rgba(25,18,66,.25);padding:28px 30px 26px}.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:22px}.modal-kicker{color:#8976c8;font-size:10px;letter-spacing:2px;font-weight:850}.modal-head h2{margin:8px 0;font-size:24px}.modal-head p{font-size:12px;color:#8b8da2;line-height:1.5;margin:0}.modal-close{width:35px;height:35px;background:#f6f4fb;border:0;color:#77718f;border-radius:12px;font-size:22px;flex:none}.fields-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field{display:flex;flex-direction:column;gap:7px;min-width:0}.field.span2{grid-column:span 2}.field label{font-size:11px;font-weight:750;color:#64627f}.field label b{color:#d77d92}.field input,.field select{height:43px;min-width:0;background:#fbfaff;border:1px solid #e9e6f1;border-radius:11px;padding:9px 12px;font-size:12px;color:#39354c}.field input:focus,.field select:focus{outline:none;border-color:#9381e1;box-shadow:0 0 0 3px #eee9ff}.modal-help{color:#88869c;font-size:11px;line-height:1.6;margin:18px 0 5px}.modal-footer{display:flex;justify-content:flex-end;gap:10px;border-top:1px solid #f0edf7;margin-top:18px;padding-top:20px}.modal-footer .btn{font-size:12px;padding:12px 17px}.toast{position:fixed;z-index:60;right:22px;bottom:24px;max-width:min(430px,calc(100vw - 35px));box-shadow:0 12px 40px rgba(25,18,66,.17);border-radius:14px;padding:14px 18px;background:#242345;color:white;font-size:13px;line-height:1.6}.toast.error{background:#ab4654}.modal-open{overflow:hidden}tbody td:last-child{min-width:94px}.source-actions{gap:8px}
 @media(max-width:510px){.fields-grid{gap:12px}.edit-modal{padding:24px 17px;border-radius:18px}.modal-head h2{font-size:21px}.field.span2{grid-column:span 2}.source-actions .admin-label{width:100%;max-width:none}.modal-footer .btn{flex:1;justify-content:center}}
+
+/* CSV import — admin only */
+.import-modal{width:min(740px,100%)}
+.csv-filebox{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:17px;border:1.5px dashed #bfb5f0;background:#faf8ff;border-radius:15px;margin:14px 0}
+.csv-filebox input{font-size:12px;color:#4b456f;width:100%;max-width:440px;cursor:pointer}
+.csv-filebox input::file-selector-button{background:#715ed3;color:white;border:0;padding:10px 12px;border-radius:9px;font-weight:700;margin-right:10px;cursor:pointer}
+.csv-example{font-size:11px;color:#77728f;line-height:1.6}
+.csv-error{color:#ad4655;background:#fff0f1;border:1px solid #fad7db;border-radius:12px;padding:11px 13px;font-size:12px;line-height:1.5;margin-top:12px}
+.import-preview{margin-top:18px;background:#faf9ff;border:1px solid #eee8fc;border-radius:15px;padding:16px}
+.import-counts{font-size:12px;line-height:1.7;color:#6f6b87;margin:0 0 12px}
+.import-counts strong{font-size:17px;color:#5146a8}
+.import-table-wrap{max-height:186px;overflow:auto;background:white;border:1px solid #e8e5f2;border-radius:10px}
+.import-table{font-size:11px;width:100%;border-collapse:collapse;min-width:570px}
+.import-table th{background:#f4f1fd;color:#736b98;font-weight:750;text-align:left;white-space:nowrap;padding:9px}
+.import-table td{padding:9px;border-top:1px solid #f4f2fa;white-space:nowrap;color:#69647a}
+.import-options{margin-top:18px;display:grid;gap:10px}
+.import-options label{display:flex;align-items:flex-start;gap:11px;padding:13px 15px;border:1px solid #eae6f4;border-radius:13px;cursor:pointer;background:white}
+.import-options label:has(input:checked){border-color:#ae9ce9;background:#f9f6ff}
+.import-options input{accent-color:#7464d9;margin-top:3px;flex-shrink:0}
+.import-options strong{display:block;font-size:12px;margin-bottom:4px}
+.import-options small{display:block;color:#928ca2;font-size:11px;line-height:1.5}
+.import-danger{border:1px solid #f1d0d6;background:#fff3f4;border-radius:12px;padding:13px;margin-top:12px}
+.import-danger p{font-size:11px;color:#a24c5c;margin:0 0 9px;line-height:1.6}
+.import-danger input{width:180px;max-width:100%;border:1px solid #df9ca8;border-radius:9px;height:38px;padding:8px 10px;font-size:12px}
+.import-progress{font-size:12px;color:#695cbe;padding-top:12px;min-height:22px}
+#importConfirmBtn:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:510px){.import-table-wrap{max-height:170px}.csv-filebox{padding:13px}.import-modal{width:100%}}
 </style>
 </head>
 <body>
@@ -48,10 +77,10 @@
  <div class="sidebar-bottom"><div class="eyebrow">WORKFLOW</div><strong>Track every little detail ✳</strong><small>Dari SO sampai repeat, semuanya jadi lebih mudah dipantau.</small></div>
 </aside>
 <main class="main" id="overview">
- <div class="topbar"><div class="breadcrumb">Workspace <span> / </span> <b>Design Dashboard</b></div><div class="tag-date" id="lastDate"><span class="dot"></span>Memuat data…</div></div>
+ <div class="topbar"><div class="breadcrumb">Workspace <span> / </span> <b>Design Dashboard</b></div><div class="tag-date" id="lastDate"><span class="dot"></span>Menyiapkan data…</div></div>
  <section class="hero"><div><small>✦ LIVE DESIGN & PO MANAGER</small><h1>Semua PO & desain.<br>Bisa edit langsung. ✨</h1><p>Tambah PO, ubah QTY, dan pindahkan status ACC di satu tempat. Update langsung terlihat untuk seluruh tim.</p></div><div class="hero-illustration" aria-hidden="true"><div class="hero-card"><span>✿</span><small>CREATIVE FLOW</small></div></div></section>
  <section class="source-strip" id="sourceStrip" aria-live="polite">
-  <div class="source-left"><span class="source-dot" aria-hidden="true"></span><div><strong id="sourceLabel">Mode pratinjau</strong><small id="sourceDetail">Sambungkan Firebase agar perubahan PO tersimpan online.</small></div></div>
+  <div class="source-left"><span class="source-dot" aria-hidden="true"></span><div><strong id="sourceLabel">Mode pratinjau</strong><small id="sourceDetail">Sedang membuka dashboard dan menyiapkan koneksi…</small></div></div>
   <div class="source-actions">
    <span class="admin-label" id="adminLabel" hidden></span>
    <button class="btn" id="importBtn" type="button" hidden>⇧ Impor 61 data awal</button>
@@ -71,17 +100,14 @@
   <section class="panel insights"><div class="panel-head"><h3>Insight produksi</h3><span class="pill">SUMMARY</span></div><div class="big-idea"><div class="idea-icon">◈</div><div><strong id="qtyTotal">0</strong><span>Total unit pada semua baris QTY terisi</span></div></div><p class="insight-text" id="insights"></p><div class="warn" id="qtyNote">ℹ️ QTY kosong tidak masuk total unit. Login admin untuk mengisi atau mengubah QTY.</div><div class="insight-footer" id="colorTags"></div></section>
  </div>
  <section class="list-panel" id="database">
-  <div class="list-top"><div><h2>Database desain <span style="color:#a69de7">✳</span></h2><span class="sub">Cari berdasarkan nama, warna, kode, status atau customer.</span></div><div class="source-actions"><button class="btn btn-primary" id="addBtnSecondary" type="button" hidden>＋ Tambah PO</button><button class="btn" id="exportBtn" type="button">↓ Export Excel (CSV)</button></div></div>
+  <div class="list-top"><div><h2>Database desain <span style="color:#a69de7">✳</span></h2><span class="sub">Cari berdasarkan nama, warna, kode, status atau customer.</span></div><div class="source-actions"><button class="btn btn-primary" id="addBtnSecondary" type="button" hidden>＋ Tambah PO</button><button class="btn btn-primary" id="csvImportBtn" type="button" hidden>↑ Import CSV</button><button class="btn" id="exportBtn" type="button">↓ Export CSV</button></div></div>
   <div class="filterbar"><input type="search" id="q" aria-label="Cari desain" placeholder="⌕  Cari nama desain, warna, kode..."><select id="status" aria-label="Filter status"><option value="">Semua status</option><option>TUNGGU ACC</option><option>REV SO</option><option>SO</option><option>ACC</option><option>REPEAT</option></select><select id="month" aria-label="Filter bulan"><option value="">Semua bulan</option></select><select id="customer" aria-label="Filter customer"><option value="">Semua customer</option></select><button class="btn" id="clearBtn" type="button">↺ Reset filter</button></div>
-  <div class="table-wrap"><table><thead><tr><th>TANGGAL</th><th>DESIGN</th><th>WARNA</th><th>QTY</th><th>CUSTOMER</th><th>KODE</th><th>STATUS</th><th id="actionsHead" hidden>AKSI</th></tr></thead><tbody id="tbody"></tbody></table></div><div class="count-row"><span id="showCount">Menampilkan 0 data</span><span>↕ Diurutkan: tanggal terbaru</span></div>
+  <div class="table-wrap"><table><thead><tr><th>TANGGAL</th><th>DESIGN</th><th>WARNA</th><th>QTY</th><th>CUSTOMER</th><th>BARANG DATANG</th><th>KODE</th><th>STATUS</th><th>HARGA</th><th>JUMLAH</th><th>TURUN</th><th id="actionsHead" hidden>AKSI</th></tr></thead><tbody id="tbody"></tbody></table></div><div class="count-row"><span id="showCount">Menampilkan 0 data</span><span>↕ Diurutkan: tanggal terbaru</span></div>
  </section>
- <div class="data-note" id="dataNote">ℹ️ Admin bisa tambah, edit, dan hapus PO langsung di website. Perubahan otomatis muncul untuk semua pengunjung saat Firebase aktif. Ekspor CSV mengambil data sesuai filter aktif dan bisa dibuka di Excel; file Excel lama <b>tidak otomatis berubah</b>.</div>
+ <div class="data-note" id="dataNote">ℹ️ Admin bisa tambah, edit, dan hapus PO langsung di website. Perubahan otomatis muncul untuk semua pengunjung saat Firebase aktif. Import CSV tersedia untuk admin, dengan pilihan gabung atau ganti semua data dan backup otomatis. Export CSV mengambil data sesuai filter aktif. File Excel lama <b>tidak otomatis berubah</b>.</div>
  <div class="footer"><span>© MERCY Design Control • dashboard dibuat dari data yang kamu berikan</span><span>Made for better workflow <b>♥</b></span></div>
 </main>
 </div>
-<script src="./data.js"></script>
-<script src="./config.js"></script>
-<script src="./app.js" defer></script>
 
 <div id="poBackdrop" class="modal-backdrop" hidden>
  <section class="edit-modal" role="dialog" aria-modal="true" aria-labelledby="poTitle">
@@ -94,12 +120,737 @@
       <div class="field"><label for="fieldColor">Warna</label><input id="fieldColor" maxlength="100" placeholder="PINK / KREM / ..."></div>
       <div class="field"><label for="fieldQty">QTY (pcs)</label><input id="fieldQty" type="number" min="0" max="999999999" step="1" inputmode="numeric" placeholder="Boleh dikosongkan"></div>
       <div class="field"><label for="fieldCode">Kode PO</label><input id="fieldCode" maxlength="150" placeholder="DGT#..."></div>
-      <div class="field"><label for="fieldStatus">Status <b>*</b></label><select id="fieldStatus" required><option>TUNGGU ACC</option><option>REV SO</option><option>SO</option><option>ACC</option><option>REPEAT</option></select></div>
+      <div class="field span2"><label for="fieldArrived">Barang datang / keterangan pengiriman</label><input id="fieldArrived" maxlength="220" placeholder="Contoh: ✅ 23 JUNI 26 atau SISA 500"></div>
+      <div class="field"><label for="fieldPrice">Harga (Rp / unit)</label><input id="fieldPrice" type="number" min="0" max="999999999" step="1" placeholder="15000"></div>
+      <div class="field"><label for="fieldJumlah">Jumlah (kolom Excel)</label><input id="fieldJumlah" type="number" min="0" max="999999999" step="1" placeholder="Sesuai kolom JUMLAH"></div>
+      <div class="field span2"><label for="fieldTurun">Turun (catatan Excel)</label><input id="fieldTurun" maxlength="200" placeholder="Opsional"></div>
+      <div class="field"><label for="fieldStatus">Status <b>*</b></label><select id="fieldStatus"><option value="">TANPA STATUS</option><option>TUNGGU ACC</option><option>REV SO</option><option>SO</option><option>ACC</option><option>REPEAT</option></select></div>
     </div>
     <div class="modal-help">Perubahan akan tampil otomatis di semua perangkat setelah berhasil tersimpan.</div>
     <div class="modal-footer"><button class="btn" id="cancelModalBtn" type="button">Batal</button><button class="btn btn-primary" id="saveBtn" type="submit">Simpan PO</button></div>
   </form>
  </section>
 </div>
+<div id="csvBackdrop" class="modal-backdrop" hidden>
+ <section class="edit-modal import-modal" role="dialog" aria-modal="true" aria-labelledby="csvTitle">
+  <div class="modal-head"><div><span class="modal-kicker">MERCY · DATA MANAGER</span><h2 id="csvTitle">Import PO dari CSV</h2><p>Pilih CSV dari Excel, periksa preview, lalu simpan ke Firebase. Hanya admin yang bisa melakukan import.</p></div><button class="modal-close" id="closeCsvBtn" type="button" aria-label="Tutup">×</button></div>
+  <div class="csv-filebox"><input id="csvFile" type="file" accept=".csv,text/csv" aria-label="Pilih file CSV"/><span class="csv-example">Kolom: TGL, DESIGN, WARNA, QTY, CUSTOMER, BARANG DATANG, KODE, KET, HARGA, JUMLAH, TURUN.<br>CSV dari Excel menggunakan koma atau titik koma juga didukung.</span></div>
+  <div id="csvError" class="csv-error" hidden></div>
+  <div id="csvPreview" class="import-preview" hidden>
+   <p id="csvSummary" class="import-counts"></p>
+   <div class="import-table-wrap"><table class="import-table"><thead><tr><th>Tanggal</th><th>Desain</th><th>Warna</th><th>QTY</th><th>Status</th><th>Harga</th></tr></thead><tbody id="csvPreviewBody"></tbody></table></div>
+   <div class="import-options">
+    <label><input type="radio" name="csvMode" value="merge" checked><span><strong>Gabungkan dengan PO lama</strong><small>Menambahkan baris yang belum ada. Tidak menghapus PO saat ini. File yang sama tidak akan digandakan jika diimpor ulang.</small></span></label>
+    <label><input type="radio" name="csvMode" value="replace"><span><strong>Ganti seluruh data dengan CSV</strong><small>Seluruh PO di Firebase saat ini akan diganti oleh isi CSV. Sistem mengunduh backup CSV sebelum mulai.</small></span></label>
+   </div>
+   <div id="replaceWarning" class="import-danger" hidden><p><b>Perhatian:</b> data lama di Firebase akan dihapus dan diganti dengan isi CSV, termasuk perubahan yang pernah kamu edit dari website. Backup otomatis akan diunduh terlebih dahulu. Untuk melanjutkan, ketik <b>GANTI</b>:</p><input id="replaceKeyword" placeholder="Ketik GANTI" autocomplete="off"></div>
+  </div>
+  <p class="import-progress" id="csvProgress" role="status" aria-live="polite"></p>
+  <div class="modal-footer"><button class="btn" id="cancelCsvBtn" type="button">Batal</button><button class="btn btn-primary" id="importConfirmBtn" type="button" disabled>Import ke Firebase</button></div>
+ </section>
+</div>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+window.MERCY_INITIAL_DATA = [{"id":1,"tgl":"2026-06-12","design":"ELEGANT GINKGO MCY","warna":"NAVY/ABU","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":2,"tgl":"2026-06-12","design":"BUNGA SPRING MCY","warna":"PEACH","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":3,"tgl":"2026-06-15","design":"BUNGA BUTTERFLY","warna":"KREM","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":4,"tgl":"2026-06-15","design":"BUNGA LILAC MCY","warna":"TOSCA","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":5,"tgl":"2026-07-06","design":"LUXURY BOTANICAL MCY","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":6,"tgl":"2026-07-21","design":"AURORA FLORA","warna":"UNGU","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":7,"tgl":"2026-07-20","design":"PEARL ANEMON","warna":"UNGU","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":8,"tgl":"2026-07-20","design":"ASSORTED DAHLIA","warna":"KREM","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":9,"tgl":"2026-08-06","design":"RED VELVET","warna":"MERAH","qty":3000,"customer":"HENGKY","kode":"DGT#YHD-26-2056","status":"REPEAT"},{"id":10,"tgl":"2026-08-22","design":"ELEGANT WHITE","warna":"KREM","qty":1000,"customer":"HENGKY","kode":"DGT#YHD-26-2116","status":"REPEAT"},{"id":11,"tgl":"2026-08-22","design":"PASTEL LEAF","warna":"KREM","qty":1000,"customer":"HENGKY","kode":"DGT#YHD-26-2166","status":"REPEAT"},{"id":12,"tgl":"2026-08-22","design":"CHAMPAGNE FLORA","warna":"UNGU","qty":2000,"customer":"HENGKY","kode":"DGT#YHD-26-2091-YD","status":"REPEAT"},{"id":13,"tgl":"2026-08-22","design":"BLUE PEARL","warna":"BIRU","qty":2000,"customer":"HENGKY","kode":"DGT#YHD-26-2118","status":"REPEAT"},{"id":14,"tgl":"2026-08-22","design":"HIBISCUS PEARL","warna":"PINK","qty":1000,"customer":"HENGKY","kode":"DGT#YHD-26-2410","status":"ACC"},{"id":15,"tgl":"2026-08-22","design":"GOLDEN PETAL","warna":"KREM","qty":1000,"customer":"HENGKY","kode":"DGT#YHD-26-2357","status":"REPEAT"},{"id":16,"tgl":"2026-09-03","design":"AUTUMN","warna":"KREM","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":17,"tgl":"2026-09-03","design":"TEAPALS","warna":"TOSCA","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":18,"tgl":"2026-09-03","design":"ELIE","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":19,"tgl":"2026-09-03","design":"HALO PANDA","warna":"KREM","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":20,"tgl":"2026-09-03","design":"HONEYBE","warna":"KUNING","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":21,"tgl":"2026-09-03","design":"MARSHY","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":22,"tgl":"2026-09-03","design":"LOVE TEDDY","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":23,"tgl":"2026-09-03","design":"SNOWY","warna":"BIRU","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":24,"tgl":"2026-09-07","design":"RIBBON","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":25,"tgl":"2026-09-07","design":"DREAM SHINCHAN","warna":"PINK","qty":3000,"customer":"MERCY","kode":"DGT#YHD-26-3053","status":"ACC"},{"id":26,"tgl":"2026-09-14","design":"SAKURA FLUFF","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":27,"tgl":"2026-09-14","design":"BUNNY FLOWER","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":28,"tgl":"2026-09-16","design":"BOWTIQUE","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":29,"tgl":"2026-09-18","design":"VELOURA","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":30,"tgl":"2026-09-18","design":"PASTELIA","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":31,"tgl":"2026-09-18","design":"HELIANDRA","warna":"KUNING","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":32,"tgl":"2026-09-18","design":"PINK ROSA","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":33,"tgl":"2026-09-18","design":"CORAL SAKURA","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":34,"tgl":"2026-09-18","design":"ELEGANT BLUE","warna":"BIRU","qty":1500,"customer":"MERCY","kode":"DGT#MERCY-26-3765","status":"ACC"},{"id":35,"tgl":"2026-09-18","design":"ROSE BUTTERFLY","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":36,"tgl":"2026-09-18","design":"RAINBOW ROSE","warna":"KREM","qty":1500,"customer":"MERCY","kode":"DGT#MERCY-26-3764","status":"ACC"},{"id":37,"tgl":"2026-09-18","design":"ASSORTED PINK","warna":"PINK","qty":500,"customer":"MERCY","kode":"DGT#MERCY-26-3777","status":"ACC"},{"id":38,"tgl":"2026-09-18","design":"KRISAN DAISY","warna":"PINK","qty":1000,"customer":"MERCY","kode":"DGT#MERCY-26-3778","status":"ACC"},{"id":39,"tgl":"2026-09-21","design":"ORANGE STAR","warna":"ORANGE","qty":1500,"customer":"MERCY","kode":"DGT#MERCY-26-3781","status":"ACC"},{"id":40,"tgl":"2026-09-21","design":"RIBBON V2","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":41,"tgl":"2026-09-21","design":"TIMBERA","warna":"KREM","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":42,"tgl":"2026-09-21","design":"GINGELLE","warna":"ABU,PINK","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":43,"tgl":"2026-09-21","design":"SAVARA","warna":"HITAM","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":44,"tgl":"2026-09-21","design":"PARDELLE","warna":"PINK,BIRU","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":45,"tgl":"2026-09-21","design":"GARIS","warna":"PINK,UNGU","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":46,"tgl":"2026-09-21","design":"GARDEN","warna":"PUTIH","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":47,"tgl":"2026-09-22","design":"PAWSTRY CAT","warna":"KREM","qty":5000,"customer":"MERCY","kode":"DGT#YHD-26-3100","status":"REPEAT"},{"id":48,"tgl":"2026-09-25","design":"SWANFLOW","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":49,"tgl":"2026-09-25","design":"DIGGERTON","warna":"ABU","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":50,"tgl":"2026-10-01","design":"OTTERCOVE","warna":"BIRU","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":51,"tgl":"2026-10-01","design":"ELOWYN","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":52,"tgl":"2026-10-10","design":"CRIMSONELLE","warna":"MERAH","qty":1000,"customer":"MERCY","kode":"DGT#MERCY-26-3538","status":"REPEAT"},{"id":53,"tgl":"2026-10-20","design":"PANDA STARS","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":54,"tgl":"2026-10-21","design":"CAMELIA TRD","warna":"UNGU","qty":1000,"customer":"MERCY","kode":"DGT#26_0827","status":"REPEAT"},{"id":55,"tgl":"2026-10-21","design":"ORCHID VEIL","warna":"PINK","qty":500,"customer":"MERCY","kode":"DGT#FH-26-3813","status":"REPEAT"},{"id":56,"tgl":"2026-10-21","design":"SUMMER SUNFLOWER","warna":"KUNING","qty":3000,"customer":"MERCY","kode":"YHD-26-2791-YD","status":"REPEAT"},{"id":57,"tgl":"2026-10-21","design":"CORALISSE","warna":"PEACH","qty":3000,"customer":"MERCY","kode":"DGT#MERCY-26-3403","status":"REPEAT"},{"id":58,"tgl":"2026-10-21","design":"KRISAN BLOOM","warna":"PINK","qty":3000,"customer":"MERCY","kode":"DGT#YHD-26-2041","status":"REPEAT"},{"id":59,"tgl":"2026-10-21","design":"CALENDULA","warna":"PINK","qty":3000,"customer":"MERCY","kode":"DGT#MERCY-26-3539","status":"REPEAT"},{"id":60,"tgl":"2026-10-21","design":"PEARLORA","warna":"PINK","qty":6000,"customer":"MERCY","kode":"DGT#MERCY-26-3392","status":"REPEAT"},{"id":61,"tgl":"2026-10-21","design":"ORANGE STAR","warna":"ORANGE","qty":3000,"customer":"MERCY","kode":"DGT#MERCY-26-3781","status":"REPEAT"}];
+window.MERCY_CONFIG = {
+  "firebase": {
+    "apiKey": "AIzaSyCnp4ELvTgLSugITbrZoasnK8Az7oM1emg",
+    "authDomain": "mercy-dashboard-d9c35.firebaseapp.com",
+    "projectId": "mercy-dashboard-d9c35",
+    "storageBucket": "mercy-dashboard-d9c35.firebasestorage.app",
+    "messagingSenderId": "93407858743",
+    "appId": "1:93407858743:web:5d852eeecb30c8035f2fb2",
+    "measurementId": "G-LZDF4HZCJ7"
+  },
+  "adminEmail": "nuryads701@gmail.com"
+};
+</script>
+<script>
+/* MERCY Design Dashboard — GitHub Pages + Firebase real-time PO editor. */
+(() => {
+  'use strict';
+
+  const CONFIG = window.MERCY_CONFIG || {};
+  const el = (id) => document.getElementById(id);
+  const fmt = (v) => new Intl.NumberFormat('id-ID').format(v);
+  const PALETTE = {
+    'TUNGGU ACC': '#f0b358', 'REV SO': '#ef8893', 'SO': '#6895e7',
+    'ACC': '#50b499', 'REPEAT': '#8b73de'
+  };
+  const CHIPS = {
+    'TUNGGU ACC': 'chip-wait', 'REV SO': 'chip-revise', 'SO': 'chip-so',
+    'ACC': 'chip-acc', 'REPEAT': 'chip-repeat'
+  };
+  const BASE_STATUSES = ['TUNGGU ACC', 'REV SO', 'SO', 'ACC', 'REPEAT'];
+  const MONTHS_ID = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  let DATA = Array.isArray(window.MERCY_INITIAL_DATA) ? window.MERCY_INITIAL_DATA.slice() : [];
+  const INITIAL_DATA = DATA.map(r => ({...r}));
+  const ADMIN_EMAIL = String(CONFIG.adminEmail || '').trim().toLowerCase();
+  let CLOUD = null;
+  let ADMIN = false;
+  let REMOTE_READY = false;
+  let CURRENT_ID = null;
+  let SAVING = false;
+  let TOAST_TIMEOUT = null;
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  function parseDate(input) {
+    if (input === null || input === undefined || input === '') return '';
+    const text = String(input).trim();
+    let m = text.match(/^Date\((\d{4}),\s*(\d{1,2}),\s*(\d{1,2})\)/i);
+    if (m) return `${m[1]}-${String(Number(m[2]) + 1).padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+    m = text.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+    if (m) return `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+    m = text.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+    if (m) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+    m = text.match(/^(\d{1,2})\s+([a-z]+)\s+(\d{2,4})$/i);
+    if (m) {
+      const names = {
+        jan: 1, januari: 1, feb: 2, februari: 2, mar: 3, maret: 3,
+        apr: 4, april: 4, mei: 5, may: 5, jun: 6, juni: 6,
+        jul: 7, juli: 7, agu: 8, ags: 8, agustus: 8,
+        sep: 9, september: 9, okt: 10, oktober: 10,
+        nov: 11, november: 11, des: 12, desember: 12
+      };
+      const month = names[m[2].toLowerCase()];
+      const year = m[3].length === 2 ? 2000 + Number(m[3]) : Number(m[3]);
+      if (month) return `${year}-${String(month).padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+    }
+    if (typeof input === 'number' || /^\d{5}(\.\d+)?$/.test(text)) {
+      const dayNumber = Number(input);
+      if (dayNumber > 35000 && dayNumber < 90000) {
+        const date = new Date(Date.UTC(1899, 11, 30) + Math.round(dayNumber) * 86400000);
+        return date.toISOString().slice(0, 10);
+      }
+    }
+    return '';
+  }
+
+  function dateFmt(v) {
+    if (!v || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return '—';
+    return new Date(`${v}T12:00:00`).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  function parseQty(input) {
+    if (input === null || input === undefined || String(input).trim() === '') return null;
+    if (typeof input === 'number') return Number.isFinite(input) ? input : null;
+    let s = String(input).trim().replace(/\s/g, '');
+    if (/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(s)) s = s.replace(/\./g, '').replace(',', '.');
+    else if (/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(s)) s = s.replace(/,/g, '');
+    else if (/^\d+,\d+$/.test(s)) s = s.replace(',', '.');
+    const result = Number(s);
+    return Number.isFinite(result) && result >= 0 ? result : null;
+  }
+
+  function normalizeHeader(input) {
+    return String(input ?? '').toUpperCase().replace(/\u00A0/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+
+  function rowsToRecords(headers, rawRows) {
+    const col = new Map(headers.map((h, i) => [normalizeHeader(h), i]));
+    if (!col.has('DESIGN') && !col.has('DESAIN')) {
+      throw new Error('Header DESIGN tidak ada. Pastikan CSV memiliki kolom TGL, DESIGN, QTY, CUSTOMER, KODE, KET.');
+    }
+    const get = (r, names) => {
+      for (const name of names) if (col.has(name)) return r[col.get(name)] ?? '';
+      return '';
+    };
+    const result = [];
+    let invalid = [];
+    rawRows.forEach((r, idx) => {
+      const design = String(get(r, ['DESIGN', 'DESAIN', 'NAMA DESIGN']) ?? '').trim();
+      if (!design || /^TOTAL\b/i.test(design)) return;
+      const rawDate = get(r, ['TGL', 'TANGGAL', 'DATE']);
+      const tgl = parseDate(rawDate);
+      const rawQty = get(r, ['QTY', 'QUANTITY']);
+      const rawHarga = get(r, ['HARGA', 'PRICE']);
+      const rawJumlah = get(r, ['JUMLAH', 'SISA', 'BALANCE']);
+      const qty = parseQty(rawQty), harga = parseQty(rawHarga), jumlah = parseQty(rawJumlah);
+      const badNum = [[rawQty,qty,'QTY'],[rawHarga,harga,'HARGA'],[rawJumlah,jumlah,'JUMLAH']]
+        .find(([original, parsed]) => String(original ?? '').trim() &&
+          (parsed === null || !Number.isSafeInteger(parsed) || parsed < 0 || parsed > 999999999));
+      if (!tgl || !/^\d{4}-\d{2}-\d{2}$/.test(tgl) ||
+          (!Number.isFinite(Date.parse(tgl + 'T12:00:00')) || new Date(tgl + 'T12:00:00').toISOString().slice(0,10) !== tgl) || badNum) {
+        invalid.push(`baris ${idx + 2}: ${!tgl ? 'tanggal tidak valid' : badNum ? `${badNum[2]} tidak valid` : 'tanggal tidak valid'}`);
+        return;
+      }
+      result.push({
+        tgl, design,
+        warna:String(get(r, ['WARNA', 'COLOR']) || '').trim(),
+        qty, customer:String(get(r, ['CUSTOMER', 'PELANGGAN']) || 'MERCY').trim(),
+        barangDatang:String(get(r, ['BARANG DATANG', 'BARANG_DATANG', 'KEDATANGAN']) || '').trim(),
+        kode:String(get(r, ['KODE', 'CODE', 'KODE PO']) || '').trim(),
+        status:String(get(r, ['KET', 'STATUS', 'KETERANGAN']) || '').trim().toUpperCase(),
+        harga, jumlah, turun:String(get(r, ['TURUN']) || '').trim()
+      });
+    });
+    if (invalid.length) throw new Error(`CSV memiliki ${invalid.length} baris salah (${invalid.slice(0,3).join('; ')}). Perbaiki di Excel, simpan CSV, lalu import ulang.`);
+    if (!result.length) throw new Error('Tidak ada baris desain yang terbaca dari CSV.');
+    if (result.length > 2000) throw new Error('Maksimal 2.000 baris per proses import. Bagi menjadi beberapa file CSV.');
+    return result;
+  }
+
+  function parseCSV(text) {
+    const s = String(text).replace(/^\uFEFF/, '');
+    const guess = s.split(/\r?\n/).slice(0, 6).join('\n');
+    const delimiter = (guess.match(/;/g) || []).length > (guess.match(/,/g) || []).length ? ';' : ',';
+    const result = [];
+    let line = [], value = '', quoted = false;
+    for (let i = 0; i < s.length; i++) {
+      const c = s[i];
+      if (c === '"') {
+        if (quoted && s[i+1] === '"') { value += '"'; i++; }
+        else quoted = !quoted;
+      } else if (c === delimiter && !quoted) {
+        line.push(value); value = '';
+      } else if ((c === '\n' || c === '\r') && !quoted) {
+        if (c === '\r' && s[i+1] === '\n') i++;
+        line.push(value); value = '';
+        if (line.some(x => x.trim())) result.push(line);
+        line = [];
+      } else value += c;
+    }
+    if (quoted) throw new Error('Tanda petik CSV tidak berpasangan. Simpan ulang sebagai CSV UTF-8.');
+    line.push(value);
+    if (line.some(x => x.trim())) result.push(line);
+    // File ekspor asli kadang memiliki judul MERCY di baris pertama.
+    const headerIdx = result.findIndex(r => r.some(v => ['DESIGN','DESAIN'].includes(normalizeHeader(v))));
+    if (headerIdx < 0) throw new Error('Tidak menemukan baris header DESIGN.');
+    return rowsToRecords(result[headerIdx], result.slice(headerIdx+1));
+  }
+
+  function rowIdentity(row) {
+    // Identitas inti PO untuk menghindari import CSV yang sama dua kali. Status/QTY adalah bagian dari identitas.
+    return JSON.stringify([
+      row.tgl || '', String(row.design || '').trim().toUpperCase(), String(row.warna || '').trim().toUpperCase(),
+      row.qty === null || row.qty === '' || row.qty === undefined ? '' : Number(row.qty),
+      String(row.customer || '').trim().toUpperCase(), String(row.kode || '').trim().toUpperCase(),
+      String(row.status || '').trim().toUpperCase()
+    ]);
+  }
+
+  function sourceState(mode, label, detail) {
+    el('sourceStrip').className = 'source-strip' + (mode === 'live' ? ' live' : mode === 'error' ? ' error' : '');
+    el('sourceLabel').textContent = label;
+    el('sourceDetail').textContent = detail;
+  }
+
+  function allStatuses() {
+    const extra = [...new Set(DATA.map(r => r.status || 'TANPA STATUS'))].filter(s => !BASE_STATUSES.includes(s));
+    return [...BASE_STATUSES, ...extra];
+  }
+  function statusCount(status) { return DATA.filter(r => (r.status || 'TANPA STATUS') === status).length; }
+  function qtyTotal() { return DATA.reduce((acc, r) => acc + (r.qty ?? 0), 0); }
+
+  function renderKpis() {
+    const kpis = [
+      ['Total desain / PO', fmt(DATA.length), 'Jumlah seluruh baris order', '▦'],
+      ['Menunggu ACC', fmt(statusCount('TUNGGU ACC')), 'Perlu follow-up customer', '◷'],
+      ['Revisi SO', fmt(statusCount('REV SO')), 'Memerlukan revisi', '✎'],
+      ['Total QTY', fmt(qtyTotal()), `${fmt(DATA.filter(x => x.qty !== null).length)} baris berisi QTY`, '◈']
+    ];
+    el('kpis').innerHTML = kpis.map(k => `<article class="kpi"><div class="kpi-top"><span class="kpi-label">${k[0].toUpperCase()}</span><span class="kpi-icon">${k[3]}</span></div><div class="num">${k[1]}</div><div class="hint">${escapeHtml(k[2])}</div></article>`).join('');
+  }
+
+  function renderStatus() {
+    const statuses = allStatuses();
+    let offset = 0;
+    const slices = statuses.map(status => {
+      const next = offset + (DATA.length ? statusCount(status) / DATA.length * 100 : 0);
+      const slice = `${PALETTE[status] || '#b8b7c9'} ${offset}% ${next}%`;
+      offset = next; return slice;
+    });
+    el('donut').style.background = DATA.length ? `conic-gradient(${slices.join(',')})` : '#efedf6';
+    el('donutTotal').textContent = fmt(DATA.length);
+    el('legend').innerHTML = statuses.map(status => `<div class="leg"><span class="swatch" style="background:${PALETTE[status] || '#b8b7c9'}"></span><span>${escapeHtml(status)}</span><strong>${fmt(statusCount(status))}</strong></div>`).join('');
+  }
+
+  function renderMonthly() {
+    const counts = new Map();
+    DATA.forEach(r => { if (/^\d{4}-\d{2}-\d{2}$/.test(r.tgl)) counts.set(r.tgl.slice(0, 7), (counts.get(r.tgl.slice(0, 7)) || 0) + 1); });
+    const allMonths = [...counts.keys()].sort();
+    const visible = allMonths.slice(-8);
+    const maxCount = Math.max(1, ...visible.map(m => counts.get(m)));
+    const label = (ym) => `${MONTHS_ID[Number(ym.slice(5, 7)) - 1]} ${ym.slice(0, 4)}`;
+    el('monthChart').innerHTML = visible.map((ym, i) => `<div class="bar-col ${i === visible.length - 1 ? 'highlight' : ''}" title="${label(ym)}: ${counts.get(ym)} desain / PO"><div class="bar-number">${fmt(counts.get(ym))}</div><div class="bar" style="height:${Math.max(6, (counts.get(ym) / maxCount) * 120)}px"></div></div>`).join('');
+    el('monthLabels').innerHTML = visible.map(ym => `<span>${MONTHS_ID[Number(ym.slice(5, 7)) - 1]}</span>`).join('');
+    el('monthRange').textContent = visible.length ? (visible.length === 1 ? label(visible[0]) : `${label(visible[0])} – ${label(visible[visible.length - 1])}`) : 'Belum ada tanggal';
+    el('trendFoot').textContent = 'Grafik dihitung ulang saat baris baru ditambahkan.';
+  }
+
+  function renderFollowUp() {
+    const pending = DATA.filter(r => r.status === 'TUNGGU ACC').sort((a, b) => b.tgl.localeCompare(a.tgl) || String(b.id).localeCompare(String(a.id),undefined,{numeric:true}));
+    el('taskItems').innerHTML = pending.length
+      ? pending.slice(0, 5).map(r => `<div class="task-row"><div class="task-id"><div class="task-avatar">✿</div><div><strong>${escapeHtml(r.design)}</strong><span>${dateFmt(r.tgl)} · ${escapeHtml(r.warna)}</span></div></div><span class="chip chip-wait">TUNGGU ACC</span></div>`).join('')
+      : '<div class="empty">Tidak ada desain menunggu ACC 🎉</div>';
+  }
+
+  function renderInsights() {
+    el('qtyTotal').textContent = fmt(qtyTotal());
+    const missing = DATA.filter(r => r.qty === null).length;
+    el('insights').textContent = `${fmt(statusCount('ACC') + statusCount('REPEAT'))} baris berstatus ACC / REPEAT. ${fmt(missing)} dari ${fmt(DATA.length)} baris belum memiliki QTY. Angka QTY kosong tidak dianggap pesanan nol.`;
+    el('qtyNote').textContent = `ℹ️ ${fmt(missing)} baris QTY masih kosong. Edit QTY lewat tombol Edit agar total terhitung otomatis.`;
+    const colorCount = {};
+    DATA.forEach(r => (r.warna || '').split(/[,/]/).forEach(t => { const color = t.trim(); if (color) colorCount[color] = (colorCount[color] || 0) + 1; }));
+    el('colorTags').innerHTML = Object.entries(colorCount).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([color, n]) => `<span class="soft-tag">${escapeHtml(color)} · ${fmt(n)} desain</span>`).join('');
+  }
+
+  function setOptions(select, items, emptyLabel) {
+    const previous = select.value;
+    select.innerHTML = `<option value="">${emptyLabel}</option>` + items.map(({ value, label }) => `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`).join('');
+    if (items.some(i => i.value === previous)) select.value = previous;
+  }
+  function renderFilters() {
+    setOptions(el('status'), allStatuses().map(s => ({ value: s, label: s })), 'Semua status');
+    const months = [...new Set(DATA.map(r => r.tgl.slice(0, 7)).filter(v => /^\d{4}-\d{2}$/.test(v)))].sort().reverse();
+    setOptions(el('month'), months.map(m => ({ value: m, label: `${MONTHS_ID[Number(m.slice(5, 7)) - 1]} ${m.slice(0, 4)}` })), 'Semua bulan');
+    const customers = [...new Set(DATA.map(r => r.customer).filter(Boolean))].sort();
+    setOptions(el('customer'), customers.map(c => ({ value: c, label: c })), 'Semua customer');
+  }
+
+  function filtered() {
+    const q = el('q').value.trim().toLocaleLowerCase('id-ID');
+    const status = el('status').value, month = el('month').value, customer = el('customer').value;
+    return [...DATA].sort((a, b) => b.tgl.localeCompare(a.tgl) || String(b.id).localeCompare(String(a.id),undefined,{numeric:true}))
+      .filter(r => (!q || [r.design, r.warna, r.kode, r.customer, r.status, r.tgl].some(v => String(v || '').toLocaleLowerCase('id-ID').includes(q)))
+        && (!status || r.status === status) && (!month || r.tgl.startsWith(month)) && (!customer || r.customer === customer));
+  }
+
+
+  function renderTable() {
+    const entries = filtered();
+    el('actionsHead').hidden = !ADMIN;
+    el('tbody').innerHTML = entries.length ? entries.map(r => `<tr>
+      <td>${dateFmt(r.tgl)}</td><td><span class="design-name">${escapeHtml(r.design)}</span></td>
+      <td>${escapeHtml(r.warna)}</td><td class="qty">${r.qty === null ? '—' : fmt(r.qty)}</td>
+      <td>${escapeHtml(r.customer)}</td>
+      <td>${escapeHtml(r.barangDatang || '—')}</td><td><span class="code">${escapeHtml(r.kode || '—')}</span></td>
+      <td><span class="chip ${CHIPS[r.status] || 'chip-so'}">${escapeHtml(r.status || 'TANPA STATUS')}</span></td>
+      <td class="qty">${r.harga === null ? '—' : 'Rp ' + fmt(r.harga)}</td>
+      <td class="qty">${r.jumlah === null ? '—' : fmt(r.jumlah)}</td><td>${escapeHtml(r.turun || '—')}</td>
+      ${ADMIN ? `<td><button class="actionbtn" type="button" data-op="edit" data-id="${escapeHtml(r.id)}">Edit</button><button class="actionbtn delete" type="button" data-op="delete" data-id="${escapeHtml(r.id)}">Hapus</button></td>` : ''}
+    </tr>`).join('') : `<tr><td colspan="${ADMIN ? 12 : 11}" class="empty">Belum ada data yang cocok dengan filter.</td></tr>`;
+    el('showCount').textContent = `Menampilkan ${fmt(entries.length)} dari ${fmt(DATA.length)} baris`;
+  }
+
+  function renderAll() {
+    renderKpis(); renderStatus(); renderMonthly(); renderFollowUp(); renderInsights(); renderFilters(); renderTable();
+    const validDates = DATA.map(r => r.tgl).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)).sort();
+    el('lastDate').innerHTML = '<span class="dot"></span>' + (validDates.length ? `Data s.d. ${dateFmt(validDates[validDates.length - 1])}` : 'Belum ada tanggal');
+    el('addBtn').hidden = el('addBtnSecondary').hidden = !(ADMIN && REMOTE_READY);
+    el('importBtn').hidden = !(ADMIN && REMOTE_READY && DATA.length === 0);
+    el('csvImportBtn').hidden = !(ADMIN && REMOTE_READY);
+    el('loginBtn').hidden = !!el('adminLabel').textContent;
+    el('logoutBtn').hidden = !el('adminLabel').textContent;
+    el('adminLabel').hidden = !el('adminLabel').textContent;
+  }
+
+  function showToast(message, error = false) {
+    const t = el('toast'); t.textContent = String(message); t.className = 'toast' + (error ? ' error' : ''); t.hidden = false;
+    clearTimeout(TOAST_TIMEOUT); TOAST_TIMEOUT = setTimeout(() => { t.hidden = true; }, 4800);
+  }
+
+  function csvDownload(records = filtered(), prefix = 'MERCY_Export_PO') {
+    const rows = [['TGL','DESIGN','WARNA','QTY','CUSTOMER','BARANG DATANG','KODE','KET','HARGA','JUMLAH','TURUN'],
+      ...records.map(r => [r.tgl,r.design,r.warna,r.qty ?? '',r.customer,r.barangDatang || '',r.kode,r.status,r.harga ?? '',r.jumlah ?? '',r.turun || ''])];
+    const safeCell = value => {
+      let s = String(value ?? '');
+      if (/^\s*[=+@\-]/.test(s)) s = "'" + s;
+      return `"${s.replace(/"/g, '""')}"`;
+    };
+    const csv = '\uFEFF' + rows.map(row => row.map(safeCell).join(',')).join('\r\n');
+    const url = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+    const a = document.createElement('a'); a.href = url; a.download = `${prefix}_${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1500);
+  }
+
+  function isConfigured() {
+    const cfg = CONFIG.firebase || {};
+    return ['apiKey','authDomain','projectId','appId'].every(k => typeof cfg[k] === 'string' && cfg[k].trim().length > 8 && !cfg[k].includes('ISI_'))
+      && ADMIN_EMAIL.includes('@') && !ADMIN_EMAIL.includes('email_admin');
+  }
+
+  function refreshBanner(meta = {}) {
+    if (!isConfigured()) {
+      sourceState('pending', 'Mode contoh · belum terhubung', '61 data awal dapat dilihat. Isi Firebase dan email admin di config.js supaya tombol Tambah/Edit PO berfungsi.');
+    } else if (meta.cache) {
+      sourceState('error', 'Data sementara (offline/cache)', 'Menampilkan cache. Login dan edit tersedia setelah koneksi server aktif.');
+    } else if (!REMOTE_READY) {
+      sourceState('pending', 'Menghubungkan Firebase…', 'Sementara menampilkan 61 data contoh. Data live akan menggantinya jika database berhasil dibaca.');
+    } else if (DATA.length === 0) {
+      sourceState('live', 'Firebase terhubung · database kosong', ADMIN ? 'Klik “Impor 61 data awal” untuk memindahkan semua data awal ke database.' : 'Login menggunakan email admin untuk mengimpor data awal.');
+    } else {
+      sourceState('live', 'Online · tersinkron otomatis ✓', `${fmt(DATA.length)} PO / desain tersimpan di Firebase. Perubahan dari perangkat lain tampil otomatis.`);
+    }
+  }
+
+  function openModal(id = null) {
+    if (!ADMIN || !REMOTE_READY || !CLOUD) { showToast('Login sebagai admin dan pastikan database online sebelum mengedit.', true); return; }
+    const existing = id === null ? null : DATA.find(r => String(r.id) === String(id));
+    if (id !== null && !existing) { showToast('Data sudah berubah. Coba lagi.', true); return; }
+    CURRENT_ID = existing ? String(existing.id) : null;
+    el('poForm').reset();
+    el('poTitle').textContent = existing ? 'Edit PO / desain' : 'Tambah PO baru';
+    el('fieldDate').value = existing?.tgl || new Date().toLocaleDateString('sv-SE', {timeZone:'Asia/Jakarta'});
+    el('fieldCustomer').value = existing?.customer ?? 'MERCY';
+    el('fieldDesign').value = existing?.design ?? '';
+    el('fieldColor').value = existing?.warna ?? '';
+    el('fieldQty').value = existing?.qty ?? '';
+    el('fieldCode').value = existing?.kode ?? '';
+    el('fieldArrived').value = existing?.barangDatang ?? '';
+    el('fieldPrice').value = existing?.harga ?? '';
+    el('fieldJumlah').value = existing?.jumlah ?? '';
+    el('fieldTurun').value = existing?.turun ?? '';
+    el('fieldStatus').value = existing ? (existing.status || '') : 'TUNGGU ACC';
+    el('saveBtn').textContent = existing ? 'Simpan Perubahan' : 'Simpan PO Baru';
+    el('poBackdrop').hidden = false;
+    document.body.classList.add('modal-open');
+    el('fieldDesign').focus();
+  }
+
+  function closeModal() {
+    if (SAVING) return;
+    el('poBackdrop').hidden = true;
+    document.body.classList.remove('modal-open');
+    CURRENT_ID = null;
+  }
+
+  async function saveForm(event) {
+    event.preventDefault();
+    if (SAVING || !ADMIN || !CLOUD || !REMOTE_READY) return;
+    const qtyText = el('fieldQty').value.trim();
+    const qty = qtyText === '' ? null : Number(qtyText);
+    const record = {
+      tgl: el('fieldDate').value.trim(), design: el('fieldDesign').value.trim(),
+      warna: el('fieldColor').value.trim().toUpperCase(), qty,
+      customer: el('fieldCustomer').value.trim().toUpperCase(),
+      kode: el('fieldCode').value.trim(), status: el('fieldStatus').value.trim(),
+      barangDatang: el('fieldArrived').value.trim(),
+      harga: el('fieldPrice').value.trim() ? Number(el('fieldPrice').value) : null,
+      jumlah: el('fieldJumlah').value.trim() ? Number(el('fieldJumlah').value) : null,
+      turun: el('fieldTurun').value.trim()
+    };
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(record.tgl) || !record.design || !record.customer || (!record.status && CURRENT_ID === null)) {
+      showToast('Tanggal, nama desain, customer, dan status wajib diisi.', true); return;
+    }
+    if (qty !== null && (!Number.isSafeInteger(qty) || qty < 0 || qty > 999999999)) {
+      showToast('QTY harus angka bulat 0–999.999.999, atau kosong.', true); return;
+    }
+    if ([record.harga, record.jumlah].some(v => v !== null && (!Number.isSafeInteger(v) || v < 0 || v > 999999999))) {
+      showToast('HARGA dan JUMLAH harus angka bulat 0–999.999.999 atau kosong.', true); return;
+    }
+    SAVING = true; el('saveBtn').disabled = true; el('saveBtn').textContent = 'Menyimpan…';
+    try {
+      await CLOUD.save(CURRENT_ID, record);
+      const isEdit = CURRENT_ID !== null;
+      SAVING = false; closeModal();
+      showToast(isEdit ? 'Perubahan PO sudah tersimpan ✓' : 'PO baru berhasil ditambahkan ✓');
+    } catch (err) {
+      showToast('Gagal menyimpan: ' + String(err.message || err), true);
+    } finally {
+      SAVING = false; el('saveBtn').disabled = false; el('saveBtn').textContent = CURRENT_ID ? 'Simpan Perubahan' : 'Simpan PO Baru';
+    }
+  }
+
+  async function removeRow(id) {
+    if (!ADMIN || !REMOTE_READY || !CLOUD) return;
+    const item = DATA.find(r => String(r.id) === String(id));
+    if (!item) return;
+    if (!confirm(`Hapus PO “${item.design}” dari database?\n\nIni akan hilang untuk semua pengguna dan tidak bisa di-undo.`)) return;
+    try { await CLOUD.remove(String(id)); showToast('PO berhasil dihapus ✓'); }
+    catch (err) { showToast('Gagal menghapus: ' + String(err.message || err), true); }
+  }
+
+  async function importInitial() {
+    if (!CLOUD || !ADMIN || !REMOTE_READY || DATA.length !== 0) return;
+    if (!confirm(`Impor ${INITIAL_DATA.length} data desain lama ke Firebase sekarang?\n\nHanya bisa dilakukan saat database masih kosong.`)) return;
+    el('importBtn').disabled = true;
+    try { await CLOUD.importInitial(INITIAL_DATA); showToast(`${INITIAL_DATA.length} data lama berhasil diimpor ✓`); }
+    catch (err) { showToast('Impor gagal: ' + String(err.message || err), true); }
+    finally { el('importBtn').disabled = false; }
+  }
+
+  async function login() {
+    if (!CLOUD) { showToast('Belum bisa login. Pastikan konfigurasi Firebase dan aturan Firestore sudah aktif.', true); return; }
+    el('loginBtn').disabled = true;
+    try { await CLOUD.login(); }
+    catch (err) {
+      const code = String(err.code || err.message || err);
+      showToast('Login gagal: ' + code + (code.includes('unauthorized-domain') ? '. Tambahkan nuryads.github.io di Authorized domains Firebase.' : ''), true);
+    }
+    finally { el('loginBtn').disabled = false; }
+  }
+
+  function authChanged(user) {
+    const email = String(user?.email || '').toLowerCase();
+    ADMIN = Boolean(email && email === ADMIN_EMAIL);
+    el('adminLabel').textContent = email ? (ADMIN ? '✓ Admin: ' : 'Bukan admin: ') + email : '';
+    if (!ADMIN && !el('poBackdrop').hidden) closeModal();
+    if (!ADMIN && !el('csvBackdrop').hidden) closeCsvModal();
+    renderAll();
+    refreshBanner();
+    if (email && !ADMIN) showToast('Akun ini hanya bisa melihat. Login menggunakan email admin yang dipasang di config.js.', true);
+  }
+
+  function cloudDataChanged(rows, info = {}) {
+    DATA = rows.map(r => ({
+      id: String(r.id), tgl: String(r.tgl || ''), design: String(r.design || ''),
+      warna: String(r.warna || ''),
+      qty: r.qty === null || r.qty === undefined || r.qty === '' ? null : parseQty(r.qty),
+      customer: String(r.customer || ''), kode: String(r.kode || ''), status: String(r.status || ''),
+      barangDatang: String(r.barangDatang || ''),
+      harga: r.harga === null || r.harga === undefined || r.harga === '' ? null : parseQty(r.harga),
+      jumlah: r.jumlah === null || r.jumlah === undefined || r.jumlah === '' ? null : parseQty(r.jumlah),
+      turun: String(r.turun || '')
+    }));
+    REMOTE_READY = !info.cache;
+    renderAll();
+    refreshBanner({cache:info.cache});
+  }
+
+  function cloudFailed(error) {
+    REMOTE_READY = false;
+    const msg = String(error?.code || error?.message || error || 'Tidak diketahui');
+    const tip = /permission-denied/i.test(msg) ? 'Buka Firebase Console → Firestore Database → Rules, lalu Publish aturan yang diberikan.'
+      : /unauthorized-domain/i.test(msg) ? 'Buka Authentication → Settings → Authorized domains, tambahkan nuryads.github.io.'
+      : 'Periksa Firestore Database, Authentication, dan koneksi internet.';
+    sourceState('error', 'Gagal tersambung ke Firebase', msg + ' · ' + tip + ' Data di tabel saat ini hanya contoh jika belum tersinkron.');
+    showToast('Firebase: ' + msg, true);
+    renderAll();
+  }
+
+
+  // Modul Firebase dimuat saat browser sudah siap. Semua logika situs ada dalam index.html.
+  async function startFirebase(config, callbacks) {
+    const root = 'https://www.gstatic.com/firebasejs/13.0.0/';
+    const [fbApp, fbAuth, fbDb] = await Promise.all([
+      import(root + 'firebase-app.js'),
+      import(root + 'firebase-auth.js'),
+      import(root + 'firebase-firestore.js')
+    ]);
+    const app = fbApp.initializeApp(config.firebase);
+    const auth = fbAuth.getAuth(app);
+    const db = fbDb.getFirestore(app);
+    const orders = fbDb.collection(db, 'mercy_orders');
+    fbAuth.onAuthStateChanged(auth,
+      user => callbacks.onAuth(user ? {email:user.email} : null),
+      callbacks.onError);
+    fbDb.onSnapshot(orders, {includeMetadataChanges:true},
+      snapshot => callbacks.onRows(
+        snapshot.docs.map(item => ({id:item.id,...item.data()})),
+        {cache:snapshot.metadata.fromCache, pending:snapshot.metadata.hasPendingWrites}
+      ),
+      callbacks.onError);
+    return {
+      login: () => fbAuth.signInWithPopup(auth, new fbAuth.GoogleAuthProvider()),
+      logout: () => fbAuth.signOut(auth),
+      save: (id, fields) => id
+        ? fbDb.updateDoc(fbDb.doc(db, 'mercy_orders', id), {...fields, updatedAt:fbDb.serverTimestamp()})
+        : fbDb.addDoc(orders, {...fields, createdAt:fbDb.serverTimestamp(), updatedAt:fbDb.serverTimestamp()}),
+      remove: (id) => fbDb.deleteDoc(fbDb.doc(db, 'mercy_orders', id)),
+      bulkImport: async (records, mode) => {
+        if (!Array.isArray(records) || !records.length || !['merge', 'replace'].includes(mode))
+          throw new Error('Berkas atau pilihan import tidak valid.');
+        const live = await fbDb.getDocsFromServer(orders);
+        const now = fbDb.serverTimestamp;
+        if (mode === 'replace') {
+          // Ganti semua dalam SATU batch atomik agar tidak tersisa database setengah jadi.
+          if (live.size + records.length > 450) throw new Error('Ganti semua sekaligus dibatasi 450 operasi. Dataset terlalu besar; hubungi pengelola untuk migrasi aman.');
+          const batch = fbDb.writeBatch(db);
+          live.docs.forEach(item => batch.delete(item.ref));
+          records.forEach(record => batch.set(fbDb.doc(orders), {...record, importedFrom:'CSV', createdAt:now(), updatedAt:now()}));
+          await batch.commit();
+          return {added:records.length, deleted:live.size, skipped:0};
+        }
+        const existingCounts = new Map();
+        live.docs.forEach(item => {
+          const id = rowIdentity(item.data());
+          existingCounts.set(id, (existingCounts.get(id) || 0) + 1);
+        });
+        const seenCounts = new Map();
+        const additions = records.filter(record => {
+          const id = rowIdentity(record);
+          const seen = (seenCounts.get(id) || 0) + 1;
+          seenCounts.set(id, seen);
+          return seen > (existingCounts.get(id) || 0);
+        });
+        for (let at = 0; at < additions.length; at += 400) {
+          const batch = fbDb.writeBatch(db);
+          additions.slice(at, at + 400).forEach(record =>
+            batch.set(fbDb.doc(orders), {...record, importedFrom:'CSV', createdAt:now(), updatedAt:now()}));
+          await batch.commit();
+        }
+        return {added:additions.length, deleted:0, skipped:records.length-additions.length};
+      },
+      importInitial: async (data) => {
+        const live = await fbDb.getDocsFromServer(orders);
+        if (!live.empty) throw new Error('Database tidak kosong. Impor dibatalkan agar PO yang sudah ada tetap aman.');
+        const batch = fbDb.writeBatch(db);
+        data.forEach((item, i) => {
+          const {tgl, design, warna, qty, customer, kode, status} = item;
+          batch.set(fbDb.doc(db, 'mercy_orders', `awal-${String(i+1).padStart(4,'0')}`), {
+            tgl,design,warna,qty,customer,kode,status,
+            createdAt: fbDb.serverTimestamp(), updatedAt: fbDb.serverTimestamp()
+          });
+        });
+        await batch.commit();
+      }
+    };
+  }
+
+  // Import CSV — baca dan preview lokal dahulu, lalu simpan ke Firestore jika admin mengonfirmasi.
+  let CSV_RECORDS = null;
+  let IMPORT_BUSY = false;
+
+  function csvMode() { return document.querySelector('input[name="csvMode"]:checked')?.value || 'merge'; }
+  function csvValidation() {
+    const replace = csvMode() === 'replace';
+    el('replaceWarning').hidden = !replace;
+    el('importConfirmBtn').disabled = IMPORT_BUSY || !ADMIN || !REMOTE_READY || !CSV_RECORDS?.length || (replace && el('replaceKeyword').value.trim() !== 'GANTI');
+    el('importConfirmBtn').textContent = IMPORT_BUSY ? 'Sedang mengimpor…' : replace ? `Ganti seluruh data (${CSV_RECORDS?.length || 0} PO)` : `Gabungkan (${CSV_RECORDS?.length || 0} PO)`;
+  }
+
+  function openCsvModal() {
+    if (!ADMIN || !REMOTE_READY || !CLOUD) { showToast('Masuk sebagai admin dan sambungkan Firebase dahulu.', true); return; }
+    CSV_RECORDS = null;
+    el('csvFile').value = '';
+    el('csvError').hidden = true;
+    el('csvPreview').hidden = true;
+    el('csvProgress').textContent = '';
+    el('replaceKeyword').value = '';
+    document.querySelector('input[name="csvMode"][value="merge"]').checked = true;
+    csvValidation();
+    el('csvBackdrop').hidden = false;
+    document.body.classList.add('modal-open');
+    el('csvFile').focus();
+  }
+
+  function closeCsvModal() {
+    if (IMPORT_BUSY) return;
+    el('csvBackdrop').hidden = true;
+    document.body.classList.remove('modal-open');
+    CSV_RECORDS = null;
+  }
+
+  async function handleCsvFile() {
+    CSV_RECORDS = null;
+    el('csvError').hidden = true;
+    el('csvPreview').hidden = true;
+    el('csvProgress').textContent = '';
+    const file = el('csvFile').files?.[0];
+    if (!file) { csvValidation(); return; }
+    try {
+      if (!/\.csv$/i.test(file.name)) throw new Error('Pilih file .csv. File Excel .xlsx perlu disimpan sebagai CSV UTF-8 dulu.');
+      if (file.size > 4_000_000) throw new Error('File maksimal 4 MB per import.');
+      const text = await file.text();
+      const records = parseCSV(text);
+      CSV_RECORDS = records;
+      const totalQty = records.reduce((sum, r) => sum + (r.qty ?? 0), 0);
+      el('csvSummary').innerHTML = `<strong>${fmt(records.length)} PO</strong> terbaca dari ${escapeHtml(file.name)} · Total QTY <strong>${fmt(totalQty)} pcs</strong><br>Database sekarang ${fmt(DATA.length)} PO. Preview 5 baris pertama di bawah ini. Tanggal serta QTY sudah dicek.`;
+      el('csvPreviewBody').innerHTML = records.slice(0,5).map(r => `<tr><td>${escapeHtml(r.tgl)}</td><td>${escapeHtml(r.design)}</td><td>${escapeHtml(r.warna)}</td><td>${r.qty === null ? '—' : fmt(r.qty)}</td><td>${escapeHtml(r.status || '—')}</td><td>${r.harga === null ? '—' : 'Rp ' + fmt(r.harga)}</td></tr>`).join('');
+      el('csvPreview').hidden = false;
+    } catch (error) {
+      el('csvError').textContent = String(error.message || error);
+      el('csvError').hidden = false;
+    }
+    csvValidation();
+  }
+
+  async function confirmCsvImport() {
+    if (IMPORT_BUSY || !CLOUD || !ADMIN || !REMOTE_READY || !CSV_RECORDS?.length) return;
+    const mode = csvMode();
+    if (mode === 'replace' && el('replaceKeyword').value.trim() !== 'GANTI') return;
+    const records = CSV_RECORDS.map(r => ({...r}));
+    if (mode === 'replace') {
+      if (!confirm(`Yakin GANTI semua ${fmt(DATA.length)} PO di database dengan ${fmt(records.length)} PO dari file CSV?\n\nSemua data lama akan dihapus (termasuk hasil edit di web). Backup CSV akan diunduh lebih dahulu.`)) return;
+      // Download backup untuk seluruh data, bukan hanya hasil filter tabel.
+      csvDownload(DATA, 'MERCY_BACKUP_SEBELUM_IMPORT');
+    }
+    IMPORT_BUSY = true;
+    csvValidation();
+    el('csvProgress').textContent = 'Menyimpan ke Firebase, jangan tutup halaman…';
+    try {
+      const result = await CLOUD.bulkImport(records, mode);
+      const message = mode === 'replace'
+        ? `Selesai! ${fmt(result.added)} PO dimasukkan, ${fmt(result.deleted)} PO lama diganti.`
+        : `Selesai! ${fmt(result.added)} PO baru ditambahkan, ${fmt(result.skipped)} duplikat dilewati.`;
+      IMPORT_BUSY = false;
+      closeCsvModal();
+      showToast(message);
+    } catch (error) {
+      el('csvProgress').textContent = '';
+      el('csvError').textContent = 'Import gagal: ' + String(error.message || error) + '. Database tidak diubah jika gagal sebelum commit.';
+      el('csvError').hidden = false;
+    } finally {
+      IMPORT_BUSY = false;
+      csvValidation();
+    }
+  }
+
+  // Search, filtering, export, and editor UI.
+  ['q', 'status', 'month', 'customer'].forEach(id => el(id).addEventListener(id === 'q' ? 'input' : 'change', renderTable));
+  el('clearBtn').addEventListener('click', () => {
+    ['q', 'status', 'month', 'customer'].forEach(id => { el(id).value = ''; }); renderTable();
+  });
+  el('seeAllWaiting').addEventListener('click', () => {
+    el('q').value = ''; el('month').value = ''; el('customer').value = '';
+    el('status').value = 'TUNGGU ACC'; renderTable(); el('database').scrollIntoView({behavior:'smooth'});
+  });
+  el('exportBtn').addEventListener('click', () => csvDownload());
+  el('csvImportBtn').addEventListener('click', openCsvModal);
+  el('csvFile').addEventListener('change', handleCsvFile);
+  el('closeCsvBtn').addEventListener('click', closeCsvModal);
+  el('cancelCsvBtn').addEventListener('click', closeCsvModal);
+  el('csvBackdrop').addEventListener('click', event => { if (event.target === el('csvBackdrop')) closeCsvModal(); });
+  el('replaceKeyword').addEventListener('input', csvValidation);
+  document.querySelectorAll('input[name="csvMode"]').forEach(input => input.addEventListener('change', csvValidation));
+  el('importConfirmBtn').addEventListener('click', confirmCsvImport);
+  el('loginBtn').addEventListener('click', login);
+  el('logoutBtn').addEventListener('click', async () => {
+    if (!CLOUD) return;
+    try { await CLOUD.logout(); } catch(err){ showToast('Gagal keluar: '+err.message,true); }
+  });
+  el('addBtn').addEventListener('click', () => openModal());
+  el('addBtnSecondary').addEventListener('click', () => openModal());
+  el('importBtn').addEventListener('click', importInitial);
+  el('poForm').addEventListener('submit', saveForm);
+  el('closeModalBtn').addEventListener('click', closeModal);
+  el('cancelModalBtn').addEventListener('click', closeModal);
+  el('poBackdrop').addEventListener('click', e => { if (e.target === el('poBackdrop')) closeModal(); });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!el('csvBackdrop').hidden) closeCsvModal();
+    else if (!el('poBackdrop').hidden) closeModal();
+  });
+  el('tbody').addEventListener('click', e => {
+    const button = e.target.closest('button[data-op]');
+    if (!button) return;
+    if (button.dataset.op === 'edit') openModal(button.dataset.id);
+    else if (button.dataset.op === 'delete') removeRow(button.dataset.id);
+  });
+
+  renderAll(); refreshBanner();
+  if (isConfigured()) {
+    // Di halaman contoh tanpa Firebase, chart tetap tampil; data belum bisa diubah online.
+    const watchdog = setTimeout(() => {
+      if (!REMOTE_READY) {
+        sourceState('error', 'Koneksi Firebase belum berhasil',
+          'Data contoh tetap terlihat. Periksa Firestore Database dan koneksi internet. Jika sudah aktif, coba refresh.');
+      }
+    }, 12000);
+    startFirebase(CONFIG, {
+      onAuth: authChanged, onRows: cloudDataChanged, onError: cloudFailed
+    }).then(client => {
+      CLOUD = client;
+    }).catch(error => cloudFailed(error));
+  }
+})();
+
+</script>
 </body></html>
