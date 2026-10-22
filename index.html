@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MERCY | Monitoring PO Tiga Pabrik</title>
+<title>MERCY · Dashboard PO</title>
 <meta name="theme-color" content="#06141B">
 <meta name="description" content="Dashboard MERCY untuk memantau desain, mengubah PO, serta mengimpor dan mengekspor CSV melalui Firebase." />
 <style>
@@ -275,13 +275,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible {o
 @media(max-width:760px){.factory-bar{margin-top:12px;padding:16px}.factory-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.factory-tab{justify-content:space-between}.factory-bar-left{width:100%}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.status-multiselect{max-width:100%;flex:1 1 100%}.status-options{width:100%}.filterbar>select{max-width:none}.filter-hint{padding:3px 14px 12px}.report-stats strong{font-size:19px}.report-stats>div{padding:10px}.report-modal{max-height:92dvh;overflow-y:auto}.factory-bar-actions{align-items:stretch}.factory-bar-actions .btn{flex:1}}
 @media(max-width:420px){.kpis{gap:9px}.kpi{padding:14px 12px}.kpi .num{font-size:26px}.report-stats small{font-size:8px}.report-stats strong{font-size:17px}}
 /* A4 report only; no action buttons, no signature, no dark page background. */
-@page{size:A4 portrait;margin:13mm 12mm 13mm 12mm}
+@page{size:A4 portrait;margin:0}
 @media print{
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   html,body{background:white!important;margin:0!important;padding:0!important;color:#11212D!important;font-family:Arial,sans-serif!important}
   html:before,html:after,body:before,body:after{content:none!important;display:none!important}
   body>*:not(#printRoot){display:none!important}
-  #printRoot{display:block!important;position:static!important;width:100%!important;background:white!important;color:#11212D!important;box-shadow:none!important;margin:0!important;padding:0!important}
+  #printRoot{display:block!important;position:static!important;width:100%!important;background:white!important;color:#11212D!important;box-shadow:none!important;margin:0!important;padding:13mm 12mm 14mm!important;box-sizing:border-box!important;box-decoration-break:clone;-webkit-box-decoration-break:clone}
   .print-header{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:2px solid #11212D;padding:0 0 11px;margin:0 0 14px;gap:16px}
   .print-logo{font-size:28px;font-weight:900;letter-spacing:1.8px;color:#11212D}
   .print-logo-sub{font-size:8px;font-weight:700;letter-spacing:1.2px;color:#617580}
@@ -294,13 +294,22 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible {o
   .print-table{border-collapse:collapse;width:100%!important;min-width:0!important;max-width:100%!important;table-layout:fixed;font-size:9px}
   .print-table thead{display:table-header-group}
   .print-table thead th{background:#e4e9e9!important;color:#11212D!important;border-top:1px solid #aab7ba;border-bottom:1px solid #aab7ba;font-size:8.2px;font-weight:800;letter-spacing:.25px;text-transform:uppercase;text-align:left;padding:8px 5px}
-  .print-table tbody td{padding:7px 5px;border-bottom:1px solid #dbe3e4;vertical-align:top;line-height:1.4;word-break:break-word;color:#253745!important}
+  .print-table tbody td{padding:5px 5px;border-bottom:1px solid #dbe3e4;vertical-align:top;line-height:1.4;word-break:break-word;color:#253745!important}
   .print-table tbody tr{break-inside:avoid;page-break-inside:avoid}
   .print-name{font-weight:800;color:#11212D}.print-sub{color:#697e85;font-size:7.5px;margin-top:2px}
   .print-age-old{color:#ad3442!important;font-weight:900}.print-age-watch{color:#86662e!important;font-weight:850}.print-age-normal{color:#253745}
-  .print-foot{margin-top:14px;padding-top:9px;border-top:1px solid #CCD0CF;font-size:8px;color:#637681;line-height:1.5}
+  .print-foot{margin-top:15px;padding-top:10px;border-top:1px solid #CCD0CF;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:8px;color:#637681;letter-spacing:.2px;line-height:1.5;break-inside:avoid}
+  .print-foot strong{font-weight:850;color:#253745;letter-spacing:.8px}
+  .print-foot span:last-child{text-transform:uppercase;font-size:7.4px;letter-spacing:1px}
 }
 
+.arrival-cancelled{color:#9c5d43;font-weight:850;background:#fff4ed;border-radius:6px;padding:4px 6px;display:inline-block}
+.age-cell.cancelled{color:#95694f;font-weight:850}
+
+/* Pilihan baru di palet navy-silver. CANCEL merah karena status, bukan otomatis terlambat. */
+.chip-order{background:#dfe9ed!important;border-color:#cbdbe0!important;color:#32515f!important}
+.chip-cancel{background:#fae9ec!important;border-color:#f0c9d0!important;color:#ae4455!important}
+.cancel-status-note{margin:10px 0 0;padding:11px 13px;background:#fff1f2;color:#8e3446;border:1px solid #f3cfd6;border-radius:11px;font-size:12px;line-height:1.55}
 </style>
 </head>
 <body>
@@ -371,7 +380,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible {o
 <div class="age-legend"><span><i class="signal signal-red"></i> 30+ hari, belum datang — Perlu Follow Up</span><span><i class="signal signal-amber"></i> 14–29 hari — Pantau</span><span><i class="signal signal-green"></i> Tanggal Barang Datang terisi — Sudah Datang</span><span class="age-legend-note">Tidak memakai tanggal target; usia dihitung otomatis.</span></div>
   <div class="table-wrap"><table><thead><tr><th>TANGGAL</th><th>PABRIK</th><th>DESAIN</th><th>WARNA</th><th>QTY</th><th>PELANGGAN</th><th>BARANG DATANG</th><th>KODE</th><th>NO. PO</th><th>STATUS</th><th>USIA PO</th><th>HARGA</th><th>JUMLAH</th><th>TURUN</th><th id="actionsHead" hidden>AKSI</th></tr></thead><tbody id="tbody"></tbody></table></div><div class="count-row"><span id="showCount">Menampilkan 0 data</span><span>↕ Urutan: tanggal PO terbaru</span></div>
  </section>
- <div class="data-note" id="dataNote">◈ Tanggal Barang Datang kosong = belum sampai. PO belum datang dengan usia 30+ hari diberi tanda merah sebagai prioritas follow up, bukan bukti lewat tenggat. PO lama tanpa kolom pabrik akan ditampilkan sebagai Tridaya. Semua perubahan admin disimpan di Firebase, bukan langsung ke file Excel.</div>
+ <div class="data-note" id="dataNote">◈ Tanggal Barang Datang kosong = belum sampai. Data bertanda CANCEL/BATAL = dibatalkan, tidak dihitung sebagai belum datang. PO belum datang dengan usia 30+ hari diberi tanda merah untuk follow up, bukan bukti lewat tenggat. PO lama tanpa kolom pabrik akan ditampilkan sebagai Tridaya. Semua perubahan admin disimpan di Firebase, bukan langsung ke file Excel.</div>
  <div class="footer"><span>© 2026 MERCY / MONITORING PO PABRIK</span><span>SETIAP PO LEBIH TERPANTAU <b>✳</b></span></div>
 </main>
 </div>
@@ -395,8 +404,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible {o
       <div class="field"><label for="fieldPrice">Harga (Rp / unit)</label><input id="fieldPrice" type="number" min="0" max="999999999" step="1" placeholder="15000"></div>
       <div class="field"><label for="fieldJumlah">Jumlah (sesuai kolom Excel)</label><input id="fieldJumlah" type="number" min="0" max="999999999" step="1" placeholder="Sesuai kolom JUMLAH"></div>
       <div class="field span2"><label for="fieldTurun">Turun (catatan dari Excel)</label><input id="fieldTurun" maxlength="200" placeholder="Opsional"></div>
-      <div class="field"><label for="fieldStatus">Status <b>*</b></label><select id="fieldStatus"><option value="">TANPA STATUS</option><option>TUNGGU ACC</option><option>REV SO</option><option>SO</option><option>ACC</option><option>REPEAT</option></select></div>
+      <div class="field"><label for="fieldStatus">Status <b>*</b></label><select id="fieldStatus"><option value="">TANPA STATUS</option><option>TUNGGU ACC</option><option>REV SO</option><option>SO</option><option>ACC</option><option>ORDER PO</option><option>REPEAT</option><option>CANCEL</option></select></div>
     </div>
+    <div id="cancelStatusNote" class="cancel-status-note" hidden>PO berstatus CANCEL tetap tersimpan sebagai riwayat, tetapi tidak masuk daftar follow up. Tanggal Barang Datang tidak diperlukan.</div>
     <div class="modal-help">Perubahan tersinkron di semua perangkat setelah berhasil disimpan.</div>
     <div class="modal-footer"><button class="btn" id="cancelModalBtn" type="button">Batal</button><button class="btn btn-primary" id="saveBtn" type="submit">Simpan PO</button></div>
   </form>
@@ -424,14 +434,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible {o
 
 <div class="modal-backdrop" id="reportBackdrop" hidden>
   <section role="dialog" aria-modal="true" aria-labelledby="reportTitle" class="edit-modal report-modal">
-    <div class="modal-head"><div><span class="modal-kicker">MERCY · LAPORAN PABRIK</span><h2 id="reportTitle">Daftar Follow Up PO</h2><p>Laporan bersih ukuran A4, mengikuti pabrik, status, dan filter pada tabel. Tidak mengubah data.</p></div><button type="button" class="modal-close" id="closeReportBtn" aria-label="Tutup">×</button></div>
+    <div class="modal-head"><div><span class="modal-kicker">MERCY · LAPORAN FOLLOW UP</span><h2 id="reportTitle">Daftar Follow Up PO</h2><p>Laporan ukuran A4 mengikuti filter daftar PO. Tidak mengubah data.</p></div><button type="button" class="modal-close" id="closeReportBtn" aria-label="Tutup">×</button></div>
     <div class="report-settings"><label class="report-pending-switch"><input type="checkbox" id="printOnlyPending" checked> <span><strong>Hanya barang yang belum datang</strong><small>Direkomendasikan untuk daftar PO yang ingin dikejar.</small></span></label>
       <div class="report-filter-recap" id="reportFilterRecap">Filter dari tabel saat ini.</div>
     </div>
     <div class="report-stats"><div><small>JUMLAH PO</small><strong id="reportTotal">0</strong></div><div><small>TOTAL QTY TERISI</small><strong id="reportQty">0</strong></div><div><small>PERLU FOLLOW UP ≥30 HARI</small><strong id="reportOld">0</strong></div></div>
     <p class="report-preview-caption">Pratinjau beberapa baris teratas (diurutkan dari PO paling lama):</p>
-    <div class="report-mini-table"><table><thead><tr><th>Desain</th><th>Pabrik</th><th>Status</th><th>Usia PO</th></tr></thead><tbody id="reportPreviewBody"></tbody></table></div>
-    <p class="report-tip">Klik Cetak / Simpan PDF, lalu pilih printer atau “Simpan sebagai PDF” di browser. Tidak ada tanda tangan atau kolom PIC.</p>
+    <div class="report-mini-table"><table><thead><tr><th>Desain</th><th>Status</th><th>Usia PO</th></tr></thead><tbody id="reportPreviewBody"></tbody></table></div>
+    <p class="report-tip">Nama PDF otomatis mengikuti tanggal cetak (contoh: LAPORAN PO PER TANGGAL 22 OKTOBER 2026). Jika browser masih mencetak alamat web, nonaktifkan “Header dan footer” di pengaturan cetak.</p>
     <div class="modal-footer"><button type="button" class="btn" id="cancelReportBtn">Batal</button><button type="button" class="btn btn-primary" id="printNowBtn">▣ Cetak / Simpan PDF</button></div>
   </section>
 </div>
@@ -463,19 +473,27 @@ window.MERCY_CONFIG = {
   const fmt = (v) => new Intl.NumberFormat('id-ID').format(v);
   const PALETTE = {
     'TUNGGU ACC': '#9BA8AB', 'REV SO': '#607583', 'SO': '#253745',
-    'ACC': '#CCD0CF', 'REPEAT': '#4A5C6A'
+    'ACC': '#CCD0CF', 'ORDER PO': '#82979F', 'REPEAT': '#4A5C6A', 'CANCEL': '#B84C5C'
   };
   const CHIPS = {
     'TUNGGU ACC': 'chip-wait', 'REV SO': 'chip-revise', 'SO': 'chip-so',
-    'ACC': 'chip-acc', 'REPEAT': 'chip-repeat'
+    'ACC': 'chip-acc', 'ORDER PO': 'chip-order', 'REPEAT': 'chip-repeat', 'CANCEL': 'chip-cancel'
   };
-  const BASE_STATUSES = ['TUNGGU ACC', 'REV SO', 'SO', 'ACC', 'REPEAT'];
+  const BASE_STATUSES = ['TUNGGU ACC', 'REV SO', 'SO', 'ACC', 'ORDER PO', 'REPEAT', 'CANCEL'];
   const FACTORIES = ['TRIDAYA','INNA','KBI'];
   let FACTORY_SCOPE = 'SEMUA';
   let SELECTED_STATUSES = new Set();
   const factoryName = r => FACTORIES.includes(String(r.pabrik || '').trim().toUpperCase()) ? String(r.pabrik).trim().toUpperCase() : 'TRIDAYA';
   const scopedRows = () => FACTORY_SCOPE === 'SEMUA' ? DATA : DATA.filter(r => factoryName(r) === FACTORY_SCOPE);
-  const arrived = r => Boolean(arrivalDate(r.barangDatang));
+  // Status CANCEL selalu berarti dibatalkan. File Excel lama bisa menulis
+  // CANCEL di kolom BARANG DATANG; tetap dikenali agar data lama aman.
+  const cancelPattern = /\b(CANCEL|CANCELLED|BATAL|DIBATALKAN)\b/i;
+  const cancelled = r => cancelPattern.test(String(r.status || '')) ||
+    (!arrivalDate(r.barangDatang) && cancelPattern.test(
+      String(r.barangDatang || '') + ' ' + String(r.barangDatangCatatan || '')
+    ));
+  const arrived = r => !cancelled(r) && Boolean(arrivalDate(r.barangDatang));
+  const pendingArrival = r => !arrived(r) && !cancelled(r);
   const MONTHS_ID = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
   let DATA = Array.isArray(window.MERCY_INITIAL_DATA) ? window.MERCY_INITIAL_DATA.slice() : [];
   const INITIAL_DATA = DATA.map(r => ({...r}));
@@ -548,13 +566,14 @@ window.MERCY_CONFIG = {
   const jakartaToday = () => new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Jakarta' });
   function poAgeDays(row) {
     // PO dengan bukti tanggal datang atau dibatalkan tidak ditandai tua.
-    if (arrivalDate(row.barangDatang) || /\b(CANCEL|BATAL|CANCELLED)\b/i.test(String(row.barangDatang || '') + ' ' + String(row.status || ''))) return null;
+    if (arrived(row) || cancelled(row)) return null;
     if (!/^\d{4}-\d{2}-\d{2}$/.test(String(row.tgl || ''))) return null;
     const today = jakartaToday();
     const d = (Date.parse(`${today}T00:00:00Z`) - Date.parse(`${row.tgl}T00:00:00Z`)) / 86400000;
     return Number.isFinite(d) && d >= 0 ? Math.round(d) : null;
   }
   function ageKind(row) {
+    if (cancelled(row)) return 'cancelled';
     const days = poAgeDays(row);
     return days !== null && days >= 30 ? 'aged' : days !== null && days >= 14 ? 'watch' : arrivalDate(row.barangDatang) ? 'arrived' : 'new';
   }
@@ -694,10 +713,10 @@ window.MERCY_CONFIG = {
 
   function renderKpis() {
     const group = scopedRows();
-    const pending = group.filter(r => !arrived(r));
+    const pending = group.filter(pendingArrival);
     const kpis = [
       ['Total PO', fmt(group.length), 'Jumlah baris di pabrik terpilih', '▦'],
-      ['Barang belum datang', fmt(pending.length), 'Kolom Barang Datang masih kosong', '◷'],
+      ['Barang belum datang', fmt(pending.length), 'Belum ada tanggal datang, tidak termasuk dibatalkan', '◷'],
       ['Perlu follow up', fmt(pending.filter(r => (poAgeDays(r) ?? -1) >= 30).length), 'Usia PO 30 hari atau lebih', '⚑'],
       ['Sudah datang', fmt(group.filter(arrived).length), 'Tanggal Barang Datang terisi', '✓'],
       ['Total QTY', fmt(group.reduce((n,r)=>n+(r.qty??0),0)), `${fmt(group.filter(r=>r.qty!==null).length)} baris memiliki QTY`, '◈']
@@ -733,7 +752,7 @@ window.MERCY_CONFIG = {
   }
 
   function renderFollowUp() {
-    const pending = scopedRows().filter(r => !arrived(r) && poAgeDays(r) !== null)
+    const pending = scopedRows().filter(r => pendingArrival(r) && poAgeDays(r) !== null)
       .sort((a,b) => poAgeDays(b)-poAgeDays(a) || a.tgl.localeCompare(b.tgl));
     el('taskItems').innerHTML = pending.length ? pending.slice(0,6).map(r => {
       const days=poAgeDays(r), kind=ageKind(r);
@@ -747,10 +766,11 @@ window.MERCY_CONFIG = {
     const group=scopedRows();
     el('qtyTotal').textContent = fmt(group.reduce((n,r)=>n+(r.qty??0),0));
     const missing=group.filter(r=>r.qty===null).length;
-    const pending=group.filter(r=>!arrived(r)).length;
+    const pending=group.filter(pendingArrival).length;
     const done=group.filter(arrived).length;
-    el('insights').textContent = `${fmt(pending)} PO belum datang dan ${fmt(done)} PO sudah tercatat datang. ${fmt(missing)} baris belum memiliki QTY. Gunakan daftar Prioritas Follow Up untuk mengejar PO terlama.`;
-    el('qtyNote').textContent = `ℹ️ Barang Datang berisi tanggal = sudah diterima. Kosong = belum datang. Tidak ada input kedatangan bertahap.`;
+    const batal=group.filter(cancelled).length;
+    el('insights').textContent = `${fmt(pending)} PO belum datang dan ${fmt(done)} PO sudah tercatat datang. ${fmt(batal)} PO dibatalkan (tidak masuk follow up). ${fmt(missing)} baris belum memiliki QTY. Gunakan daftar Prioritas Follow Up untuk mengejar PO terlama.`;
+    el('qtyNote').textContent = `ℹ️ Barang Datang terisi tanggal = sudah diterima. Barang Datang kosong = belum diterima, kecuali status CANCEL yang tidak masuk follow up.`;
     const colorCount = {};
     group.forEach(r => (r.warna || '').split(/[,/]/).forEach(t => { const color=t.trim(); if(color) colorCount[color]=(colorCount[color]||0)+1; }));
     el('colorTags').innerHTML = Object.entries(colorCount).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([c,n])=>`<span class="soft-tag">${escapeHtml(c)} · ${fmt(n)} desain</span>`).join('');
@@ -785,7 +805,7 @@ window.MERCY_CONFIG = {
       .filter(r => (!q || [r.design,r.warna,r.kode,r.nomorPo,r.pabrik,r.customer,r.status,r.tgl].some(v=>String(v||'').toLocaleLowerCase('id-ID').includes(q)))
         && (!SELECTED_STATUSES.size || SELECTED_STATUSES.has(r.status||'TANPA STATUS'))
         && (!month || r.tgl.startsWith(month)) && (!customer || r.customer===customer)
-        && (!age || ageKind(r)===age) && (!arrival || (arrival==='arrived' ? arrived(r) : !arrived(r))));
+        && (!age || ageKind(r)===age) && (!arrival || (arrival==='arrived' ? arrived(r) : pendingArrival(r))));
   }
 
   function renderTable() {
@@ -793,10 +813,10 @@ window.MERCY_CONFIG = {
     el('actionsHead').hidden=!ADMIN;
     el('tbody').innerHTML=entries.length ? entries.map(r=>{
       const kind=ageKind(r),days=poAgeDays(r),arrival=arrivalDate(r.barangDatang);
-      const arrivalHtml=arrival ? `<span class="arrival-ok">✓ ${dateFmt(arrival)}</span>` : '<span style="color:#8a999f">Belum datang</span>';
+      const arrivalHtml=cancelled(r) ? '<span class="arrival-cancelled">Dibatalkan</span>' : arrival ? `<span class="arrival-ok">✓ ${dateFmt(arrival)}</span>` : '<span style="color:#8a999f">Belum datang</span>';
       const arriveNote=r.barangDatangCatatan?`<span class="arrival-note">${escapeHtml(r.barangDatangCatatan)}</span>`:'';
       const flag=kind==='aged'?`<span class="age-flag flag-aged">● FOLLOW UP</span>`:kind==='watch'?`<span class="age-flag flag-watch">● PANTAU</span>`:'';
-      const label=arrival?'<span class="age-cell arrived">Sudah datang</span>':days===null?'<span class="age-cell">—</span>':`<span class="age-cell ${kind==='aged'?'old':kind==='watch'?'watch':''}">${fmt(days)} hari</span>`;
+      const label=cancelled(r)?'<span class="age-cell cancelled">Dibatalkan</span>':arrival?'<span class="age-cell arrived">Sudah datang</span>':days===null?'<span class="age-cell">—</span>':`<span class="age-cell ${kind==='aged'?'old':kind==='watch'?'watch':''}">${fmt(days)} hari</span>`;
       const f=factoryName(r), fClass=f.toLowerCase();
       return `<tr class="${kind==='aged'?'row-aged':kind==='watch'?'row-watch':''}">
         <td><div class="po-date"><span class="po-date-main">${dateFmt(r.tgl)}</span>${flag}</div></td>
@@ -890,11 +910,22 @@ window.MERCY_CONFIG = {
     const statusSel=el('fieldStatus');
     [...statusSel.options].filter(o=>o.dataset.extra==='1').forEach(o=>o.remove());
     if (existing?.status && ![...statusSel.options].some(o=>o.value===existing.status)) { const opt=new Option(existing.status,existing.status); opt.dataset.extra='1'; statusSel.add(opt); }
-    statusSel.value = existing ? (existing.status || '') : 'TUNGGU ACC';
+    statusSel.value = existing ? (cancelled(existing) ? 'CANCEL' : (existing.status || '')) : 'TUNGGU ACC';
+    syncCancelStatus();
     el('saveBtn').textContent = existing ? 'Simpan Perubahan' : 'Simpan PO Baru';
     el('poBackdrop').hidden = false;
     document.body.classList.add('modal-open');
     el('fieldDesign').focus();
+  }
+
+  function syncCancelStatus() {
+    const isCancel = el('fieldStatus').value === 'CANCEL';
+    el('fieldArrived').disabled = isCancel;
+    if (isCancel) el('fieldArrived').value = '';
+    el('arrivalHelp').textContent = isCancel
+      ? 'Status CANCEL: tanggal kedatangan tidak diperlukan.'
+      : 'Pilih tanggal melalui kalender. Biarkan kosong jika barang belum datang.';
+    el('cancelStatusNote').hidden = !isCancel;
   }
 
   function closeModal() {
@@ -921,6 +952,12 @@ window.MERCY_CONFIG = {
       jumlah: el('fieldJumlah').value.trim() ? Number(el('fieldJumlah').value) : null,
       turun: el('fieldTurun').value.trim()
     };
+    // Status CANCEL disimpan di KET/STATUS, bukan di tanggal Barang Datang.
+    // Penanda CANCEL dari berkas Excel lama dinormalkan saat record diedit.
+    const exactLegacyCancel = /^(CANCEL|CANCELLED|BATAL|DIBATALKAN)$/i;
+    if (exactLegacyCancel.test(record.barangDatangCatatan.trim())) record.barangDatangCatatan = '';
+    if (record.status === 'CANCEL') record.barangDatang = '';
+
     if (!/^\d{4}-\d{2}-\d{2}$/.test(record.tgl) || !record.design || !record.customer || (!record.status && CURRENT_ID === null)) {
       showToast('Tanggal, nama desain, customer, dan status wajib diisi.', true); return;
     }
@@ -1232,6 +1269,7 @@ window.MERCY_CONFIG = {
   el('addBtnSecondary').addEventListener('click',()=>openModal());
   el('importBtn').addEventListener('click',importInitial);
   el('poForm').addEventListener('submit',saveForm);
+  el('fieldStatus').addEventListener('change',syncCancelStatus);
   el('closeModalBtn').addEventListener('click',closeModal);
   el('cancelModalBtn').addEventListener('click',closeModal);
   el('poBackdrop').addEventListener('click',e=>{if(e.target===el('poBackdrop'))closeModal()});
@@ -1249,12 +1287,11 @@ window.MERCY_CONFIG = {
   });
 
   // Cetak berdasarkan filter tabel aktif, tanpa perlu memilih baris per PO.
-  const reportRecords=()=>filtered().filter(r=>!el('printOnlyPending').checked || !arrived(r))
+  const reportRecords=()=>filtered().filter(r=>!cancelled(r) && (!el('printOnlyPending').checked || pendingArrival(r)))
     .sort((a,b)=>(poAgeDays(b)??-1)-(poAgeDays(a)??-1)||a.tgl.localeCompare(b.tgl));
   const reportScopeText=()=>[
-    `Pabrik: ${FACTORY_SCOPE==='SEMUA'?'Semua pabrik':FACTORY_SCOPE}`,
-    `Status: ${SELECTED_STATUSES.size?[...SELECTED_STATUSES].join(', '):'Semua status'}`,
-    `Kedatangan: ${el('printOnlyPending').checked?'Belum datang':el('arrivalFilter').value==='arrived'?'Sudah datang':el('arrivalFilter').value==='pending'?'Belum datang':'Sesuai filter tabel'}`,
+    SELECTED_STATUSES.size?`Status: ${[...SELECTED_STATUSES].join(', ')}`:'',
+    el('printOnlyPending').checked?'Barang belum datang':el('arrivalFilter').value==='arrived'?'Barang sudah datang':el('arrivalFilter').value==='pending'?'Barang belum datang':'',
     el('ageFilter').value?`Usia: ${el('ageFilter').selectedOptions[0].textContent}`:'',
     el('month').value?`Bulan: ${el('month').selectedOptions[0].textContent}`:'',
     el('q').value.trim()?`Pencarian: ${el('q').value.trim()}`:''
@@ -1265,7 +1302,7 @@ window.MERCY_CONFIG = {
     el('reportQty').textContent=fmt(records.reduce((n,r)=>n+(r.qty??0),0));
     el('reportOld').textContent=fmt(records.filter(r=>(poAgeDays(r)??-1)>=30).length);
     el('reportFilterRecap').textContent=reportScopeText();
-    el('reportPreviewBody').innerHTML=records.length?records.slice(0,7).map(r=>`<tr><td>${escapeHtml(r.design)}</td><td>${escapeHtml(factoryName(r))}</td><td>${escapeHtml(r.status||'—')}</td><td class="${(poAgeDays(r)??0)>=30?'priority-red':''}">${poAgeDays(r)===null?'—':fmt(poAgeDays(r))+' hari'}</td></tr>`).join(''):'<tr><td colspan="4">Tidak ada PO yang cocok. Ubah filter tabel atau pilihan Barang Datang.</td></tr>';
+    el('reportPreviewBody').innerHTML=records.length?records.slice(0,7).map(r=>`<tr><td>${escapeHtml(r.design)}</td><td>${escapeHtml(r.status||'—')}</td><td class="${(poAgeDays(r)??0)>=30?'priority-red':''}">${poAgeDays(r)===null?'—':fmt(poAgeDays(r))+' hari'}</td></tr>`).join(''):'<tr><td colspan="3">Tidak ada PO yang cocok. Ubah filter tabel atau pilihan Barang Datang.</td></tr>';
     el('printNowBtn').disabled=records.length===0;
   }
   function openReportModal(){
@@ -1282,14 +1319,14 @@ window.MERCY_CONFIG = {
     const totalQty=records.reduce((n,r)=>n+(r.qty??0),0);
     const body=records.map((r,i)=>{
       const age=poAgeDays(r);const ageClass=age!==null&&age>=30?'print-age-old':age!==null&&age>=14?'print-age-watch':'print-age-normal';
-      return `<tr><td>${i+1}</td><td>${dateFmt(r.tgl)}</td><td><div class="print-name">${escapeHtml(r.design)}</div><div class="print-sub">${escapeHtml(r.warna||'—')} · ${escapeHtml(r.nomorPo||r.kode||'Tanpa kode')}</div></td><td>${escapeHtml(factoryName(r))}</td><td>${r.qty===null?'—':fmt(r.qty)}</td><td>${escapeHtml(r.status||'—')}</td><td class="${ageClass}">${arrived(r)?'Sudah datang':age===null?'—':fmt(age)+' hari'}</td></tr>`;
+      return `<tr><td>${i+1}</td><td>${dateFmt(r.tgl)}</td><td><div class="print-name">${escapeHtml(r.design)}</div><div class="print-sub">${escapeHtml(r.warna||'—')} · ${escapeHtml(r.nomorPo||r.kode||'Tanpa kode')}</div></td><td>${r.qty===null?'—':fmt(r.qty)}</td><td>${escapeHtml(r.status||'—')}</td><td class="${ageClass}">${arrived(r)?'Sudah datang':age===null?'—':fmt(age)+' hari'}</td></tr>`;
     }).join('');
-    el('printRoot').innerHTML=`<div class="print-header"><div><div class="print-logo">MERCY.</div><div class="print-logo-sub">MONITORING PESANAN PABRIK</div></div><div class="print-date">Dicetak: ${escapeHtml(currentDate)}<br>Dokumen monitoring PO</div></div>
+    el('printRoot').innerHTML=`<div class="print-header"><div><div class="print-logo">MERCY.</div></div><div class="print-date">Dicetak: ${escapeHtml(currentDate)}</div></div>
       <div class="print-title-bar"><h1>DAFTAR FOLLOW UP PO</h1><p>${escapeHtml(summary)}</p></div>
       <div class="print-overview"><div>Total <strong>${fmt(records.length)} PO</strong> · QTY tercatat <strong>${fmt(totalQty)} pcs</strong></div><div>Urutan: PO paling lama</div></div>
-      <table class="print-table"><colgroup><col style="width:5%"><col style="width:13%"><col style="width:29%"><col style="width:12%"><col style="width:10%"><col style="width:15%"><col style="width:16%"></colgroup>
-      <thead><tr><th>No</th><th>Tanggal</th><th>Desain / Kode</th><th>Pabrik</th><th>QTY</th><th>Status</th><th>Usia PO</th></tr></thead><tbody>${body}</tbody></table>
-      <div class="print-foot">Daftar ini untuk memudahkan tindak lanjut pesanan yang belum diterima. Usia PO dihitung dari tanggal pada kolom TGL, bukan berdasarkan batas pengiriman yang disepakati. Tanggal Barang Datang terisi dianggap barang telah sampai.</div>`;
+      <table class="print-table"><colgroup><col style="width:6%"><col style="width:14%"><col style="width:41%"><col style="width:12%"><col style="width:12%"><col style="width:15%"></colgroup>
+      <thead><tr><th>No</th><th>Tanggal</th><th>Desain / Kode</th><th>QTY</th><th>Status</th><th>Usia PO</th></tr></thead><tbody>${body}</tbody></table>
+      <div class="print-foot"><strong>© ${escapeHtml(now.slice(0,4))} MERCY</strong><span>Dokumen Pemantauan PO</span></div>`;
   }
   el('reportBtn').addEventListener('click',openReportModal);
   el('factoryPrintBtn').addEventListener('click',openReportModal);
@@ -1300,7 +1337,18 @@ window.MERCY_CONFIG = {
   el('reportBackdrop').addEventListener('click',event=>{if(event.target===el('reportBackdrop'))closeReportModal()});
   el('printNowBtn').addEventListener('click',()=>{
     const records=reportRecords();if(!records.length)return;
-    buildPrintableReport(records);closeReportModal();window.print();
+    buildPrintableReport(records);closeReportModal();
+    // @page margin:0 meminta browser mencetak tanpa header/footer otomatis.
+    // Beberapa versi browser masih memerlukan opsi "Header dan footer" dimatikan.
+    const previousPageTitle=document.title;
+    const restorePageTitle=()=>{document.title=previousPageTitle;window.removeEventListener('afterprint',restorePageTitle)};
+    window.addEventListener('afterprint',restorePageTitle);
+    // Nama tab sementara menjadi nama PDF yang disarankan saat "Simpan sebagai PDF".
+    // Memakai tanggal Asia/Jakarta agar nama berkas tidak bergantung zona waktu perangkat.
+    const [year,month,day]=jakartaToday().split('-');
+    const namaBulan=['JANUARI','FEBRUARI','MARET','APRIL','MEI','JUNI','JULI','AGUSTUS','SEPTEMBER','OKTOBER','NOVEMBER','DESEMBER'];
+    document.title=`LAPORAN PO PER TANGGAL ${Number(day)} ${namaBulan[Number(month)-1]} ${year}`;
+    try{window.print()}catch(error){restorePageTitle();throw error}
   });
 
   renderAll(); refreshBanner();
