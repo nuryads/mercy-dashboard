@@ -1,6 +1,4 @@
-// MERCY Dashboard — GitHub Pages + Firebase
-// Firebase Web configuration (public client settings, not a password).
-// For write access, set up secure Firestore Rules in Firebase Console.
+
 window.MERCY_CONFIG = {
   firebase: {
     apiKey: "AIzaSyCnp4ELvTgLSugITbrZoasnK8Az7oM1emg",
