@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#050d1c" />
+<meta name="description" content="MERCY Command Center — ruang kontrol 3D untuk monitoring PO Tridaya, Inna, dan KBI." />
+<title>MERCY / 3D Command Center</title>
+<style>
+  :root { color-scheme: dark; --bg:#050a17; --cyan:#55eaff; --purple:#b09cff; --amber:#ffcb87; --faint:rgba(204,235,255,.56); --line:rgba(118,209,249,.17); }
+  * {box-sizing:border-box}
+  html,body {width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:#f1fbff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+  button,a {font:inherit}
+  button {cursor:pointer}
+  a {color:inherit;text-decoration:none}
+  .app {position:relative; width:100%;height:100%;min-height:540px; isolation:isolate;overflow:hidden;background:radial-gradient(ellipse 70% 75% at 55% 55%,#103457 0%,#09162d 50%,#050916 98%)}
+  .app:before {content:"";pointer-events:none;position:absolute;inset:0;z-index:3;background:radial-gradient(ellipse at 50% 44%,transparent 23%,rgba(2,7,19,.25) 68%,rgba(1,5,17,.7) 100%)}
+  .noise {pointer-events:none;position:absolute;inset:0;z-index:4;opacity:.22;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.67' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.13' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .stars {pointer-events:none;position:absolute;inset:0;z-index:0;opacity:.45;background-image:radial-gradient(#70d5ff 1px,transparent 1px),radial-gradient(#a897fe .75px,transparent .75px);background-size:106px 106px,181px 181px;background-position:22px 9px,77px 45px;mask-image:linear-gradient(to bottom, #000,transparent 90%)}
+  #stage {position:absolute;inset:0;z-index:1;touch-action:none;cursor:grab;outline:0}
+  #stage.dragging {cursor:grabbing}
+  #stage canvas {display:block;width:100%;height:100%;outline:0}
+  .scanlines {position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.12;background:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(12,26,49,.65) 4px,transparent 5px)}
+  .beam {position:absolute;z-index:0;pointer-events:none;left:33%;top:-40%;width:35%;height:110%;transform:rotate(-28deg);background:linear-gradient(90deg,transparent,rgba(29,168,245,.05),transparent);filter:blur(16px);animation:sweep 14s ease-in-out infinite alternate}
+  @keyframes sweep {to{transform:translateX(28%) rotate(-20deg)}}
+  .ui {position:absolute;z-index:5;inset:0;pointer-events:none}
+  .ui button,.ui a,.ui [tabindex] {pointer-events:auto}
+  header {position:absolute;top:0;left:0;right:0;min-height:92px;display:flex;align-items:center;justify-content:space-between;padding:24px 36px;gap:20px;border-bottom:1px solid rgba(121,209,253,.08);background:linear-gradient(to bottom,rgba(5,11,25,.92),rgba(5,11,25,0))}
+  .brand {display:flex;align-items:center;gap:14px;white-space:nowrap}
+  .brandmark {display:grid;place-items:center;width:44px;height:44px;flex:none;position:relative;border:1px solid rgba(111,232,255,.55);border-radius:13px;background:linear-gradient(145deg,rgba(100,237,255,.2),rgba(33,70,166,.08));box-shadow:inset 0 0 25px rgba(35,217,253,.09),0 0 30px rgba(55,199,255,.1);font-weight:900;font-size:25px;letter-spacing:-4px;padding-right:4px;color:#aefaff}
+  .brandmark:after {content:"";position:absolute;inset:-5px;border:1px solid rgba(83,213,255,.08);border-radius:17px}
+  .brand b {display:block;font-size:17px;letter-spacing:.22em;font-weight:800;line-height:1.25}
+  .brand small {display:block;color:#79a8c8;font-size:9px;letter-spacing:.22em;margin-top:4px;font-weight:700}
+  .top-tools {display:flex;align-items:center;gap:9px}
+  .live-indicator {display:flex;align-items:center;gap:10px;border:1px solid rgba(123,207,249,.18);background:rgba(7,19,37,.75);color:#b3cddf;border-radius:999px;padding:10px 15px;font-size:10px;font-weight:850;letter-spacing:.10em;white-space:nowrap}
+  .pulse {width:7px;height:7px;border-radius:50%;background:#ffcc82;box-shadow:0 0 0 3px rgba(255,204,130,.13),0 0 13px #ffcc82;animation:dot 2s ease-in-out infinite}
+  .live-indicator.live .pulse {background:#6effcd;box-shadow:0 0 0 3px rgba(110,255,205,.12),0 0 13px #6effcd}
+  .live-indicator.error .pulse {background:#ff988d;box-shadow:0 0 0 3px rgba(255,152,141,.12),0 0 13px #ff988d}
+  @keyframes dot {50% {opacity:.48;box-shadow:0 0 0 6px rgba(110,255,205,.025)}}
+  .navbtn {height:39px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid rgba(133,225,255,.24);border-radius:11px;background:rgba(17,49,78,.54);color:#ddf7ff;padding:0 16px;font-size:11px;font-weight:800;letter-spacing:.03em;backdrop-filter:blur(12px);transition:background .2s,border .2s,transform .2s}
+  .navbtn:hover {background:rgba(34,99,132,.66);border-color:rgba(138,240,255,.66);transform:translateY(-2px)}
+  .navbtn.primary {background:linear-gradient(110deg,rgba(78,222,241,.94),rgba(93,155,252,.9));color:#071726;border-color:transparent;box-shadow:0 8px 28px rgba(19,169,239,.15)}
+  .navbtn:focus-visible,.factory-card:focus-visible {outline:2px solid #9df9ff;outline-offset:3px}
+  .hero {position:absolute;top:clamp(121px,17vh,172px);left:clamp(25px,3vw,52px);width:300px;max-width:calc(100vw - 56px)}
+  .eyebrow {display:flex;align-items:center;gap:10px;color:#72e2fb;letter-spacing:.2em;font-size:10px;font-weight:850}
+  .eyebrow:before {content:"";width:24px;height:1px;background:#57e2ff;box-shadow:0 0 10px #57e2ff}
+  h1 {font-size:clamp(36px,4.05vw,62px);letter-spacing:-.065em;line-height:1.04;margin:20px 0 15px;font-weight:850;max-width:370px;text-wrap:balance}
+  h1 span {display:block;color:#6cddf5;text-shadow:0 0 45px rgba(68,191,232,.2)}
+  .hero p {font-size:13px;line-height:1.75;color:#96b5d0;max-width:273px;margin:0}
+  .hero-sep {width:82px;height:1px;margin:28px 0 21px;background:linear-gradient(to right,#52e9fe,transparent)}
+  .hero-metrics {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .hero-metrics .val {display:block;font-size:22px;line-height:1;font-weight:800;letter-spacing:-.04em}
+  .hero-metrics .name {display:block;color:#7e99b6;font-size:9px;letter-spacing:.08em;font-weight:750;margin-top:8px;white-space:nowrap}
+  .hero-metrics .warn {color:#ffbe84}
+  .right-pane {position:absolute;right:clamp(22px,3vw,45px);top:clamp(127px,17vh,172px);width:280px;border:1px solid rgba(109,204,255,.2);border-radius:18px;background:linear-gradient(145deg,rgba(20,49,79,.7),rgba(5,15,34,.78));box-shadow:0 25px 55px rgba(0,0,0,.22),inset 0 1px 0 rgba(211,251,255,.08);backdrop-filter:blur(24px);overflow:hidden}
+  .right-pane:before {content:"";height:2px;position:absolute;left:19px;right:19px;top:0;background:linear-gradient(to right,transparent,var(--accent, #55eaff),transparent);box-shadow:0 0 22px var(--accent,#55eaff)}
+  .right-pane .top {padding:21px 22px 15px}
+  .pane-kicker {display:flex;align-items:center;justify-content:space-between;color:#8da9c4;font-size:9px;letter-spacing:.18em;font-weight:850}
+  .pane-kicker span {color:var(--accent,#6ff4ff)}
+  .pane-title {font-size:27px;letter-spacing:-.045em;font-weight:850;margin-top:15px}
+  .pane-sub {font-size:11px;color:#8babc4;margin-top:6px}
+  .separator {height:1px;background:rgba(141,210,246,.13)}
+  .kpi-grid {display:grid;grid-template-columns:1fr 1fr;padding:16px 22px 18px;gap:19px 12px}
+  .statname {font-size:10px;color:#839eb8;margin-bottom:6px}
+  .statval {font-size:25px;font-weight:820;letter-spacing:-.035em;line-height:1.12}
+  .statval.cyan {color:#a1f7ff}
+  .statval.amber {color:#ffc48a}
+  .statval.purple {color:#baaaff}
+  .progress-section {padding:13px 22px 22px}
+  .progress-title {display:flex;justify-content:space-between;gap:8px;font-size:10px;color:#a8bfd1;margin-bottom:10px}
+  .progress-title strong {color:#ebfaff}
+  .track {height:5px;border-radius:20px;background:#1c344d;overflow:hidden}
+  .track span {display:block;height:100%;border-radius:20px;background:linear-gradient(to right,#3bb7ee,#72ffd1);width:0%;transition:width .5s}
+  .last-update {font-size:9px;color:#6685a6;margin-top:12px;line-height:1.5}
+  .right-cta {display:flex;align-items:center;gap:9px;padding:14px 20px;border-top:1px solid rgba(141,210,246,.1);background:rgba(59,156,207,.04);font-size:11px;font-weight:750;color:#99eefe;transition:background .2s}
+  .right-cta:hover {background:rgba(59,156,207,.11)}
+  .scene-label {position:absolute;top:0;left:0;z-index:3;transform:translate(-50%,-50%);color:#e6faff;font-size:11px;font-weight:900;letter-spacing:.12em;text-shadow:0 0 15px #001620,0 2px 3px #000;pointer-events:none;white-space:nowrap;opacity:0;transition:opacity .35s}
+  .scene-label:before {content:"";position:absolute;left:50%;top:calc(100% + 8px);height:30px;width:1px;background:linear-gradient(var(--tag-color),transparent);opacity:.8}
+  .scene-label > span {display:flex;align-items:center;gap:7px;padding:7px 10px;background:rgba(6,24,45,.66);border:1px solid rgba(125,226,252,.24);border-radius:7px;backdrop-filter:blur(8px)}
+  .scene-label i {width:6px;height:6px;border-radius:50%;background:var(--tag-color);box-shadow:0 0 13px var(--tag-color)}
+  .scene-label.active {filter:drop-shadow(0 0 13px var(--tag-color))}
+  .bottom-wrap {position:absolute;bottom:30px;left:50%;width:min(800px,calc(100% - 70px));transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:15px}
+  .bottom-caption {display:flex;align-items:center;gap:10px;text-align:center;color:#799cba;font-size:9px;font-weight:800;letter-spacing:.2em;text-shadow:0 1px 4px black}
+  .bottom-caption:before,.bottom-caption:after {content:"";height:1px;width:40px;background:linear-gradient(to right,transparent,rgba(96,208,255,.5))}
+  .bottom-caption:after {transform:rotate(180deg)}
+  .factory-switch {width:100%;padding:9px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border:1px solid rgba(108,189,240,.18);border-radius:20px;background:linear-gradient(140deg,rgba(12,29,53,.88),rgba(7,19,37,.89));backdrop-filter:blur(22px);box-shadow:0 25px 75px rgba(1,6,19,.64),inset 0 1px 0 rgba(255,255,255,.05)}
+  .factory-card {position:relative;display:flex;align-items:center;text-align:left;gap:12px;min-width:0;min-height:69px;border-radius:13px;padding:13px 14px;border:1px solid transparent;background:transparent;color:#fff;transition:background .2s,border .2s,transform .2s}
+  .factory-card:hover {background:rgba(109,209,243,.09)}
+  .factory-card.active {background:linear-gradient(110deg,rgba(43,111,157,.3),rgba(67,99,166,.14));border-color:rgba(126,221,255,.3)}
+  .factory-icon {position:relative;flex:none;width:33px;height:33px;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--fc) 55%, transparent);border-radius:10px;background:color-mix(in srgb,var(--fc) 11%, transparent);color:var(--fc);font-size:17px;box-shadow:inset 0 0 16px color-mix(in srgb,var(--fc) 9%, transparent)}
+  .factory-card b {display:block;font-size:14px;font-weight:850;letter-spacing:.015em;line-height:1.25}
+  .factory-card small {display:block;font-size:9px;margin-top:5px;color:#93abc2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+  .factory-card .arrow {margin-left:auto;color:#8db2c9;font-size:17px;transition:transform .2s}
+  .factory-card.active .arrow {color:#92eaff;transform:rotate(-45deg)}
+  .controls-hint {position:absolute;bottom:168px;left:calc(50% - 102px);font-size:10px;color:#779cb5;letter-spacing:.025em;text-align:center;pointer-events:none;text-shadow:0 1px 6px #001}
+  .controls-hint span {display:inline-flex;border:1px solid #39627b;border-radius:6px;padding:3px 6px;margin-right:3px;background:rgba(7,18,34,.7)}
+  .view-controls {position:absolute;bottom:172px;right:clamp(24px,3vw,46px);display:flex;gap:6px}
+  .round-btn {pointer-events:auto;border:1px solid rgba(115,189,234,.22);color:#a0d5ef;background:rgba(10,28,50,.78);border-radius:10px;width:38px;height:38px;font-size:16px;display:grid;place-items:center;backdrop-filter:blur(10px)}
+  .round-btn:hover {border-color:#55eaff;color:#fff;background:rgba(21,70,92,.8)}
+  .notice {position:absolute;bottom:172px;left:clamp(22px,3vw,47px);font-size:9px;color:#698cad;letter-spacing:.06em;max-width:250px;line-height:1.5}
+  .notice strong {color:#abcddd}
+  .bottom-strip {position:absolute;bottom:6px;left:0;right:0;text-align:center;color:#53718b;font-size:8px;letter-spacing:.18em;font-weight:750}
+  .sr-only {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+  /* Animated self-contained CSS 3D fallback, shown if a WebGL library cannot load. */
+  .fallback {position:absolute;inset:0;z-index:1;pointer-events:none;perspective:950px;overflow:hidden}
+  .fallback:before {content:"";position:absolute;left:18%;top:12%;width:64%;height:65%;border-radius:50%;background:radial-gradient(ellipse,#10426b 0%,transparent 67%);filter:blur(14px)}
+  .fake-room {position:absolute;left:50%;top:47%;width:830px;height:460px;transform:translate(-50%,-50%) rotateX(62deg) rotateZ(-1deg);transform-style:preserve-3d;animation:floatroom 11s ease-in-out infinite alternate}
+  @keyframes floatroom {to{transform:translate(-50%,-50%) rotateX(63deg) rotateZ(3deg)}}
+  .fake-floor {position:absolute;inset:0;transform:translateZ(-12px);background:linear-gradient(100deg,rgba(25,75,116,.34),rgba(1,16,34,.8)),repeating-linear-gradient(0deg,transparent 0px,transparent 30px,rgba(84,215,255,.23) 31px),repeating-linear-gradient(90deg,transparent 0px,transparent 30px,rgba(84,215,255,.23) 31px);border:2px solid rgba(74,226,255,.4);box-shadow:0 0 55px rgba(51,173,255,.2),inset 0 0 70px rgba(51,173,255,.12)}
+  .fake-factory {position:absolute;top:36%;width:190px;height:150px;border-radius:25px;transform-style:preserve-3d;transform:translateZ(25px);background:radial-gradient(ellipse at center,color-mix(in srgb,var(--fc) 20%, transparent),transparent 65%);border:3px solid color-mix(in srgb,var(--fc) 75%,transparent);box-shadow:0 0 32px color-mix(in srgb,var(--fc) 20%,transparent), inset 0 0 30px color-mix(in srgb,var(--fc) 18%,transparent)}
+  .fake-factory:nth-of-type(2) {left:7%}.fake-factory:nth-of-type(3) {left:38%}.fake-factory:nth-of-type(4) {left:69%}
+  .fake-build {position:absolute;left:38px;top:27px;width:110px;height:82px;background:linear-gradient(135deg,color-mix(in srgb,var(--fc) 65%,#08152c),#102c43);border:1px solid var(--fc);box-shadow:12px 13px 0 #08182a,12px 13px 2px var(--fc),0 0 38px color-mix(in srgb,var(--fc) 17%,transparent);transform:translateZ(80px) rotateX(-12deg)}
+  .fake-build:before {content:"";display:block;position:absolute;left:5px;top:15px;width:98px;height:8px;background:repeating-linear-gradient(90deg,#86dbf0 0 7px,transparent 8px 16px);opacity:.5}
+  .fake-build:after {content:"";position:absolute;left:14px;top:-36px;width:20px;height:39px;background:linear-gradient(#72eaff,#11344f);box-shadow:55px 9px 0 -3px #1e80ae,0 0 20px var(--fc)}
+  .fake-orbit {position:absolute;inset:-13px;border:1px dashed color-mix(in srgb,var(--fc) 80%,transparent);border-radius:36px;animation:orbit 9s linear infinite}
+  @keyframes orbit {to{transform:rotate(360deg)}}
+  .fallback-title {position:absolute;left:50%;top:15%;transform:translateX(-50%);color:#70dafa;letter-spacing:.28em;text-shadow:0 0 24px #2293e9;font-size:12px;font-weight:800;white-space:nowrap}
+  .fallback-err {position:absolute;top:68%;left:50%;transform:translateX(-50%);text-align:center;color:#91b1c9;font-size:11px;background:rgba(8,21,39,.83);border:1px solid rgba(80,151,198,.23);padding:9px 14px;border-radius:8px;max-width:80%}
+
+  @media(min-width:1500px) { .hero {width:340px}.right-pane {width:305px} .bottom-wrap {width:855px} }
+  @media(max-width:1180px) {.hero {width:245px}h1{font-size:40px}.hero p{font-size:11px}.right-pane{width:236px}.right-pane .top,.kpi-grid,.progress-section{padding-left:17px;padding-right:17px}.pane-title{font-size:24px}.statval{font-size:23px}.bottom-wrap{width:min(680px,calc(100% - 40px))}.notice{display:none}.controls-hint{left:30px;bottom:166px}}
+  @media(max-width:850px) {
+    .app{min-height:590px}
+    header{padding:17px 18px;min-height:70px}.brandmark{width:39px;height:39px}.brand b{font-size:14px}.brand small{font-size:8px}.top-tools{gap:6px}.live-indicator{padding:9px 10px;font-size:8px}.top-tools .navbtn{font-size:10px;padding:0 10px}
+    .hero{top:92px;left:22px;width:245px}.eyebrow{font-size:8px}h1{font-size:36px;margin:13px 0}.hero p{font-size:11px;max-width:205px}.hero-sep{margin:13px 0}.hero-metrics{gap:9px}.hero-metrics .val{font-size:18px}.hero-metrics .name{font-size:8px}
+    .right-pane{top:94px;right:18px;width:210px}.right-pane .top{padding-top:17px}.pane-title{font-size:23px}.kpi-grid{gap:12px}.statval{font-size:20px}.progress-section{padding-top:9px;padding-bottom:12px}
+    .bottom-wrap{width:calc(100% - 32px);bottom:28px}.view-controls{bottom:161px;right:19px}.controls-hint{display:none}
+  }
+  @media(max-width:600px) {
+    .app {min-height:550px}
+    header {align-items:center;padding:14px 13px}.brand{gap:8px}.brandmark{width:36px;height:36px;border-radius:10px;font-size:22px}.brand b{font-size:13px;letter-spacing:.16em}.brand small{font-size:7px;letter-spacing:.09em}.top-tools .navbtn{height:33px;padding:0 9px;font-size:9px}.top-tools .navbtn.secondary{display:none}.live-indicator{font-size:7px;padding:8px;gap:5px}
+    .hero{top:83px;left:17px;width:53%}.eyebrow{font-size:7px;letter-spacing:.12em;gap:5px}.eyebrow:before{width:12px}h1{font-size:clamp(26px,7.4vw,38px);margin:12px 0 9px}.hero p{font-size:10px;line-height:1.55;max-width:210px}.hero-sep{margin:12px 0}.hero-metrics .val{font-size:17px}.hero-metrics .name{font-size:7px;letter-spacing:0}
+    .right-pane {top:84px;right:10px;width:42%;max-width:192px;border-radius:13px}.right-pane .top{padding:12px 12px 9px}.pane-kicker{font-size:7px}.pane-title{font-size:19px;margin-top:7px}.pane-sub{font-size:8px;margin-top:3px}.kpi-grid{padding:9px 12px;gap:10px 5px}.statname{font-size:8px}.statval{font-size:18px}.progress-section{padding:7px 12px 12px}.progress-title{font-size:8px}.last-update{font-size:8px}.right-cta{padding:9px 12px;font-size:9px}
+    .bottom-wrap{bottom:27px;width:calc(100% - 16px);gap:8px}.bottom-caption{font-size:8px}.bottom-caption:before,.bottom-caption:after{width:17px}.factory-switch{padding:5px;gap:4px;border-radius:14px}.factory-card{min-height:57px;padding:8px 5px;gap:5px;border-radius:9px}.factory-card b{font-size:10px}.factory-card small{font-size:7px;margin-top:4px}.factory-icon{width:23px;height:26px;font-size:12px;border-radius:6px}.factory-card .arrow{display:none}
+    .view-controls{bottom:141px;right:11px}.round-btn{width:32px;height:32px;font-size:14px}.scene-label{font-size:8px}.scene-label>span{padding:4px 6px}.bottom-strip{font-size:7px}
+    .fake-room{animation:floatroomMobile 11s ease-in-out infinite alternate;transform:translate(-50%,-50%) scale(.43) rotateX(62deg)}
+    @keyframes floatroomMobile {
+      from {transform:translate(-50%,-50%) scale(.43) rotateX(62deg) rotateZ(-1deg)}
+      to {transform:translate(-50%,-50%) scale(.43) rotateX(63deg) rotateZ(3deg)}
+    }
+  }
+  @media(max-width:600px) {
+    .hero {width:calc(100% - 30px);top:84px}
+    .hero h1 {font-size:clamp(25px,8vw,31px);line-height:1.05;max-width:310px;margin:10px 0 12px;letter-spacing:-.055em}
+    .hero h1 span {display:inline}
+    .hero p,.hero-sep {display:none}
+    .hero-metrics {display:flex;gap:20px}
+    .hero-metrics .val{font-size:17px}
+    .hero-metrics .name{font-size:7px}
+    .right-pane {top:auto;bottom:155px;left:14px;right:14px;width:calc(100% - 28px);max-width:none;border-radius:13px;display:grid;grid-template-columns:1fr 1.8fr;align-items:center;min-height:95px}
+    .right-pane:before{right:8px;left:8px}
+    .right-pane .top{padding:12px}
+    .pane-kicker,.pane-sub,.right-pane .separator,.progress-section,.right-cta{display:none}
+    .pane-title{font-size:20px;margin-top:0}
+    .kpi-grid{grid-template-columns:1fr 1fr;padding:12px;gap:8px 10px}
+    .statname{font-size:8px;margin-bottom:3px}
+    .statval{font-size:17px}
+    .view-controls{bottom:262px}
+    .fallback-title{display:none}
+    .fallback-err{font-size:9px;top:60%;padding:6px 10px}
+  }
+  @media(max-height:720px) and (min-width:600px){.hero,.right-pane{top:104px}.hero p{font-size:11px}.hero-sep{margin:14px 0}.bottom-wrap{bottom:20px}.view-controls,.controls-hint{bottom:155px}}
+  @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
+<!-- Existing file from the same MERCY GitHub repository. Optional for local preview. -->
+<script src="./config.js" onerror="void 0"></script>
+</head>
+<body>
+<main class="app" id="app">
+  <div class="stars"></div><div class="beam"></div>
+  <div id="stage" aria-label="Ruang kontrol tiga dimensi: geser untuk memutar kamera dan klik pabrik untuk memilih" tabindex="0">
+    <div class="fallback" id="fallback">
+      <div class="fallback-title">M E R C Y &nbsp; / &nbsp; C O N T R O L &nbsp; R O O M</div>
+      <div class="fake-room" id="fakeRoom"><div class="fake-floor"></div>
+        <div class="fake-factory" style="--fc:#58edff"><div class="fake-build"></div><div class="fake-orbit"></div></div>
+        <div class="fake-factory" style="--fc:#b69bff"><div class="fake-build"></div><div class="fake-orbit"></div></div>
+        <div class="fake-factory" style="--fc:#ffc58a"><div class="fake-build"></div><div class="fake-orbit"></div></div>
+      </div>
+      <div class="fallback-err" id="fallbackNote">Menyiapkan efek WebGL 3D…</div>
+    </div>
+  </div>
+  <div class="scanlines"></div><div class="noise"></div>
+  <div class="ui">
+    <header>
+      <div class="brand"><div class="brandmark" aria-hidden="true">M</div><div><b>MERCY<span style="color:#62dff8">.</span></b><small>INDUSTRIAL INTELLIGENCE</small></div></div>
+      <div class="top-tools">
+        <div class="live-indicator" id="sourceIndicator"><i class="pulse"></i><span id="sourceText">MODE SIMULASI</span></div>
+        <a class="navbtn secondary" href="https://nuryads.github.io/mercy-dashboard/" target="_blank" rel="noopener noreferrer">☷ &nbsp;Daftar PO</a>
+        <a class="navbtn primary" href="https://nuryads.github.io/mercy-dashboard/" target="_blank" rel="noopener noreferrer">Dashboard asli ↗</a>
+      </div>
+    </header>
+    <section class="hero" aria-label="Ringkasan Command Center">
+      <div class="eyebrow">CONTROL ROOM / 001</div>
+      <h1>Monitor. <span>Control.</span> Evolve.</h1>
+      <p>Semua pesanan, satu ruang kendali. Pantau pergerakan PO di Tridaya, Inna, dan KBI secara interaktif.</p>
+      <div class="hero-sep"></div>
+      <div class="hero-metrics">
+        <div><span class="val" id="allTotal">—</span><span class="name">TOTAL PO</span></div>
+        <div><span class="val" id="allPending">—</span><span class="name">BELUM DATANG</span></div>
+        <div><span class="val warn" id="allAged">—</span><span class="name">FOLLOW UP</span></div>
+      </div>
+    </section>
+    <section class="right-pane" id="rightPane" style="--accent:#59eaff" aria-label="Informasi pabrik terpilih">
+      <div class="top">
+        <div class="pane-kicker">FACTORY INTELLIGENCE <span>● SELECTED</span></div>
+        <div class="pane-title" id="selectedName">TRIDAYA</div>
+        <div class="pane-sub" id="selectedSubtitle">Factory Node 01 · Monitoring PO</div>
+      </div>
+      <div class="separator"></div>
+      <div class="kpi-grid" aria-live="polite">
+        <div><div class="statname">Total PO</div><div class="statval cyan" id="factoryTotal">—</div></div>
+        <div><div class="statname">Belum datang</div><div class="statval" id="factoryPending">—</div></div>
+        <div><div class="statname">Perlu follow up</div><div class="statval amber" id="factoryAged">—</div></div>
+        <div><div class="statname">Total QTY terisi</div><div class="statval purple" id="factoryQty">—</div></div>
+      </div>
+      <div class="separator"></div>
+      <div class="progress-section"><div class="progress-title"><span>Barang sudah datang</span><strong id="arrivedText">—</strong></div><div class="track"><span id="arrivalBar"></span></div><div class="last-update" id="dataNote">Data simulasi untuk pratinjau tampilan 3D.</div></div>
+      <a href="https://nuryads.github.io/mercy-dashboard/" target="_blank" rel="noopener noreferrer" class="right-cta">⌁ &nbsp; Buka tabel & laporan PO &nbsp;↗</a>
+    </section>
+    <div class="scene-label" id="label-TRIDAYA" style="--tag-color:#56eaff"><span><i></i> TRIDAYA</span></div>
+    <div class="scene-label" id="label-INNA" style="--tag-color:#b09cff"><span><i></i> INNA</span></div>
+    <div class="scene-label" id="label-KBI" style="--tag-color:#ffbf83"><span><i></i> KBI</span></div>
+    <div class="notice"><strong>PROTOTIPE INTERAKTIF</strong><br />Halaman ini hanya membaca data. Tambah/Edit PO tetap di dashboard asli.</div>
+    <div class="controls-hint"><span>↔</span> Geser untuk memutar &nbsp; <span>⊕</span> Scroll untuk zoom</div>
+    <div class="view-controls">
+      <button class="round-btn" id="motionBtn" title="Jeda / jalankan animasi" aria-label="Jeda animasi">Ⅱ</button>
+      <button class="round-btn" id="resetBtn" title="Reset sudut kamera" aria-label="Reset kamera">⟳</button>
+    </div>
+    <div class="bottom-wrap"><div class="bottom-caption">EXPLORE PRODUCTION NETWORK</div>
+      <nav class="factory-switch" aria-label="Pilih pabrik">
+        <button type="button" class="factory-card active" data-factory="TRIDAYA" style="--fc:#59eaff" aria-pressed="true"><span class="factory-icon" aria-hidden="true">⌘</span><span><b>TRIDAYA</b><small id="count-TRIDAYA">Node 01 · 0 PO</small></span><span class="arrow">↗</span></button>
+        <button type="button" class="factory-card" data-factory="INNA" style="--fc:#b09cff" aria-pressed="false"><span class="factory-icon" aria-hidden="true">◇</span><span><b>INNA</b><small id="count-INNA">Node 02 · 0 PO</small></span><span class="arrow">↗</span></button>
+        <button type="button" class="factory-card" data-factory="KBI" style="--fc:#ffbf83" aria-pressed="false"><span class="factory-icon" aria-hidden="true">▣</span><span><b>KBI</b><small id="count-KBI">Node 03 · 0 PO</small></span><span class="arrow">↗</span></button>
+      </nav>
+    </div>
+    <div class="bottom-strip">MERCY COMMAND CENTER &nbsp; / &nbsp; TRIDAYA · INNA · KBI &nbsp; / &nbsp; 2026</div>
+  </div>
+</main>
+<script type="module">
+/* MERCY 3D — self-contained presentation layer. All Firebase access is read-only. */
+const $ = id => document.getElementById(id);
+const NAMES = ['TRIDAYA','INNA','KBI'];
+const COLORS = {TRIDAYA:'#59eaff', INNA:'#b09cff', KBI:'#ffbf83'};
+const NODE = {TRIDAYA:'01', INNA:'02', KBI:'03'};
+const fmt = n => Math.round(Number(n)||0).toLocaleString('id-ID');
+const initialDemo = {
+  TRIDAYA:{total:34,pending:18,aged:6,arrived:13,qty:48200},
+  INNA:{total:21,pending:8,aged:3,arrived:12,qty:21750},
+  KBI:{total:16,pending:5,aged:1,arrived:9,qty:13400}
+};
+let stats=initialDemo, selected='TRIDAYA', dataMode='demo', running=!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function setSource(label, mode) {
+  dataMode=mode; $('sourceText').textContent=label;
+  $('sourceIndicator').className='live-indicator' + (mode==='live'?' live':mode==='error'?' error':'');
+  $('dataNote').textContent=mode==='live' ? 'Data aktif · otomatis mengikuti perubahan Firebase.' : mode==='cache' ? 'Data dari cache Firestore. Belum tentu paling baru.' : mode==='connecting' ? 'Menghubungkan Firebase… angka sementara adalah simulasi.' : mode==='error' ? 'Firebase tidak tersedia. Angka yang tampil hanya simulasi.' : 'Angka contoh, bukan data PO asli. Upload bersama file Firebase untuk data live.';
+}
+function updateStats() {
+  const total=NAMES.reduce((s,k)=>s+(stats[k]?.total||0),0);
+  const pending=NAMES.reduce((s,k)=>s+(stats[k]?.pending||0),0);
+  const aged=NAMES.reduce((s,k)=>s+(stats[k]?.aged||0),0);
+  $('allTotal').textContent=fmt(total);$('allPending').textContent=fmt(pending);$('allAged').textContent=fmt(aged);
+  NAMES.forEach(k=>{$('count-'+k).textContent=`Node ${NODE[k]} · ${fmt(stats[k]?.total||0)} PO`;});
+  const f=stats[selected]||{total:0,pending:0,aged:0,arrived:0,qty:0};
+  $('selectedName').textContent=selected;
+  $('selectedSubtitle').textContent=`Factory Node ${NODE[selected]} · Monitoring PO`;
+  $('rightPane').style.setProperty('--accent',COLORS[selected]);
+  $('factoryTotal').textContent=fmt(f.total);$('factoryPending').textContent=fmt(f.pending);
+  $('factoryAged').textContent=fmt(f.aged);$('factoryQty').textContent=fmt(f.qty);
+  const completion=f.total?Math.round(f.arrived/f.total*100):0;
+  $('arrivedText').textContent=`${fmt(f.arrived)} PO / ${completion}%`;
+  $('arrivalBar').style.width=completion+'%';
+}
+function selectFactory(name) {
+  if(!NAMES.includes(name))return;
+  selected=name;updateStats();
+  document.querySelectorAll('.factory-card').forEach(b=>{const yes=b.dataset.factory===name;b.classList.toggle('active',yes);b.setAttribute('aria-pressed',String(yes));});
+  NAMES.forEach(k=>$('label-'+k).classList.toggle('active',k===selected));
+  window.dispatchEvent(new CustomEvent('mercy:factory',{detail:{name}}));
+}
+document.querySelectorAll('.factory-card').forEach(b=>b.addEventListener('click',()=>selectFactory(b.dataset.factory)));
+let resetCamera=()=>{};
+$('resetBtn').addEventListener('click',()=>resetCamera());
+$('motionBtn').addEventListener('click',()=>{running=!running;$('motionBtn').textContent=running?'Ⅱ':'▶';$('motionBtn').setAttribute('aria-label',running?'Jeda animasi':'Jalankan animasi');});
+$('motionBtn').textContent=running?'Ⅱ':'▶';
+document.addEventListener('keydown',e=>{if(e.target instanceof HTMLInputElement)return;if(e.key==='1')selectFactory('TRIDAYA');if(e.key==='2')selectFactory('INNA');if(e.key==='3')selectFactory('KBI');if(e.key.toLowerCase()==='r')resetCamera();});
+updateStats(); setSource('MODE SIMULASI','demo');
+
+/* Use the project's existing config.js + firebase-client.js when the file is deployed in the repo root. */
+async function connectFirebase() {
+  const config=window.MERCY_CONFIG;
+  if(!config?.firebase?.projectId)return;
+  setSource('MENGHUBUNGKAN…','connecting');
+  try {
+    const {startFirebase}=await import('./firebase-client.js');
+    startFirebase(config,{
+      onAuth:()=>{},
+      onRows:(rows,meta={})=>{
+        stats=aggregate(rows);
+        updateStats();
+        setSource(meta.cache?'DATA CACHE':'FIREBASE LIVE',meta.cache?'cache':'live');
+      },
+      onError:e=>{console.warn('MERCY 3D: Firebase read error',e);setSource('KONEKSI GAGAL','error');}
+    });
+  } catch(e){console.warn('MERCY 3D: Firebase connection unavailable',e);setSource('MODE SIMULASI','error');}
+}
+const cancellation=/\b(CANCEL|CANCELLED|BATAL|DIBATALKAN)\b/i;
+function isArrived(s){
+  const str=String(s||'').trim();
+  return /^(?:\d{4}[-/]\d{1,2}[-/]\d{1,2}|\d{1,2}[-/]\d{1,2}[-/]\d{4})$/.test(str);
+}
+function poAge(s){
+  const t=String(s||'').trim().match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/);
+  if(!t)return null;
+  const d=Date.UTC(+t[1],+t[2]-1,+t[3]);
+  const parts=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+  const today=Object.fromEntries(parts.map(({type,value})=>[type,value]));
+  const age=Math.round((Date.UTC(+today.year,+today.month-1,+today.day)-d)/86400000);
+  return age>=0?age:null;
+}
+function aggregate(rows){
+  const out=Object.fromEntries(NAMES.map(k=>[k,{total:0,pending:0,aged:0,arrived:0,qty:0}]));
+  for(const r of (Array.isArray(rows)?rows:[])){
+    let k=String(r.pabrik||'').trim().toUpperCase();
+    if(!NAMES.includes(k))k='TRIDAYA'; // Matches MERCY handling of older PO without a factory.
+    const f=out[k];f.total++;
+    const cancelled=cancellation.test(String(r.status||'')) || (!isArrived(r.barangDatang) && cancellation.test(`${r.barangDatang||''} ${r.barangDatangCatatan||''}`));
+    const arrived=!cancelled&&isArrived(r.barangDatang);
+    if(arrived)f.arrived++;
+    if(!cancelled&&!arrived){f.pending++;const age=poAge(r.tgl);if(age!==null&&age>=30)f.aged++;}
+    const q=r.qty;
+    if(q!==null&&q!==''&&q!==undefined){const n=Number(q);if(Number.isFinite(n)&&n>=0)f.qty+=n;}
+  }
+  return out;
+}
+connectFirebase();
+
+/* 3D renderer. Three.js is imported at runtime, so preview stays visible without network. */
+async function getThree(){
+  for(const url of [
+    'https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js',
+    'https://unpkg.com/three@0.169.0/build/three.module.js'
+  ]) {try{return await import(url)}catch(e){console.warn('Three.js CDN unavailable:',url,e)}}
+  throw new Error('Three.js belum bisa dimuat. Cek akses internet.');
+}
+try {await create3D(await getThree())}
+catch(err){console.warn('MERCY 3D fallback enabled:',err);$('fallbackNote').textContent='Pratinjau CSS 3D aktif. Untuk WebGL 3D lengkap, sambungkan internet lalu buka kembali.';}
+
+async function create3D(THREE){
+  const stage=$('stage');
+  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,window.innerWidth<600?1.25:1.75));
+  renderer.setSize(stage.clientWidth,stage.clientHeight);
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.55;
+  stage.appendChild(renderer.domElement);
+  $('fallback').hidden=true;
+  const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x040b1a,.025);
+  const camera=new THREE.PerspectiveCamera(47,stage.clientWidth/stage.clientHeight,.1,120);
+  scene.add(new THREE.AmbientLight(0x77baf8,1.1));
+  const fill=new THREE.DirectionalLight(0x79b9ff,2.1);fill.position.set(-5,12,8);scene.add(fill);
+  const rim=new THREE.PointLight(0x23cfff,58,33,2);rim.position.set(1,8,-2);scene.add(rim);
+  const purpleLight=new THREE.PointLight(0x9364ff,26,20,2);purpleLight.position.set(5,4,-2);scene.add(purpleLight);
+  const amberLight=new THREE.PointLight(0xffaf67,19,15,2);amberLight.position.set(-7,3,2);scene.add(amberLight);
+  const mat=(color,metalness=.52,roughness=.34,emissive=0x000000,emissiveIntensity=0)=>new THREE.MeshStandardMaterial({color,metalness,roughness,emissive,emissiveIntensity});
+  const baseMat=mat(0x172c45,.78,.28), dark=mat(0x0c182d,.75,.26), floorMat=mat(0x07162b,.72,.54), lineMat=mat(0x235879,.45,.36,0x15698d,.33);
+  const glow=(color,opacity=.75)=>new THREE.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false,blending:THREE.AdditiveBlending});
+  const makeBox=(parent,w,h,d,x,y,z,material)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);m.position.set(x,y,z);parent.add(m);return m};
+  const makeCyl=(parent,top,bottom,height,x,y,z,material,segments=28)=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(top,bottom,height,segments),material);m.position.set(x,y,z);parent.add(m);return m};
+  const makeRing=(parent,r,tube,x,y,z,material,segments=68)=>{const m=new THREE.Mesh(new THREE.TorusGeometry(r,tube,7,segments),material);m.rotation.x=Math.PI/2;m.position.set(x,y,z);parent.add(m);return m};
+  const animated=[], interactive=[];
+  const floor=makeBox(scene,24,.18,19,0,-.5,-1,floorMat);
+  makeBox(scene,24,.08,.11,0,-.37,8.45,glow(0x12bfdc,.6));
+  makeBox(scene,24,.08,.10,0,-.37,-10.4,glow(0x1551b3,.6));
+  for(let x=-11;x<=11;x+=1){makeBox(scene,.011,.014,18,x,-.387,-1,lineMat)}
+  for(let z=-10;z<=8;z+=1){makeBox(scene,23,.014,.011,0,-.386,z,lineMat)}
+  // Long metallic railing and side columns produce a physical sci-fi control room.
+  for(const z of [-8.5,-5.6,-2.6,1.0,4.8])for(const x of [-11.5,11.5]){
+    makeBox(scene,.2,6.1,.25,x,2.58,z,mat(0x102a4b,.7,.28,0x0e4a68,.25));
+    makeBox(scene,.28,.11,.36,x,5.55,z,glow(0x2ee5ff,.6));
+  }
+  makeBox(scene,22,.15,.28,0,5.6,-8.7,dark);
+  makeBox(scene,22,4,.10,0,2.9,-9.3,new THREE.MeshBasicMaterial({color:0x102a50,transparent:true,opacity:.20}));
+  for(let x=-10;x<=10;x+=2.5){makeBox(scene,.024,3.6,.11,x,3.2,-9.24,glow(0x226bc7,.34));}
+  for(let y=1.2;y<5.4;y+=.78){makeBox(scene,21,.014,.11,0,y,-9.2,glow(0x226bc7,.22));}
+  // Large circular HUD on back wall.
+  const wallHUD=new THREE.Group();wallHUD.position.set(0,4.2,-8.85);scene.add(wallHUD);
+  const HUDmat=glow(0x33e9ff,.49);
+  for(const rad of [1.55,1.9,2.3]){
+    const mesh=new THREE.Mesh(new THREE.TorusGeometry(rad,.015,5,100),HUDmat);
+    mesh.rotation.z=rad;wallHUD.add(mesh);animated.push({type:'spinZ',mesh,speed:rad>2?-.0015:.002});
+  }
+  const marks=36;
+  for(let i=0;i<marks;i++){
+    const a=i/marks*Math.PI*2,r=2.47;
+    const tick=makeBox(wallHUD,.02,(i%3===0?.17:.08),.01,Math.cos(a)*r,Math.sin(a)*r,0,glow(0x6bcbfd,.48));tick.rotation.z=a-Math.PI/2;
+  }
+  // Central hovering orb + scan rings.
+  const orbMat=new THREE.MeshStandardMaterial({color:0x12528d,metalness:.73,roughness:.18,emissive:0x0794be,emissiveIntensity:1.05,transparent:true,opacity:.65,wireframe:true});
+  const orb=new THREE.Mesh(new THREE.IcosahedronGeometry(.78,2),orbMat);orb.position.set(0,4.2,-8.1);scene.add(orb);animated.push({type:'orb',mesh:orb});
+  // Suspended conduits.
+  for(let i=-1;i<=1;i++){
+    const cable=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([
+      new THREE.Vector3(i*5,3.2,-2),new THREE.Vector3(i*5,4.5,-4.4),new THREE.Vector3(i*2.7,5.1,-6.2),new THREE.Vector3(0,4.1,-8.8)
+    ]),36,.016,5,false),glow(i===-1?0x41f6ff:i===0?0xb09cff:0xffbc7e,.31));scene.add(cable);
+  }
+  // Factory assembly: miniature buildings, rotating energy machinery and lift platforms.
+  const locations={TRIDAYA:-5.5,INNA:0,KBI:5.5};
+  const tagPositions={};
+  function factory(name,index){
+    const x=locations[name],c=new THREE.Color(COLORS[name]);
+    const group=new THREE.Group();group.position.set(x,0,1.25);scene.add(group);
+    const accent=mat(c,.35,.28,c,.34), glass=new THREE.MeshStandardMaterial({color:c,transparent:true,opacity:.2,metalness:.3,roughness:.08,emissive:c,emissiveIntensity:.8});
+    const light=glow(c,.78),steel=mat(0x173451,.8,.25), darkSteel=mat(0x07172a,.78,.28);
+    const pad=makeCyl(group,2.28,2.45,.37,0,-.16,0,darkSteel,6);pad.rotation.y=Math.PI/6;
+    const upper=makeCyl(group,2.13,2.25,.19,0,.08,0,steel,6);upper.rotation.y=Math.PI/6;
+    const disc=makeCyl(group,2.02,2.10,.045,0,.21,0,glass,6);disc.rotation.y=Math.PI/6;
+    for(const y of [.03,.20]){
+      const ring=makeRing(group,2.28,.025,0,y,0,light,6);ring.rotation.z=Math.PI/6;
+    }
+    const spinning=makeRing(group,2.5,.013,0,.22,0,glow(c,.42),6);animated.push({type:'spinY',mesh:spinning,speed:.004+index*.0006});
+    // Ventilated industrial building (front facing +Z).
+    makeBox(group,2.9,1.15,1.52,0,1.01,0,steel);
+    makeBox(group,3.04,.09,1.69,0,1.59,0,darkSteel);
+    for(let i=-1;i<=1;i++){
+      const roof=makeBox(group,.88,.46,1.40,i*.95,1.85,-.02,steel);roof.rotation.z=-.13;
+      makeBox(group,.11,.24,1.42,i*.95+.33,2.10,-.02,light);
+    }
+    for(let k=-1;k<=1;k++){
+      makeBox(group,.42,.36,.04,k*.83,1.1,.79,glass);
+      makeBox(group,.07,.37,.055,k*.83,1.1,.82,light);
+    }
+    // Multiple animated reactors / tall stacks.
+    for(let k=0;k<2;k++){
+      let stackX=k===0?-1.10:1.07;
+      if(index===1)stackX=k===0?-.95:1.03;
+      const height=index===2?1.3+k*.22:.95+k*.30;
+      makeCyl(group,.21,.25,height,stackX,1.58+height/2,-.45,darkSteel,10);
+      makeCyl(group,.24,.24,.10,stackX,1.60+height,-.45,light,10);
+      const core=makeCyl(group,.14,.14,.28,stackX,1.73+height,-.45,glass,12);animated.push({type:'stack',mesh:core,base:core.position.y,phase:k*1.7+index});
+    }
+    // Rotating turbine on a forward control cabinet.
+    const turbine=new THREE.Group();turbine.position.set(.03,1.07,1.06);group.add(turbine);
+    const motor=new THREE.Mesh(new THREE.TorusGeometry(.44,.095,8,28),accent);turbine.add(motor);
+    for(let j=0;j<5;j++){
+      const a=j*Math.PI*2/5;
+      const spoke=new THREE.Mesh(new THREE.BoxGeometry(.11,.72,.07),steel);spoke.rotation.z=a;spoke.position.set(Math.sin(a)*.18,Math.cos(a)*.18,0);turbine.add(spoke);
+    }
+    const core=new THREE.Mesh(new THREE.SphereGeometry(.15,12,8),light);core.position.z=.08;turbine.add(core);
+    animated.push({type:'spinZ',mesh:turbine,speed:index%2===0?.018:-.016});
+    // Conveyor with a moving glowing cargo block.
+    makeBox(group,1.75,.20,.59,0,.57,1.47,darkSteel);
+    for(let i=0;i<6;i++)makeBox(group,.065,.04,.65,-.72+i*.28,.70,1.47,light);
+    const crate=makeBox(group,.25,.24,.30,0,.88,1.47,accent);animated.push({type:'crate',mesh:crate,phase:index*1.3});
+    // Hologram: translucent rising beam and counter rotating disks.
+    const laser=new THREE.Mesh(new THREE.CylinderGeometry(.35,.13,2.0,16,1,true),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.075,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide}));
+    laser.position.y=3.65;group.add(laser);
+    for(const rad of [.56,.79]){
+      const ring=makeRing(group,rad,.025,0,rad===.56?4.4:4.65,0,glow(c,.65));
+      animated.push({type:'scan',mesh:ring,base:ring.position.y,phase:rad*9+index});
+    }
+    const beacon=new THREE.Mesh(new THREE.OctahedronGeometry(.23),glass);beacon.position.set(0,4.5,0);group.add(beacon);animated.push({type:'beacon',mesh:beacon,phase:index});
+    tagPositions[name]=new THREE.Vector3(x,5.1,1.25);
+    group.traverse(m=>{if(m.isMesh){m.userData.factory=name;interactive.push(m)}});
+    return group;
+  }
+  const factories=NAMES.map(factory);
+  // Industrial floating particles.
+  const particles=new Float32Array(280*3);
+  for(let i=0;i<280;i++){particles[i*3]=(Math.random()-.5)*27;particles[i*3+1]=Math.random()*9;particles[i*3+2]=(Math.random()-.5)*21;}
+  const pGeom=new THREE.BufferGeometry();pGeom.setAttribute('position',new THREE.BufferAttribute(particles,3));
+  const points=new THREE.Points(pGeom,new THREE.PointsMaterial({color:0x5ea4ed,size:.039,transparent:true,opacity:.5,blending:THREE.AdditiveBlending,depthWrite:false}));scene.add(points);
+  // Soft directional scan line crosses the floor.
+  const scan=makeBox(scene,21,.012,.05,0,-.34,-4,glow(0x2be7fc,.18));
+
+  const raycaster=new THREE.Raycaster();const pointer=new THREE.Vector2();
+  let azimuth=.13,polar=1.20,radius=17.9;
+  let targetAzimuth=azimuth,targetPolar=polar,targetRadius=radius,targetFocus=0,focus=0;
+  let down=null;
+  function calibrate(){return window.innerWidth<600?23:window.innerWidth<920?19.5:17.9}
+  radius=targetRadius=calibrate();
+  function updateCamera(){
+    azimuth+=(targetAzimuth-azimuth)*.08;polar+=(targetPolar-polar)*.08;radius+=(targetRadius-radius)*.08;focus+=(targetFocus-focus)*.06;
+    const lookX=focus;
+    const y=1.8;
+    camera.position.set(lookX+radius*Math.sin(polar)*Math.sin(azimuth),y+radius*Math.cos(polar),radius*Math.sin(polar)*Math.cos(azimuth)+1.6);
+    camera.lookAt(lookX,1.8,-.6);
+  }
+  resetCamera=()=>{targetAzimuth=.13;targetPolar=1.20;targetRadius=calibrate();targetFocus=0};
+  window.addEventListener('mercy:factory',e=>{targetFocus=locations[e.detail.name]*.10;});
+  stage.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY,a:targetAzimuth,p:targetPolar,moved:false};stage.setPointerCapture(e.pointerId);stage.classList.add('dragging');});
+  stage.addEventListener('pointermove',e=>{
+    if(!down)return;
+    const dx=e.clientX-down.x,dy=e.clientY-down.y;
+    if(Math.abs(dx)+Math.abs(dy)>7)down.moved=true;
+    targetAzimuth=Math.max(-.83,Math.min(.83,down.a-dx*.004));
+    targetPolar=Math.max(.73,Math.min(1.48,down.p+dy*.003));
+  });
+  stage.addEventListener('pointerup',e=>{
+    stage.classList.remove('dragging');const prev=down;down=null;
+    if(!prev||prev.moved)return;
+    const r=renderer.domElement.getBoundingClientRect();pointer.x=((e.clientX-r.left)/r.width)*2-1;pointer.y=-((e.clientY-r.top)/r.height)*2+1;
+    raycaster.setFromCamera(pointer,camera);
+    const hits=raycaster.intersectObjects(interactive,false);
+    if(hits.length&&hits[0].object.userData.factory)selectFactory(hits[0].object.userData.factory);
+  });
+  stage.addEventListener('pointercancel',()=>{down=null;stage.classList.remove('dragging')});
+  stage.addEventListener('wheel',e=>{e.preventDefault();targetRadius=Math.max(11.5,Math.min(27,targetRadius+e.deltaY*.013));},{passive:false});
+  stage.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')targetAzimuth+=.10;if(e.key==='ArrowRight')targetAzimuth-=.10;if(e.key==='ArrowUp')targetPolar=Math.max(.75,targetPolar-.10);if(e.key==='ArrowDown')targetPolar=Math.min(1.45,targetPolar+.10)});
+  const onResize=()=>{const w=stage.clientWidth,h=stage.clientHeight;camera.aspect=w/h;camera.fov=window.innerWidth<600?56:47;camera.updateProjectionMatrix();renderer.setSize(w,h);renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,w<600?1.25:1.75));};
+  window.addEventListener('resize',onResize);onResize();
+  let elapsed=0,last=performance.now();
+  function animate(t){
+    requestAnimationFrame(animate);
+    const dt=Math.min(.05,(t-last)/1000);last=t;
+    if(running){elapsed+=dt;if(!down){targetAzimuth+=Math.sin(elapsed*.23)*.00008}}
+    const f=elapsed*60;
+    for(const a of animated){
+      if(a.type==='spinZ')a.mesh.rotation.z+=running?a.speed*dt*60:0;
+      if(a.type==='spinY')a.mesh.rotation.z+=running?a.speed*dt*60:0;
+      if(a.type==='orb'&&running){a.mesh.rotation.y+=dt*.19;a.mesh.rotation.x+=dt*.08}
+      if(a.type==='stack')a.mesh.position.y=a.base+Math.sin(f*.04+a.phase)*.13;
+      if(a.type==='crate')a.mesh.position.x=Math.sin(f*.014+a.phase)*.69;
+      if(a.type==='scan')a.mesh.position.y=a.base+Math.sin(f*.021+a.phase)*.12;
+      if(a.type==='beacon'){a.mesh.rotation.y+=running?dt*.42:0;a.mesh.position.y=4.5+Math.sin(f*.024+a.phase)*.17;}
+    }
+    if(running){scan.position.z=-6+((elapsed*1.15)%15);points.rotation.y=Math.sin(elapsed*.09)*.014}
+    updateCamera();
+    NAMES.forEach(k=>{
+      const v=tagPositions[k].clone().project(camera);const tag=$('label-'+k);
+      const visible=v.z<1&&v.z>-1;
+      tag.style.left=((v.x+1)/2*stage.clientWidth)+'px';
+      tag.style.top=((1-v.y)/2*stage.clientHeight)+'px';
+      tag.style.opacity=visible?'1':'0';
+    });
+    renderer.render(scene,camera);
+  }
+  requestAnimationFrame(animate);
+}
+</script>
+</body>
+</html>
