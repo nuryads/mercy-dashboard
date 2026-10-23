@@ -4,9 +4,10 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="theme-color" content="#edf6f4" />
-<title>MERCY • Factory Studio V5 · Auto Living + Workspace</title>
-<meta name="description" content="MERCY Factory Studio V5: miniatur pabrik hidup otomatis dan workspace layar lebar untuk data PO, prioritas, barang datang, laporan dan CSV Firebase." />
+<title>MERCY • Factory Studio V6 · Realistic Industrial Diorama</title>
+<meta name="description" content="MERCY Factory Studio V6: miniatur pabrik 3D hidup otomatis, 28 karakter unik, gudang realistis, dan workspace layar penuh terhubung Firebase." />
 <style>
+
 :root{--paper:#f1f8f5;--panel:#fff;--border:#d9e8e6;--text:#1e3542;--muted:#79919a;--sea:#168f8e;--sea2:#2cb5a9;--mint:#dff3e9;--blue:#5e91bd;--amber:#d69753;--danger:#c56c5f;--shadow:0 16px 60px rgba(52,106,105,.1)}
 *{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--paper);color:var(--text)}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}a{color:inherit}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid #1ab7af;outline-offset:3px}button{touch-action:manipulation}::selection{background:#c3eddd;color:#135157}
 .shell{height:100vh;min-height:690px;overflow:hidden;display:grid;grid-template-columns:226px minmax(0,1fr);grid-template-rows:73px minmax(0,1fr);background:#f1f8f5}
@@ -167,14 +168,61 @@
 @media(max-width:400px){.drawer.workspace .field-grid{grid-template-columns:1fr}.drawer.workspace .drawer-head h2{font-size:19px}}
 @media print{.drawer.workspace,.workspace-toolbar{display:none!important}}
 
+/* MERCY Factory Studio V6 — architectural miniature palette and legible workspace */
+:root{--paper:#edf1ed;--panel:#fffdf8;--border:#cad6d0;--text:#203943;--muted:#60727a;--sea:#14766c;--sea2:#27867d;--mint:#e3ede1;--blue:#487999;--amber:#bd803f;--danger:#b4574c}
+body{background:#e8efea;color:#203944}
+.topbar{background:#fcfdfa;border-bottom-color:#cbd9d2;box-shadow:0 2px 20px #263c3920}
+.brand-logo{background:linear-gradient(145deg,#dfac6a,#a45c2c);box-shadow:0 6px 16px #9a593344}
+.brand-accent{color:#af6b35}
+.brand small{color:#688177}
+.sidebar{background:#f8faf6;border-right-color:#d2dcd5}
+.menu-label{color:#809389}
+.nav-button{color:#53696b}
+.nav-button:hover{background:#e5eee5;color:#254f52}
+.nav-button.active{background:#d7e9dc;color:#176759;border-color:#a4d1b5}
+.sidebar-foot{background:#e3eee3;border-color:#c4d8c3}
+.sidebar-foot p,.help-mini{color:#55746a}
+.status-mini{color:#1f6f58}
+.world-stage{background:linear-gradient(180deg,#d6dfd7 0%,#e7eeea 100%)}
+.world-canvas{background:#dfe7df}
+.stage-title{top:20px;left:22px;max-width:300px;pointer-events:none;display:grid;gap:8px}
+.stage-title .eyebrow{font-size:9px;letter-spacing:.16em;color:#276d61;background:#fffc;padding:8px 11px;border-radius:30px;width:max-content;max-width:100%;box-shadow:0 6px 20px #42544918}
+.stage-title h1{margin:0;font-size:clamp(20px,1.8vw,29px);line-height:1.11;letter-spacing:-.045em;color:#20343d;text-shadow:0 1px 12px #fff}
+.stage-title h1 em{color:#236b5e}
+.stage-title p{margin:0;background:#fffdf9e8;border:1px solid #d5ddd2;border-radius:11px;padding:9px 11px;max-width:252px;line-height:1.52;font-size:10px;color:#43635c;box-shadow:0 7px 22px #4c605723}
+.stage-tools{top:20px;right:20px}
+.stage-tools button{background:#fffefaef;color:#2c4d52;border-color:#bacfc4;box-shadow:0 4px 15px #28433d21}
+.floating-label button{background:#fffef9f7;color:#25444b;border-color:#9ebfb2;box-shadow:0 5px 15px #1f3e3e26}
+.floating-label button:hover{background:#fff}
+.floating-label small{background:#e6f0e6;color:#276b5c}
+.scene-dialog{left:21px;bottom:20px;background:#fffffff4;border-color:#c2d2c4;padding:10px 13px;max-width:270px}
+.ambient-live{bottom:20px;background:#193d42f2;border-color:#4a6863;border-radius:12px;padding:10px 15px;box-shadow:0 7px 22px #193e4140}
+.stats-strip{background:#f0f3ef;border-top:1px solid #d7ddd6}
+.stat-card{background:#fffdf9;border-color:#d6ddd3;box-shadow:0 4px 15px #213e3710}
+.stat-card strong{color:#214d54}
+.drawer.workspace{background:#edf3ee}
+.workspace-head{background:#fffefb}
+.workspace-toolbar{background:#fbfcfa}
+.drawer.workspace .drawer-body{background:#edf3ee}
+.workspace-return{background:#2c635e;border-color:#2c635e}
+.workspace-return:hover{background:#20534d}
+.story-overlay{background:#fffefaef;border:1px solid #d6dacb;box-shadow:0 12px 50px #2a454c3f}
+.story-overlay strong{color:#22464b}
+.story-progress-value{background:linear-gradient(90deg,#b97339,#e4b96c)}
+.ambient-live-dot,.active-pulse{background:#4eaa80;box-shadow:0 0 0 4px #47a97a30}
+.stage-bottom{font-weight:700;color:#617a71;text-shadow:0 1px 2px #fff9}
+@media(max-width:980px){.stage-title{max-width:220px}.stage-title h1{font-size:22px}.stage-title p{display:none}.stage-tools button{padding:9px}.stage-title .eyebrow{font-size:8px}}
+@media(max-width:760px){.stage-title{top:12px;left:12px}.stage-title h1{font-size:20px}.stage-tools{top:14px;right:10px}.stage-tools button span{display:none}.stats-strip{min-height:108px}.ambient-live{bottom:47px;max-width:calc(100% - 26px)}.stage-bottom{display:none}}
+@media(prefers-reduced-motion:reduce){.story-progress-value{transition:none!important}}
+
 </style>
 </head>
 <body>
 <div class="shell" id="shell">
   <header class="topbar">
-    <div class="brand"><span class="brand-logo">✳</span><span><strong>MERCY<span class="brand-accent">.STUDIO</span></strong><small>AUTO-LIVING 3D • FIREBASE</small></span></div>
+    <div class="brand"><span class="brand-logo">✳</span><span><strong>MERCY<span class="brand-accent">.STUDIO</span></strong><small>28 KARAKTER • FIREBASE LIVE</small></span></div>
     <div class="top-center"><span class="top-date" id="topDate"></span><span class="sep">•</span><span>Tridaya · Inna · KBI</span></div>
-    <div class="top-actions"><span class="connection connecting" id="connection" title="Menyiapkan koneksi"><i></i><span id="connectionText">Menghubungkan…</span></span><button class="header-btn" id="loginButton" type="button">Masuk admin</button><span class="header-link" title="Model GLB 3D dapat diimpor dan diedit di Blender">◈ DIORAMA 3D</span></div>
+    <div class="top-actions"><span class="connection connecting" id="connection" title="Menyiapkan koneksi"><i></i><span id="connectionText">Menghubungkan…</span></span><button class="header-btn" id="loginButton" type="button">Masuk admin</button><span class="header-link" title="Model GLB 3D dapat diimpor dan diedit di Blender">◈ REALISTIC WORLD</span></div>
   </header>
   <aside class="sidebar">
     <div class="scroll-nav">
@@ -197,12 +245,12 @@
         <button class="nav-button" data-action="csv"><span class="nav-icon">📁</span><span>Impor / ekspor CSV</span></button>
       </nav>
     </div>
-    <div class="sidebar-foot"><div class="status-mini"><span class="active-pulse"></span> PABRIK HIDUP OTOMATIS</div><p>Pekerja, truk, forklift, dan mesin bergerak sendiri. Klik hanya saat ingin melihat data PO atau mengikuti adegan khusus.</p><div class="help-mini">🖱 Geser: putar • Scroll: zoom</div></div>
+    <div class="sidebar-foot"><div class="status-mini"><span class="active-pulse"></span> PABRIK HIDUP OTOMATIS</div><p>28 karakter berbeda bekerja sesuai tugas. Hanya tokoh KAMU yang bergerak ke menu pilihan; seluruh aktivitas berjalan otomatis.</p><div class="help-mini">🖱 Geser: putar • Scroll: zoom</div></div>
   </aside>
   <main class="main">
     <section class="world-stage" id="worldStage" aria-label="Miniatur pabrik interaktif">
       <div class="ambient-pattern"></div>
-      <div class="stage-title"><span class="eyebrow"><i></i> AUTO-LIVING FACTORY WORLD</span><h1>Miniature factory.<br /><em>Bergerak otomatis.</em></h1><p>Seluruh pabrik beraktivitas sendiri. Klik menu hanya saat ingin melihat data — adegan khusus tetap diputar lebih dulu.</p></div>
+      <div class="stage-title"><span class="eyebrow"><i></i> REALISTIC FACTORY DIORAMA · 28 TOKOH</span><h1>MERCY Factory World.<br /><em>Miniatur yang hidup.</em></h1><p>28 pekerja dengan tugas berbeda. Truk, forklift dan kantor terus bekerja. Kamu hanya menggerakkan satu karakter.</p></div>
       <div class="stage-tools"><button type="button" id="resetCamera" title="Kembali ke tampilan awal">⌖ <span>Reset kamera</span></button><button type="button" id="toggleMotion" aria-pressed="true" title="Jeda atau lanjutkan semua aktivitas otomatis">Ⅱ <span>Jeda dunia</span></button><button type="button" id="expandWorld" title="Layar penuh">⛶</button></div>
       <canvas id="worldCanvas" class="world-canvas" aria-label="Pabrik MERCY dalam tampilan 3D yang bisa diputar dan diklik" hidden></canvas>
       <div id="worldFallback" class="world-fallback" aria-label="Miniatur isometrik cadangan">
@@ -233,7 +281,7 @@
       <div class="floating-label label-tridaya"><button type="button" data-quick="TRIDAYA"><span class="label-dot teal"></span> TRIDAYA <small id="labelTridaya">— PO</small></button></div>
       <div class="floating-label label-inna"><button type="button" data-quick="INNA"><span class="label-dot blue"></span> INNA <small id="labelInna">— PO</small></button></div>
       <div class="floating-label label-kbi"><button type="button" data-quick="KBI"><span class="label-dot yellow"></span> KBI <small id="labelKbi">— PO</small></button></div>
-      <div class="scene-dialog" id="sceneDialog" aria-live="polite"><b id="dialogTitle">🏭 Pabrik beroperasi otomatis</b><span id="dialogText">Pegawai bekerja, conveyor bergerak, dan logistik berjalan tanpa klik.</span></div>
+      <div class="scene-dialog" id="sceneDialog" aria-live="polite"><b id="dialogTitle">🏭 Pabrik beroperasi otomatis</b><span id="dialogText">28 pekerja beraktivitas, conveyor bekerja, dan truk masuk-keluar otomatis.</span></div>
       <section id="storyOverlay" class="story-overlay" aria-live="polite" hidden>
         <div class="story-topline"><span><span class="story-status-dot"></span> SEDANG BERLANGSUNG</span><span id="storyClock">00:00 / 00:00</span></div>
         <strong id="storyHeading">Menyiapkan adegan miniatur…</strong>
@@ -566,7 +614,7 @@
   function csvString(rows){return '\uFEFF'+[HEADER_CSV,...rows.map(r=>[r.tgl,r.design,r.warna,r.qty??'',r.customer,r.barangDatang||'',r.kode,r.status,r.harga??'',r.jumlah??'',r.turun||'',r.barangDatangCatatan||'',factory(r),r.nomorPo||''])].map(a=>a.map(safeCsv).join(',')).join('\r\n');}
   function exportCSV(){if(!state.ready){showToast('Belum ada data Firebase siap diekspor.',true);return;}download(`MERCY_World_PO_${today()}.csv`,csvString(filtered()),'text/csv;charset=utf-8');showToast(`${money(filtered().length)} PO diekspor ke CSV.`);}
   function fillPrint(rows){const m=metrics(rows),date=new Date().toLocaleDateString('id-ID',{timeZone:'Asia/Jakarta',day:'numeric',month:'long',year:'numeric'});document.title='LAPORAN PO PER TANGGAL '+date.toUpperCase();$('printRoot').innerHTML=`<h1>MERCY · LAPORAN FOLLOW UP PO</h1><div class="print-sub">LAPORAN PO PER TANGGAL ${escapeHTML(date.toUpperCase())} · ${escapeHTML(state.scope)}</div><div class="print-metrics"><span><b>Jumlah PO</b> ${m.total}</span><span><b>Total QTY</b> ${money(m.qty)}</span><span><b>Follow Up ≥30 Hari</b> ${m.old}</span></div><table><thead><tr><th style="width:11%">Tanggal</th><th style="width:11%">Pabrik</th><th style="width:22%">Desain / No PO</th><th style="width:11%">QTY</th><th style="width:13%">Pelanggan</th><th style="width:12%">Status</th><th style="width:13%">Barang datang</th><th style="width:7%">Usia</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${dateLabel(r.tgl)}</td><td>${escapeHTML(factory(r))}</td><td>${escapeHTML(r.design)}<br/><small>${escapeHTML(r.nomorPo||r.kode)}</small></td><td>${qty(r)===null?'—':money(qty(r))}</td><td>${escapeHTML(r.customer)}</td><td>${escapeHTML(r.status)}</td><td>${arrived(r)?dateLabel(arrival(r)):cancelled(r)?'Batal':'Belum'}</td><td>${ageDays(r)===null?'—':ageDays(r)+' hari'}</td></tr>`).join('')}</tbody></table><footer>Dicetak dari MERCY Mini Factory World • ${escapeHTML(date)}</footer>`;}
-  function printReport(){if(!state.ready){showToast('Laporan membutuhkan data Firebase terbaru.',true);return;}const rows=reportRows();fillPrint(rows);window.print();setTimeout(()=>{document.title='MERCY • Factory Studio V5 · Auto Living + Workspace';},1200);}
+  function printReport(){if(!state.ready){showToast('Laporan membutuhkan data Firebase terbaru.',true);return;}const rows=reportRows();fillPrint(rows);window.print();setTimeout(()=>{document.title='MERCY • Factory Studio V6 · Realistic Industrial Diorama';},1200);}
   function parseCSV(text,defaultFactory){
     const s=String(text).replace(/^\uFEFF/,'');const guess=s.split(/\r?\n/).slice(0,5).join('\n');const delimiter=(guess.match(/;/g)||[]).length>(guess.match(/,/g)||[]).length?';':',';
     const all=[];let row=[],val='',quoted=false;
@@ -685,360 +733,480 @@
 </script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"}}</script>
 <script type="module">
-/* MERCY Blender-ready glTF diorama • static high-detail geometry and moving 3D characters.
-   Each animation is a fixed cinematic route; no random object movement through walls. */
+/* MERCY Factory Studio V6 • 28 individually generated worker assets, self-running site.
+   Only the avatar named KAMU is user-directed; everybody else has an independent job.
+   Traffic and pedestrian corridors are deterministic, separate, and time-scheduled.
+   Requires local GLB assets plus Three.js 0.160.1. */
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 
-const canvas=document.getElementById('worldCanvas'),stage=document.getElementById('worldStage');
-const $=id=>document.getElementById(id);
-const durations={all:5.0,factory:9.2,old:9.0,priority:9.0,arrived:19.8,orders:8.3,add:8.3,edit:8.3,report:13.9,csv:9.4};
-const phaseDescriptions={
- all:[[0,'Kamera menjelajahi kawasan produksi'],[3,'Pabrik Tridaya, Inna, KBI siap dipantau']],
- factory:[[0,'Pegawai memakai helm keselamatan'],[1.5,'Pegawai berjalan di jalur pejalan kaki'],[4.5,'Mendekati pintu produksi'],[6.5,'Masuk ruang produksi'],[8,'Data pabrik siap dibuka']],
- old:[[0,'Sinyal perhatian PO lama aktif'],[2.7,'Supervisor berjalan ke pusat inspeksi'],[6.8,'Memeriksa catatan PO usia 30+ hari']],
- priority:[[0,'Supervisor mengambil daftar prioritas'],[3,'Memeriksa area produksi'],[6.7,'Mengurutkan pekerjaan follow-up']],
- arrived:[[0,'Truk memasuki gerbang utama'],[3,'Truk berjalan di jalur logistik'],[8,'Truk berbelok perlahan ke loading dock'],[11,'Truk parkir dan mesin berhenti'],[13.0,'Forklift menuju muatan'],[15.2,'Forklift membawa pallet ke gudang'],[18,'Bongkar barang selesai']],
- orders:[[0,'Staf menuju ruang administrasi'],[3,'Staf memasuki kantor'],[6,'Menyalakan komputer dan membuka PO']],
- add:[[0,'Staf menuju ruang administrasi'],[3,'Staf memasuki kantor'],[6,'Komputer siap untuk menambah PO']],
- edit:[[0,'Staf membawa berkas ke kantor'],[3,'Staf memeriksa komputer'],[6,'Form edit PO siap dibuka']],
- report:[[0,'Petugas berjalan menuju kantor'],[3,'Petugas memasuki ruang laporan'],[6,'Petugas menghampiri mesin printer'],[8.5,'Printer memproses data laporan'],[11,'Kertas laporan mulai tercetak']],
- csv:[[0,'Petugas menuju kantor administrasi'],[3.5,'Petugas menyiapkan berkas arsip'],[7.5,'CSV siap diproses']]
+const $ = id => document.getElementById(id);
+const canvas = $('worldCanvas'), stage = $('worldStage');
+const durations = {all:4.8,factory:9.8,old:9.2,priority:9.2,arrived:21.0,orders:9.8,add:9.8,edit:9.8,report:15.4,csv:9.8};
+const phases = {
+  all:[[0,'Kamera memperlihatkan seluruh kawasan'],[2.5,'Tiga pabrik, gudang, dan kantor aktif']],
+  factory:[[0,'Kamu berjalan melalui trotoar'],[2.8,'Menuju pintu produksi'],[6.0,'Masuk ke ruang produksi'],[8.8,'Data PO pabrik siap dibuka']],
+  old:[[0,'Kamu menuju pengawas'],[3.0,'Supervisor mengambil daftar PO lama'],[6.8,'Peringatan PO usia 30+ hari diperiksa']],
+  priority:[[0,'Supervisor memeriksa jadwal'],[3.3,'Tim mengurutkan pekerjaan'],[7.0,'Prioritas follow-up siap']],
+  arrived:[[0,'Truk memasuki gerbang'],[4,'Roda bergerak, truk mengikuti jalan'],[9,'Truk berbelok dan mendekati loading dock'],[12,'Truk berhenti, sopir bersiap turun'],[14.2,'Forklift mendekati sisi muatan'],[16,'Pallet diangkat dan dibawa ke gudang'],[19.3,'Penerimaan barang siap dicatat']],
+  orders:[[0,'Kamu berjalan ke zebra cross'],[3.7,'Menyeberang menuju kantor data'],[6.6,'Staf membuka komputer PO'],[9,'Tabel PO siap dibaca']],
+  add:[[0,'Kamu menuju ruang administrasi'],[4.0,'Staf menyalakan komputer'],[7.5,'Form PO siap diisi']],
+  edit:[[0,'Kamu membawa berkas PO ke kantor'],[4.0,'Dokumen dibuka oleh admin'],[7.7,'Form perubahan siap']],
+  report:[[0,'Kamu menyeberang ke kantor laporan'],[4,'Staf menuju mesin printer'],[7.5,'Laporan diproses di komputer'],[10.5,'Kertas keluar dari printer'],[13.5,'Pratinjau A4 siap dibuka']],
+  csv:[[0,'Kamu menuju ruang arsip'],[3.8,'Petugas menyiapkan dokumen'],[7.4,'Arsip CSV siap diproses']]
 };
-const stopListeners=()=>window.dispatchEvent(new Event('mercy-scene-ready'));
-function browserFallback(error){
- console.error('MERCY diorama GLB:',error);
- $('worldFallback').hidden=false;$('worldFallback').style.display='flex';
- $('worldFallback').querySelector('.fallback-note').textContent='Tidak dapat memuat model 3D. Pastikan assets/*.glb sudah diunggah dan internet aktif. Fitur data tetap dapat digunakan.';
+const EPS=1e-5;
+const lerp=(a,b,t)=>a+(b-a)*t;
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const smooth=t=>{t=clamp(t);return t*t*(3-2*t)};
+const pathLength=pts=>pts.slice(1).reduce((s,p,i)=>s+Math.hypot(p[0]-pts[i][0],p[1]-pts[i][1]),0);
+const placement = [
+ [-22,-16.3],[-16.5,-16.3],[-21,-11.3],[-16,-11.5],
+ [-3.2,-16.3],[3.2,-16.3],[-3,-11.2],[2.9,-11.2],
+ [15.8,-16.3],[21.8,-16.3],[15.7,-11.3],[21.3,-11.5],
+ [12.7,18.4],[17.5,18.0],[21.5,18.5],[26,18.2],[24,12.6],
+ [-23.4,15.0],[-20.2,14.8],[-22,12.0],[-14.5,15.0],
+ [-8,-6.5],[8,-6.5],[6.0,1.0],[15.2,14.0],
+ [30,6.5],[-29,6.2],[0,-4.6]
+];
+const roles = [
+ 'operator','operator','operator','qc','operator','operator','operator','qc','operator','operator','operator','qc',
+ 'packing','packing','racking','inspect','packing','admin','admin','report','archive',
+ 'supervisor','supervisor','driver','forklift','guard','cleaner','you'
+];
+const roaming = {
+  2:[[-21,-11.3],[-20.7,-10.1],[-19.8,-10.1]],
+  5:[[3.2,-16.3],[3.2,-15.35],[2.7,-14.9]],
+  10:[[15.7,-11.3],[16.1,-10.2],[17.0,-10.2]],
+  12:[[12.7,18.4],[12.7,17.7],[13.3,17.3]],
+  14:[[21.5,18.5],[21.4,19.7],[22.0,20.1]],
+  16:[[24,12.6],[25.2,12.6],[25.9,13.3]],
+  19:[[-22,12],[-20.5,11.9],[-18.3,12.0],[-16.3,15.3]],
+  20:[[-14.5,15],[-14.1,15.7],[-13.0,17.2]],
+  21:[[-8,-6.5],[-5.0,-6.5],[-3.1,-6.5]],
+  22:[[8,-6.5],[5.3,-6.5],[3.9,-6.5]],
+  25:[[30,6.5],[30,5.9],[29.0,5.9]],
+  26:[[-29,6.2],[-28.3,6.2],[-28.3,7.4]]
+};
+
+let fallbackResolver=null;
+function sendReady(){window.dispatchEvent(new Event('mercy-scene-ready'));}
+function offlineFallback(e){
+ console.error('MERCY 3D tidak dapat dimuat:',e);
+ const fb=$('worldFallback');fb.hidden=false;fb.style.display='flex';
+ const note=fb.querySelector('.fallback-note');if(note)note.textContent='Aset GLB atau pustaka 3D gagal dimuat. Pastikan seluruh folder assets diunggah dan internet aktif. Data MERCY tetap bisa dibuka.';
  canvas.hidden=true;
- let storyActive=null;
- window.MERCY_SCENE={play(mode){return new Promise(resolve=>{storyActive=resolve;window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode,elapsed:0,duration:1,step:'Mode tanpa WebGL — panel data tetap tersedia'}}));setTimeout(()=>{if(storyActive===resolve){storyActive=null;resolve({cancelled:false})}},1400)})},skip(){if(storyActive){storyActive({cancelled:false});storyActive=null}},stop(){if(storyActive){storyActive({cancelled:true});storyActive=null}},reset(){},pause(){},updateMetrics(){}};
- stopListeners();
+ let active=null;
+ window.MERCY_SCENE={play(mode){return new Promise(resolve=>{active=resolve;setTimeout(()=>{if(active===resolve){active=null;resolve({cancelled:false})}},1100);})},skip(){if(active){active({cancelled:false});active=null}},stop(){if(active){active({cancelled:true});active=null}},reset(){},pause(){},updateMetrics(){},getAmbientState(){return{offline:true}}};
+ sendReady();
 }
+
 (async()=>{
  try{
-  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
   renderer.outputColorSpace=THREE.SRGBColorSpace;
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,window.innerWidth<=768?1.15:1.5));
-  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.02; // keep actual GLB material colours visible
-  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-  const scene=new THREE.Scene();scene.background=new THREE.Color('#dfefe7');scene.fog=new THREE.Fog('#dfefe7',120,195);
-  scene.add(new THREE.HemisphereLight(0xffffff,0x839d95,1.12));
-  scene.add(new THREE.AmbientLight(0xffffff,.29));
-  const sun=new THREE.DirectionalLight(0xffedcc,2.00);sun.position.set(-21,54,36);
-  sun.castShadow=true;sun.shadow.mapSize.set(window.innerWidth<=768?768:1536,window.innerWidth<=768?768:1536);
-  Object.assign(sun.shadow.camera,{left:-42,right:42,top:42,bottom:-42,near:.1,far:180});sun.shadow.bias=-.00025;sun.shadow.normalBias=.035;
-  sun.shadow.radius=3;scene.add(sun);
-  const soft=new THREE.DirectionalLight(0xc9eaff,.62);soft.position.set(29,31,-30);scene.add(soft);
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=.89;
+  renderer.shadowMap.enabled=true;
+  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,window.innerWidth<860?1.08:1.5));
+  const scene=new THREE.Scene();scene.background=new THREE.Color('#dbe4e0');scene.fog=new THREE.Fog('#dbe4e0',125,205);
+  const hemi=new THREE.HemisphereLight('#fff5e2','#7f9990',.96);scene.add(hemi);
+  scene.add(new THREE.AmbientLight('#f8f7ed',.20));
+  const sun=new THREE.DirectionalLight('#fff0d8',2.05);sun.position.set(-26,51,37);sun.castShadow=true;
+  const sm=window.innerWidth<860?768:1536;sun.shadow.mapSize.set(sm,sm);
+  Object.assign(sun.shadow.camera,{left:-46,right:46,top:46,bottom:-46,near:.1,far:160});sun.shadow.bias=-.00030;sun.shadow.normalBias=.034;sun.shadow.radius=3.5;scene.add(sun);
+  const fill=new THREE.DirectionalLight('#bfd7e9',.64);fill.position.set(23,27,-25);scene.add(fill);
   const world=new THREE.Group();scene.add(world);
-  const camera=new THREE.OrthographicCamera(-27,27,18,-18,.1,270);
-  const gltf=new GLTFLoader();
+  const camera=new THREE.OrthographicCamera(-29,29,20,-20,.1,250);
+  const loader=new GLTFLoader();
   const base='./assets/';
-  const [diorama,truckGLB,forkGLB,workerGLB]=await Promise.all([
-   gltf.loadAsync(base+'mercy_factory_diorama.glb'),gltf.loadAsync(base+'mercy_truck.glb'),gltf.loadAsync(base+'mercy_forklift.glb'),gltf.loadAsync(base+'mercy_worker.glb')
+  const meta={names:[
+    'Operator Tridaya 1','Operator Tridaya 2','Operator Tridaya 3','QC Tridaya',
+    'Operator Inna 1','Operator Inna 2','Operator Inna 3','QC Inna',
+    'Operator KBI 1','Operator KBI 2','Operator KBI 3','QC KBI',
+    'Logistik A','Logistik B','Penyusun Rak','Pemeriksa Barang','Petugas Packing',
+    'Admin PO','Admin Data','Staf Laporan','Staf Arsip','Supervisor Barat','Supervisor Timur',
+    'Sopir Truk','Operator Forklift','Petugas Keamanan','Petugas Kebersihan','Kamu'
+  ]};
+  const mainPromise=Promise.all([
+   loader.loadAsync(base+'mercy_factory_diorama.glb'),
+   loader.loadAsync(base+'mercy_truck.glb'),
+   loader.loadAsync(base+'mercy_forklift.glb')
   ]);
-  const surface=diorama.scene;world.add(surface);
-  // Textured signs in the original GLB had flipped UVs on certain viewing angles.
-  // Hide those legacy meshes and replace them with crisp camera-facing 3D boards.
-  surface.traverse(o=>{if(o.isMesh){if(o.name.startsWith('SIGN_')){o.visible=false;return;}o.castShadow=true;o.receiveShadow=true;if(o.material)o.material.envMapIntensity=.15;}});
-  function readableBoard(text,x,y,z,w=7.1,h=.90,bg='#165a61',border='#ffd88b'){
-    const texCanvas=document.createElement('canvas');texCanvas.width=1280;texCanvas.height=174;
-    const g=texCanvas.getContext('2d');
-    g.fillStyle=bg;g.beginPath();g.roundRect(9,9,1262,156,28);g.fill();
-    g.lineWidth=9;g.strokeStyle=border;g.stroke();
-    g.fillStyle='#ffffff';g.textAlign='center';g.textBaseline='middle';
-    // Fit long names without changing the 800 font weight or reversing the board.
-    let fontSize=72;
-    do {g.font=`800 ${fontSize}px system-ui, sans-serif`;if(g.measureText(text).width<=1120)break;fontSize-=2;}while(fontSize>=34);
-    g.fillText(text,640,91);
-    const texture=new THREE.CanvasTexture(texCanvas);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
-    const sign=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,depthTest:true,depthWrite:false,toneMapped:false}));
-    sign.position.set(x,y,z);sign.scale.set(w,h,1);sign.renderOrder=4;world.add(sign);return sign;
+  const workerPromises=Array.from({length:28},(_,i)=>loader.loadAsync(base+`mercy_person_${String(i).padStart(2,'0')}.glb`));
+  const [[diorama,truckAsset,forkAsset],...peopleAssets]=await Promise.all([mainPromise,...workerPromises]);
+  const district=diorama.scene;world.add(district);
+  district.traverse(obj=>{
+   if(!obj.isMesh)return;
+   if(obj.name.startsWith('SIGN_')){obj.visible=false;return;}
+   obj.castShadow=obj.name.includes('STEEL')||obj.name.includes('WALL')||obj.name.includes('DARKSTEEL');
+   obj.receiveShadow=true;
+   if(obj.material){obj.material.envMapIntensity=.18;obj.material.needsUpdate=true;}
+  });
+  function makeLabel(text,x,y,z,w=6,h=.75,bg='#224e55',edge='#eac88c'){
+   const cvs=document.createElement('canvas');cvs.width=1280;cvs.height=180;
+   const g=cvs.getContext('2d');g.clearRect(0,0,1280,180);
+   g.fillStyle=bg;g.beginPath();g.roundRect(12,12,1256,156,26);g.fill();
+   g.strokeStyle=edge;g.lineWidth=6;g.stroke();
+   g.font='800 75px system-ui,sans-serif';
+   let size=75;while(g.measureText(text).width>1110&&size>30){size-=2;g.font=`800 ${size}px system-ui,sans-serif`;}
+   g.fillStyle='#fffdf5';g.textAlign='center';g.textBaseline='middle';g.fillText(text,640,95);
+   const tex=new THREE.CanvasTexture(cvs);tex.colorSpace=THREE.SRGBColorSpace;
+   tex.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
+   const label=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:true,depthWrite:false,toneMapped:false}));
+   label.name=text;label.position.set(x,y,z);label.scale.set(w,h,1);label.renderOrder=5;world.add(label);return label;
   }
-  // Sprites always face the camera, so text stays upright and never mirrors on rotation.
-  for(const [name,x,y,z,w,bg,edge] of [
-   ['TRIDAYA · LINE 01',-19,4.65,-7.15,7.15,'#0d6862','#c4e9cb'],
-   ['INNA · LINE 02',0,4.65,-7.15,7.15,'#246c9a','#b8dcff'],
-   ['KBI · LINE 03',19,4.65,-7.15,7.15,'#986026','#ffe3a0'],
-   ['GUDANG · LOADING',19,4.25,23.4,9.1,'#214f63','#f4cd75'],
-   ['KANTOR · LAPORAN',-19,4.38,23.25,9.0,'#276457','#f8dfa3'],
-   ['ADMIN · DATA PO',0,4.33,22.3,8.9,'#285b78','#f8dfa3']
-  ])readableBoard(name,x,y,z,w,.83,bg,edge);
-  function cloneModel(gltf,name,scale=1){const wrapper=new THREE.Group();wrapper.name=name;const c=gltf.scene.clone(true);c.scale.setScalar(scale);wrapper.add(c);world.add(wrapper);c.traverse(m=>{if(m.isMesh){if(m.name.startsWith('SIGN_')){m.visible=false;return;}m.castShadow=true;m.receiveShadow=true}});return wrapper}
-  function place(o,x,z,y=0){o.position.set(x,y,z);return o}
-  const workers={
-   factory:place(cloneModel(workerGLB,'Pegawai pabrik'),-22,-6.55),
-   supervisor:place(cloneModel(workerGLB,'Supervisor'),-6.5,-6.55),
-   admin:place(cloneModel(workerGLB,'Staf administrasi'),0,8.1),
-   reporter:place(cloneModel(workerGLB,'Pegawai laporan'),-19,7.8),
-   loader:place(cloneModel(workerGLB,'Petugas gudang'),17.0,10.45),
-   static1:place(cloneModel(workerGLB,'Pekerja Tridaya',.87),-19.2,-13.65),
-   static2:place(cloneModel(workerGLB,'Pekerja Inna',.87),.2,-13.65),
-   static3:place(cloneModel(workerGLB,'Pekerja KBI',.87),18.8,-13.65),
-   static4:place(cloneModel(workerGLB,'Pekerja rak gudang',.85),26.3,17),
-   static5:place(cloneModel(workerGLB,'Staf kantor',.85),-23.6,14.7),
-   roamerInna:place(cloneModel(workerGLB,'Petugas INNA',.94),-3,-6.55),
-   roamerKbi:place(cloneModel(workerGLB,'Petugas KBI',.94),16,-6.55)
-  };
-  const homes={factory:[-22,-6.55],supervisor:[-6.5,-6.55],admin:[0,8.1],reporter:[-19,7.8],loader:[17.0,10.45]};
-  const truck=place(cloneModel(truckGLB,'Truk pengiriman'),37,1.4);truck.userData.forward='negativeX';
-  // High contrast label stays readable, including during a truck turn.
-  const truckBadge=readableBoard('MERCY LOGISTIK',0,3.44,0,4.9,.57,'#155e66','#ffe4a5');
+  const billboards=[
+   ['TRIDAYA  /  LINE 01',-19,5.20,-8.45,7.9,'#175e5b','#e9cb79'],
+   ['INNA  /  LINE 02',0,5.20,-8.45,7.9,'#285a80','#c5dce3'],
+   ['KBI  /  LINE 03',19,5.20,-8.45,7.9,'#8e542b','#efd3a0'],
+   ['KANTOR LAPORAN',-19,5.1,20.75,9.3,'#31595a','#e8c88f'],
+   ['ADMIN DATA PO',0,5.05,19.9,8.6,'#345d70','#dbd3a7'],
+   ['GUDANG / LOADING',19,5.1,21.4,9.8,'#374e5e','#edc87c']
+  ];
+  billboards.forEach(([text,x,y,z,w,b,e])=>makeLabel(text,x,y,z,w,.82,b,e));
+  function createInstance(src,name){const group=new THREE.Group();group.name=name;
+   const root=src.scene.clone(true);group.add(root);world.add(group);
+   root.traverse(o=>{if(o.isMesh){if(o.name.startsWith('SIGN_'))o.visible=false;o.castShadow=false;o.receiveShadow=true;}});
+   return group;
+  }
+  const actors=peopleAssets.map((glb,i)=>{
+   const root=createInstance(glb,meta.names[i]);root.position.set(placement[i][0],0,placement[i][1]);
+   const joints={};root.traverse(n=>{if(['Arm_Left','Arm_Right','Leg_Left','Leg_Right','Hand_Left','Hand_Right','Boot_Left','Boot_Right'].includes(n.name))joints[n.name]=n;});
+   root.userData.kind=roles[i];root.userData.id=i;
+   return{id:i,root,joints,home:placement[i],role:roles[i],moving:false,task:'work',phase:i*1.03};
+  });
+  const you=actors[27];
+  const youBadge=makeLabel('◆ KAMU',you.root.position.x,3.47,you.root.position.z,2.7,.65,'#b76c32','#ffe2a1');
+  const truck=createInstance(truckAsset,'Truk Ekspedisi MERCY');
+  const forklift=createInstance(forkAsset,'Forklift Gudang');
+  truck.position.set(37,0,1.4);
+  forklift.position.set(17,0,14.9);
+  truck.userData.forward='negativeX';forklift.userData.forward='positiveX';
+  const truckBadge=makeLabel('MERCY / LOGISTIK',0,3.38,0,5.0,.59,'#225c67','#dcca93');
   world.remove(truckBadge);truck.add(truckBadge);
-  const forklift=place(cloneModel(forkGLB,'Forklift gudang'),17,14.9);forklift.userData.forward='positiveX';
-  // Imported asset files: truck model is oriented with its front toward -X.
-  const cargo=new THREE.Group();const pallet=new THREE.Mesh(new THREE.BoxGeometry(1.52,.22,1.12),new THREE.MeshStandardMaterial({color:'#c59c73',roughness:.84}));cargo.add(pallet);
+  // Wheels rotate with distance, rather than the whole truck merely sliding sideways.
+  const wheels=[];
+  for(const x of [-2.2,1.4,2.4])for(const z of [-1.23,1.23]){
+   const hub=new THREE.Group();hub.position.set(x,.47,z);
+   const rubber=new THREE.Mesh(new THREE.CylinderGeometry(.43,.43,.24,22),new THREE.MeshStandardMaterial({color:'#252b2d',roughness:.93}));
+   rubber.rotation.x=Math.PI/2;hub.add(rubber);
+   const rim=new THREE.Mesh(new THREE.CylinderGeometry(.205,.205,.261,18),new THREE.MeshStandardMaterial({color:'#929ba2',metalness:.65,roughness:.33}));rim.rotation.x=Math.PI/2;hub.add(rim);
+   for(let i=0;i<6;i++){
+    const a=i*Math.PI/3;const bolt=new THREE.Mesh(new THREE.SphereGeometry(.034,6,5),new THREE.MeshStandardMaterial({color:'#e6e2d6',roughness:.65}));
+    bolt.position.set(Math.cos(a)*.138,Math.sin(a)*.138,z<0?-.145:.145);hub.add(bolt);
+   }
+   truck.add(hub);wheels.push(hub);
+  }
+  // Forks/cargo lift: physical pallet is attached to the fork carriage and rises during pickup.
+  const cargo=new THREE.Group();cargo.position.set(2.04,.45,0);forklift.add(cargo);
+  const palletMat=new THREE.MeshStandardMaterial({color:'#a87e53',roughness:.89});
+  const cartonMat=[new THREE.MeshStandardMaterial({color:'#b3885c',roughness:.91}),new THREE.MeshStandardMaterial({color:'#8fa49c',roughness:.91}),new THREE.MeshStandardMaterial({color:'#bd985e',roughness:.92})];
+  const slab=new THREE.Mesh(new THREE.BoxGeometry(1.25,.16,1.02),palletMat);cargo.add(slab);
   for(let i=0;i<3;i++){
-   let m=new THREE.Mesh(new THREE.BoxGeometry(.94,.60,.90),new THREE.MeshStandardMaterial({color:['#cfa47d','#94b3a2','#bba188'][i],roughness:.93}));m.position.set(0,.46+i*.60,0);cargo.add(m);
+   const box=new THREE.Mesh(new THREE.BoxGeometry(.98,.38,.72),cartonMat[i]);box.position.set(0,.28+i*.39,0);box.castShadow=true;cargo.add(box);
   }
-  cargo.position.set(2.10,.49,0);forklift.add(cargo);cargo.visible=false;
-  // Closed-loop moving parcels: each remains on top of an actual machine line.
-  const ambientParcels=[];
-  for(const cx of [-19,0,19]){
-    for(const side of [-1,1]){
-      for(let i=0;i<3;i++){
-        const c=['#c99d70','#92b5a2','#d8b484'][(i+(cx===19?2:cx===0?1:0))%3];
-        const box=new THREE.Mesh(new THREE.BoxGeometry(.43,.27,.35),new THREE.MeshStandardMaterial({color:c,roughness:.78}));
-        box.position.set(cx+side*3.65,1.24,-16.4+i*1.6);
-        box.castShadow=true;world.add(box);ambientParcels.push({box,cx,side,i});
-      }
-    }
+  cargo.visible=false;
+  const seated=actors[24]; // forklift operator works inside cabin, not an identical static clone
+  world.remove(seated.root);forklift.add(seated.root);seated.root.scale.setScalar(.59);seated.root.position.set(-.22,.52,0);
+  const paperMat=new THREE.MeshStandardMaterial({color:'#fff6d9',roughness:.94,side:THREE.DoubleSide});
+  const sheets=Array.from({length:4},(_,i)=>{
+   const m=new THREE.Mesh(new THREE.BoxGeometry(.65,.018,.48),paperMat);
+   m.position.set(-14.9,1.57+i*.030,17.56);world.add(m);m.visible=false;return m;
+  });
+  // Conveyor parcels move along factory lanes, never through people or walls.
+  const parcels=[];
+  for(const cx of [-19,0,19])for(const side of [-1,1])for(let i=0;i<4;i++){
+   const box=new THREE.Mesh(new THREE.BoxGeometry(.39,.23,.34),cartonMat[(i+(cx===19?2:cx===0?1:0))%3]);
+   box.position.set(cx+side*3.67,1.21,-16.4+i*1.1);world.add(box);parcels.push({box,cx,side,i});
   }
-  const beacon=new THREE.PointLight('#f44336',0,6);beacon.position.set(10.5,4.35,7.4);world.add(beacon);
-  const sheetMat=new THREE.MeshStandardMaterial({color:'#fff9e6',side:THREE.DoubleSide,roughness:.98});
-  const sheets=[];for(let i=0;i<3;i++){
-   const m=new THREE.Mesh(new THREE.BoxGeometry(.68,.025,.49),sheetMat);
-   m.position.set(-14.9,1.55,17.7);m.visible=false;m.castShadow=true;world.add(m);sheets.push(m);
+  // Workers lifting parcels are distinct characters; cartons visibly move with the work.
+  const heldPackages=new Map();
+  for(const i of [12,14,16]){
+   const box=new THREE.Mesh(new THREE.BoxGeometry(.33,.29,.35),cartonMat[i%3]);
+   actors[i].root.add(box);box.position.set(0,1.07,.37);box.castShadow=true;heldPackages.set(i,box);
   }
-  const hitTargets=[];
-  const zoneDefs=[
-   {x:-19,z:-13.2,w:15.2,d:11.8,action:'factory',factory:'TRIDAYA'},
-   {x:0,z:-13.2,w:15.2,d:11.8,action:'factory',factory:'INNA'},
-   {x:19,z:-13.2,w:15.2,d:11.8,action:'factory',factory:'KBI'},
-   {x:-19,z:16.1,w:17,d:14,action:'report'},
-   {x:0,z:16.0,w:11.2,d:11.8,action:'orders'},
-   {x:19,z:16.5,w:19,d:14.4,action:'arrived'}
-  ];
-  for(const t of zoneDefs){const mesh=new THREE.Mesh(new THREE.BoxGeometry(t.w,4.3,t.d),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false,color:0xffffff}));mesh.position.set(t.x,2.15,t.z);mesh.userData={action:t.action,factory:t.factory};world.add(mesh);hitTargets.push(mesh);}
-  const focus=new THREE.Vector3(0,0,0),cameraLook=new THREE.Vector3();
-  let ambientEpoch=0,ambientPhase=0,ambientActiveLabel='',lastAmbientSecond=-1;const AMBIENT_CYCLE=43;
-  let yaw=.74,pitch=.81,targetYaw=yaw,targetPitch=pitch,zoom=1,zoomTarget=1,paused=false,nowTime=0,lastTime=performance.now(),active=null,initialSceneReady=false;
-  const cameraDefault=()=>{focus.set(0,0,0);zoomTarget=1;targetYaw=.74;targetPitch=.81};
-  const lerp=(a,b,t)=>a+(b-a)*t;
-  const ease=t=>{let p=Math.max(0,Math.min(1,t));return p*p*(3-2*p)};
-  const pathFactory=x=>[[x-3,-6.55],[x-1.2,-6.55],[x-1.2,-8.1],[x-.5,-9.5]];
-  const paths={
-   old:[[-6.5,-6.55],[-3.0,-6.55],[1,-6.55],[4.0,-6.55],[4.0,-4.65]],
-   admin:[[0,8.1],[0,9.7],[0,11.8],[0,13.9]],
-   report:[[-19,7.8],[-19,9.2],[-19,10.2],[-17.45,10.2],[-17.45,16.2],[-15.9,16.2]],
-   loader:[[17.0,10.45],[15.7,10.45],[14.0,10.45]],
-   forklift:[[17.0,14.9],[14.0,14.9],[11.45,14.9],[9.73,13.4]],
-   truck:[[36.5,1.4],[27,1.4],[17,1.4],[12,1.4],[9.7,2.3],[7.4,4.55],[7.3,7.0],[7.3,11.1]]
+  const beacon=new THREE.PointLight('#d65244',0,7);beacon.position.set(10.5,4.45,7.4);world.add(beacon);
+  const shadowTexture=(()=>{
+   const cvs=document.createElement('canvas');cvs.width=cvs.height=96;
+   const ctx=cvs.getContext('2d');const g=ctx.createRadialGradient(48,48,4,48,48,47);
+   g.addColorStop(0,'rgba(19,38,32,.26)');g.addColorStop(.5,'rgba(19,38,32,.12)');g.addColorStop(1,'rgba(19,38,32,0)');ctx.fillStyle=g;ctx.fillRect(0,0,96,96);
+   return new THREE.CanvasTexture(cvs);
+  })();
+  const characterShadows=actors.map((a,i)=>{
+   if(i===23||i===24)return null;
+   const m=new THREE.Mesh(new THREE.PlaneGeometry(.95,.77),new THREE.MeshBasicMaterial({map:shadowTexture,transparent:true,depthWrite:false,opacity:.7}));
+   m.rotation.x=-Math.PI/2;m.position.set(a.root.position.x,.46,a.root.position.z);m.renderOrder=1;world.add(m);return m;
+  });
+  const routeTruck=[[36.8,1.4],[30.2,1.4],[24.0,1.4],[16.4,1.4],[11.2,1.4],[9.4,1.8],[7.8,3.2],[7.3,5.5],[7.3,8.5],[7.3,11.05]];
+  const routeFork=[[17.0,14.9],[15.4,14.9],[13.0,14.9],[11.25,14.9],[9.74,13.55]];
+  const reverseTruck=[...routeTruck].reverse();
+  const reverseFork=[...routeFork].reverse();
+  const routeVan=[[38,1.4],[33.5,1.4],[30.5,1.4],[26.0,1.4],[22.0,1.4],[19.4,1.4]];
+  const routeCross=[[-7,-5.65],[-7,-3],[-7,1.4],[-7,4.65],[-7,6.15]];
+  const routeFactory=x=>[[0,-4.6],[0,-5.65],[x,-5.65],[x,-7.35],[x,-9.55]];
+  const routeOffice=(x,z)=>[[0,-4.6],[-7,-5.65],[-7,-1.8],[-7,1.4],[-7,5.7],[x,6.15],[x,8.5],[x,z]];
+  const storyPaths={
+   factory:f=>routeFactory(({TRIDAYA:-19,INNA:0,KBI:19}[f]??0)),
+   old:()=>[[0,-4.6],[-2.8,-5.65],[-5.1,-5.65]],
+   priority:()=>[[0,-4.6],[-2.8,-5.65],[-5.1,-5.65]],
+   arrived:()=>[[0,-4.6],[-7,-5.65],[-7,1.4],[-7,5.7],[3.2,6.1],[3.2,8.7]],
+   orders:()=>routeOffice(0,13.1),add:()=>routeOffice(0,13.1),edit:()=>routeOffice(0,13.1),csv:()=>routeOffice(0,13.1),
+   report:()=>routeOffice(-19,14.7),all:()=>[[0,-4.6],[0,-4.6]]
   };
-  function motion(obj,points,amount,walk=false){
-   let t=ease(amount);t=Math.max(0,Math.min(1,t));const lengths=points.slice(1).map((p,i)=>Math.hypot(p[0]-points[i][0],p[1]-points[i][1]));const full=lengths.reduce((s,n)=>s+n,0);let distance=t*full;
-   for(let i=0;i<lengths.length;i++){if(distance<=lengths[i]||i===lengths.length-1){const seg=Math.max(.001,lengths[i]);const pct=Math.min(1,distance/seg);
-    const start=points[i],end=points[i+1],dx=end[0]-start[0],dz=end[1]-start[1];
-    obj.position.x=lerp(start[0],end[0],pct);obj.position.z=lerp(start[1],end[1],pct);
-    // Front of vehicles/characters faces negative X at zero yaw in mesh design.
-    const angle=Math.atan2(dz,dx);
-    obj.rotation.y=obj.userData.forward==='positiveX'?-angle:obj.userData.forward==='negativeX'?Math.PI-angle:Math.atan2(dx,dz);
-    obj.userData.walking=walk&&t>0&&t<1;
-    return;
-   }distance-=lengths[i];}
-  }
-  function driveSmooth(obj,points,t){
-    // Road centerline follows a reserved traffic corridor, with smoothly sampled turn.
-    const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(p[0],0,p[1])),false,'centripetal',.25);
-    const at=Math.max(0,Math.min(1,ease(t)));
-    const location=curve.getPointAt(at),tangent=curve.getTangentAt(at);
-    obj.position.set(location.x,0,location.z);
-    obj.rotation.y=Math.PI-Math.atan2(tangent.z,tangent.x);
-  }
-  const focusFor=(mode,f)=>{if(mode==='factory')return [({TRIDAYA:-19,INNA:0,KBI:19}[f]??-19),-13];
-   if(['report'].includes(mode))return [-19,15];if(['orders','add','edit','csv'].includes(mode))return [0,15];
-   if(mode==='arrived')return [10.5,9.5];if(['old','priority'].includes(mode))return [1,-3];return [0,0]};
-  function clearStory(){for(const k of ['factory','supervisor','admin','reporter','loader']){const a=workers[k];a.position.set(...[homes[k][0],0,homes[k][1]]);a.rotation.set(0,0,0);a.userData.walking=false}truck.position.set(37,0,1.4);truck.rotation.y=0;forklift.position.set(17,0,14.9);forklift.rotation.y=0;cargo.visible=false;beacon.intensity=0;for(const paper of sheets)paper.visible=false;}
-
-  // Autonomous shift: self-running factory floor with segregated logistics and walking lanes.
-  // Timeline is deterministic, not random: vehicles never choose arbitrary coordinates.
-  const WANDERS=[
-   {name:'factory',path:pathFactory(-19),offset:0,cycle:22,travel:7,hold:3},
-   {name:'roamerInna',path:pathFactory(0),offset:7,cycle:24,travel:7.5,hold:3},
-   {name:'roamerKbi',path:pathFactory(19),offset:14,cycle:25,travel:8,hold:2.5},
-   {name:'supervisor',path:paths.old,offset:8,cycle:32,travel:10,hold:4},
-   {name:'admin',path:paths.admin,offset:5,cycle:26,travel:6.8,hold:4},
-   {name:'reporter',path:paths.report,offset:11,cycle:35,travel:9,hold:7},
-   {name:'loader',path:paths.loader,offset:0,cycle:20,travel:5,hold:4}
-  ];
-  function patrol(person,points,t,travel,hold,cycle){
-    const s=((t%cycle)+cycle)%cycle;
-    if(s<travel)motion(person,points,s/travel,true);
-    else if(s<travel+hold)motion(person,points,1,false);
-    else if(s<travel*2+hold)motion(person,points,1-(s-travel-hold)/travel,true);
-    else motion(person,points,0,false);
-  }
-  const reverseTruck=[...paths.truck].reverse();
-  function autonomousFrame(){
-    const t=(nowTime-ambientEpoch+1.25+AMBIENT_CYCLE*100)%AMBIENT_CYCLE;
-    ambientPhase=t;
-    // A delivery enters, unloads, leaves; another can arrive on the next cycle.
-    // Forklift only moves when the truck is stationary, on its own perpendicular aisle.
-    if(t<10.8)driveSmooth(truck,paths.truck,t/10.8);
-    else if(t<25.2)driveSmooth(truck,paths.truck,1);
-    else if(t<36.0)driveSmooth(truck,reverseTruck,(t-25.2)/10.8);
-    else truck.position.set(37,0,1.4);
-    if(t>=12 && t<18)motion(forklift,paths.forklift,(t-12)/6);
-    else if(t>=18&&t<24)motion(forklift,paths.forklift,1-(t-18)/6);
-    else motion(forklift,paths.forklift,0);
-    cargo.visible=t>=15&&t<24;
-    // Individual employees have different shifts. Paths stay out of the vehicle lane.
-    for(const w of WANDERS)patrol(workers[w.name],w.path,nowTime+w.offset,w.travel,w.hold,w.cycle);
-    // Printer starts running from time to time even without a report click.
-    for(let i=0;i<sheets.length;i++){
-      const paper=sheets[i],s=(nowTime+i*0.14)%24;
-      paper.visible=s>10.2+i*.58 && s<14.8+i*.58;
-      if(paper.visible){const progress=Math.min(1,Math.max(0,(s-10.2-i*.58)/2.0));paper.position.set(-14.9,1.57+i*.027,17.63+progress*.49);}
-    }
-    const aged=Number(window.mercySceneMetrics?.old||0);
-    beacon.intensity=aged>0?(0.32+Math.sin(nowTime*3.5)**2*.56):0;
-    let label=t<10.8?'🚚 Truk mengantar barang ke loading dock':
-      t<14.5?'📦 Truk parkir · pekerja menyiapkan muatan':
-      t<24?'🏗️ Forklift mengangkut pallet ke gudang':
-      t<36?'🚚 Truk kembali keluar melalui gerbang':'🏭 Mesin produksi, kantor, dan pekerja tetap beraktivitas';
-    ambientActiveLabel=label;
-    const sec=Math.floor(nowTime);
-    if(sec!==lastAmbientSecond){lastAmbientSecond=sec;const e=$('ambientStatus');if(e)e.textContent=label;}
-  }
-
-  function currentStep(mode,t){const steps=phaseDescriptions[mode]||phaseDescriptions.all;let result=steps[0][1];for(const [at,txt]of steps)if(t>=at)result=txt;return result;}
-  function storyFrame(mode,f,t,d){const p=Math.max(0,Math.min(1,t/d));
-   const [fx,fz]=focusFor(mode,f); const drift=Math.min(1,t/3.0);
-   focus.x=lerp(focus.x,fx,.035+drift*.022);focus.z=lerp(focus.z,fz,.035+drift*.022);
-   zoomTarget=(mode==='factory'?1.12:mode==='all'?1:1.13);
-   if(mode==='factory'){const xx=({TRIDAYA:-19,INNA:0,KBI:19}[f]??-19);
-    const person=f==='INNA'?workers.roamerInna:f==='KBI'?workers.roamerKbi:workers.factory;
-    motion(person,pathFactory(xx),Math.min(1,t/7.0),true);}
-   if(mode==='old'||mode==='priority'){motion(workers.supervisor,paths.old,Math.min(1,t/7.4),true);beacon.intensity=2.8+Math.sin(nowTime*11)*1.4;}
-   if(mode==='arrived'){
-    // No forklift motion until truck has parked; vehicles use disjoint centerlines.
-    driveSmooth(truck,paths.truck,Math.min(1,t/11.0));
-    if(t<11){cargo.visible=false;}
-    if(t>=11.5){motion(forklift,paths.forklift,Math.min(1,(t-11.5)/3.1));}
-    if(t>=14.6){cargo.visible=true;}
-    if(t>15.1){
-      // Forklift backs away in reverse, preserving heading and loaded fork direction.
-      motion(forklift,paths.forklift,Math.max(0,1-(t-15.1)/3.5));
-    }
-    if(t>=13)motion(workers.loader,paths.loader,Math.min(1,(t-13)/4.0),true);
-    const subject=t<11.3?truck:forklift;
-    const lookX=Math.max(-21,Math.min(23,subject.position.x-(t<11.3?6:1.8)));
-    const lookZ=t<11.3?Math.max(-2,subject.position.z):subject.position.z;
-    focus.x=lerp(focus.x,lookX,.085);
-    focus.z=lerp(focus.z,lookZ,.085);
+  function atPath(pts,p){
+   if(pts.length<2)return{x:pts[0][0],z:pts[0][1],dx:0,dz:1};
+   const lengths=pts.slice(1).map((point,i)=>Math.hypot(point[0]-pts[i][0],point[1]-pts[i][1]));
+   let remaining=clamp(p)*lengths.reduce((a,b)=>a+b,0);
+   for(let i=0;i<lengths.length;i++){
+    const d=lengths[i];if(remaining<=d||i===lengths.length-1){
+     const u=d<EPS?0:clamp(remaining/d),[x,z]=pts[i],[ex,ez]=pts[i+1];
+     return{x:lerp(x,ex,u),z:lerp(z,ez,u),dx:ex-x,dz:ez-z};
+    }remaining-=d;
    }
-   if(['orders','add','edit','csv'].includes(mode))motion(workers.admin,paths.admin,Math.min(1,t/6.4),true);
+   return{x:pts.at(-1)[0],z:pts.at(-1)[1],dx:0,dz:1};
+  }
+  function movePerson(actor,path,progress,moving=true){
+   const pt=atPath(path,progress);actor.root.position.x=pt.x;actor.root.position.z=pt.z;
+   if(Math.hypot(pt.dx,pt.dz)>.1){const intended=Math.atan2(pt.dx,pt.dz);
+    let diff=(intended-actor.root.rotation.y+Math.PI*3)%(Math.PI*2)-Math.PI;
+    actor.root.rotation.y+=clamp(diff,-.11,.11);
+   }
+   actor.moving=moving&&progress>.002&&progress<.997;
+  }
+  function alongRoad(vehicle,pts,p,front){
+   // The vehicle stays between predetermined road waypoints, following curved corners.
+   // Tangents derive from a centripetal spline; no intersection with buildings.
+   if(!vehicle.userData.track||vehicle.userData.trackPoints!==pts){
+    const curve=new THREE.CatmullRomCurve3(pts.map(([x,z])=>new THREE.Vector3(x,0,z)),false,'centripetal',.18);
+    vehicle.userData.track={curve,points:pts};vehicle.userData.trackPoints=pts;
+   }
+   const curve=vehicle.userData.track.curve,t=clamp(p),point=curve.getPointAt(t),tangent=curve.getTangentAt(t);
+   vehicle.position.set(point.x,0,point.z);
+   vehicle.rotation.y=front==='negativeX'?Math.PI-Math.atan2(tangent.z,tangent.x):-Math.atan2(tangent.z,tangent.x);
+  }
+  function animateActorPose(actor,time){
+   const walk=actor.moving;
+   const cyc=time*(walk?9.6:1.6)+actor.phase;
+   const swing=walk ? .42*Math.sin(cyc) : .028*Math.sin(cyc);
+   const legSwing=walk ? .52*Math.sin(cyc) : 0;
+   const working=actor.role!=='guard'&&actor.role!=='you';
+   const individual=working&&!walk?(actor.role==='admin'||actor.role==='report'?-0.23:actor.role==='qc'?-0.18:-.22):0;
+   const left=clamp(swing+individual,-.8,.75),right=clamp(-swing+individual*.75,-.8,.75);
+   for(const [name,angle] of [['Arm_Left',left],['Arm_Right',right],['Leg_Left',-legSwing],['Leg_Right',legSwing]]){
+    const node=actor.joints[name];if(node)node.rotation.x=angle;
+   }
+   for(const side of ['Left','Right']){
+    const angle=side==='Left'?left:right;
+    const hand=actor.joints['Hand_'+side];if(hand){hand.position.y=.56*(1-Math.cos(angle));hand.position.z=-.56*Math.sin(angle)}
+    const shoe=actor.joints['Boot_'+side];if(shoe){const l=side==='Left'?-legSwing:legSwing;shoe.position.z=.32*Math.sin(l);shoe.position.y=.11*Math.abs(Math.sin(l))}
+   }
+   const model=actor.root.children[0];if(model)model.position.y=walk?.045*Math.abs(Math.sin(cyc)): .012*Math.sin(cyc*.8);
+  }
+  let worldTime=0,lastTime=performance.now(),paused=false,story=null,truckPhase=0,truckStatus='';
+  let yaw=.80,pitch=.88,targetYaw=yaw,targetPitch=pitch,zoom=1,zoomTarget=1;
+  const lookTarget=new THREE.Vector3(0,0,0),focus=new THREE.Vector3(0,0,0);
+  function cameraDefault(){targetYaw=.80;targetPitch=.88;zoomTarget=1;focus.set(0,0,0)}
+  const modeTarget=(mode,f)=>{
+   if(mode==='factory')return[({TRIDAYA:-19,INNA:0,KBI:19}[f]??0),-13];
+   if(mode==='report')return[-19,16];
+   if(['orders','add','edit','csv'].includes(mode))return[0,16];
+   if(mode==='arrived')return[9.0,10];
+   if(['old','priority'].includes(mode))return[-2.2,-5];
+   return[0,0];
+  };
+  function runPatrol(i,path,t){
+   const actor=actors[i],period=12+i%5*3.1,offset=(i*3.91)%period,s=(t+offset)%period;
+   const movingTime=Math.min(5.6,period*.33),hold=3.1+(i%4)*.4;
+   if(s<movingTime)movePerson(actor,path,smooth(s/movingTime),true);
+   else if(s<movingTime+hold)movePerson(actor,path,1,false);
+   else if(s<movingTime*2+hold)movePerson(actor,path,1-smooth((s-movingTime-hold)/movingTime),true);
+   else movePerson(actor,path,0,false);
+  }
+  function workersAmbient(){
+   for(const actor of actors){if([23,24,27].includes(actor.id))continue;
+    if(roaming[actor.id])runPatrol(actor.id,roaming[actor.id],worldTime);
+    else{
+     actor.moving=false;
+     actor.root.position.set(actor.home[0],0,actor.home[1]);
+     actor.root.rotation.y=(actor.id<12?0:actor.role==='admin'||actor.role==='report'?.1:Math.sin(actor.id*.4)*.28);
+    }
+   }
+   if(!story){you.root.position.set(0,0,-4.6);you.moving=false;you.root.rotation.y=.08;}
+  }
+  function showPaperAt(t,force=false){for(let i=0;i<sheets.length;i++){
+   const at=force?9.95+i*.65:10.1+i*.62;
+   const visible=t>at&&t<at+4.3;sheets[i].visible=visible;
+   if(visible){const progress=smooth((t-at)/2.0);sheets[i].position.set(-14.9,1.59+i*.027,17.63+progress*.51);}
+  }}
+  function autonomousLogistics(){
+   const cycle=78;const t=worldTime%cycle;truckPhase=t;
+   if(t<16)alongRoad(truck,routeTruck,smooth(t/16),'negativeX');
+   else if(t<43)alongRoad(truck,routeTruck,1,'negativeX');
+   else if(t<60)alongRoad(truck,reverseTruck,smooth((t-43)/17),'negativeX');
+   else{truck.position.set(37,0,1.4);truck.rotation.y=0;}
+   if(t>=19&&t<28)alongRoad(forklift,routeFork,smooth((t-19)/9),'positiveX');
+   else if(t>=28&&t<40)alongRoad(forklift,reverseFork,smooth((t-28)/12),'positiveX');
+   else{forklift.position.set(17,0,14.9);forklift.rotation.y=0;}
+   cargo.visible=t>=24&&t<39;
+   cargo.position.y=(t>=24&&t<30)?lerp(.45,1.03,smooth((t-24)/6)):(t>=30&&t<39?lerp(1.03,.55,smooth((t-30)/9)):.45);
+   actors[23].root.visible=t>16&&t<43;
+   if(actors[23].root.visible){
+    const driver=actors[23];
+    const path=[[6.5,10.7],[5.6,10.7],[5.25,9.1]];
+    const phase=t<21?clamp((t-16)/5):t>38?clamp(1-(t-38)/5):1;
+    movePerson(driver,path,phase,t<21||t>38);
+   }
+   if(t<16)truckStatus='🚚 Truk masuk lewat gerbang';
+   else if(t<21)truckStatus='📦 Sopir turun, tim gudang bersiap';
+   else if(t<38)truckStatus='🏗️ Forklift mengantar pallet ke rak gudang';
+   else if(t<43)truckStatus='📋 Pemeriksaan barang dan dokumen';
+   else if(t<60)truckStatus='🚚 Truk meninggalkan lokasi';
+   else truckStatus='🏭 Mesin dan tim pabrik tetap bekerja';
+   for(const wheel of wheels)wheel.rotation.z=!(t>=16&&t<43||t>=60)?worldTime*3.2:0;
+  }
+  function updateBackground(){
+   workersAmbient();
+   const idle=worldTime%78;
+   if(!story)autonomousLogistics();
+   if(!story)showPaperAt(worldTime%25);
+   const old=Number(window.mercySceneMetrics?.old||0);
+   beacon.intensity=old>0?.18+Math.pow(Math.sin(worldTime*2.5),2)*.38:0;
+   if(!story){
+    const text=$('ambientStatus');
+    if(text&&Math.floor(worldTime*2)!==Math.floor((worldTime-0.02)*2))text.textContent=truckStatus+' · '+actors.length+' pekerja unik';
+   }
+  }
+  function sceneStory(mode,factory,elapsed,duration){
+   const t=elapsed,p=clamp(t/duration);
+   // User-directed avatar takes the safe sidewalk, crosses only at the crosswalk,
+   // and only the chosen special scene overrides scheduled logistic vehicles.
+   const path=(storyPaths[mode]||storyPaths.orders)(factory);
+   const travel=mode==='arrived'?12:mode==='report'?10.7:duration-2;
+   movePerson(you,path,smooth(clamp(t/travel)),true);
+   const [tx,tz]=modeTarget(mode,factory),isVehicle=mode==='arrived';
+   const targetX=isVehicle?(t<12?lerp(-1,8,smooth(t/12)):lerp(8,12,smooth((t-12)/9))):tx;
+   const targetZ=isVehicle?(t<12?lerp(1.5,6,smooth(t/12)):lerp(6,13,smooth((t-12)/9))):tz;
+   focus.x=lerp(focus.x,targetX,.035);focus.z=lerp(focus.z,targetZ,.035);
+   zoomTarget=mode==='all'?1:mode==='factory'?1.16:1.10;
+   if(isVehicle){
+    if(t<12)alongRoad(truck,routeTruck,smooth(t/12),'negativeX');
+    else alongRoad(truck,routeTruck,1,'negativeX');
+    if(t>=13&&t<17)alongRoad(forklift,routeFork,smooth((t-13)/4),'positiveX');
+    else if(t>=17)alongRoad(forklift,reverseFork,smooth((t-17)/3.9),'positiveX');
+    else forklift.position.set(17,0,14.9);
+    cargo.visible=t>=15.4;
+    cargo.position.y=t>=16?lerp(.45,1.09,smooth((t-16)/1.7)):.45;
+    actors[23].root.visible=t>=12.5;
+    if(t>=12.5)movePerson(actors[23],[[6.5,10.7],[5.5,10.7],[5.3,9.2]],smooth((t-12.5)/3),true);
+    for(const wheel of wheels)wheel.rotation.z=t<12?t*3.1:0;
+   }else{
+    truck.position.set(37,0,1.4);forklift.position.set(17,0,14.9);
+    cargo.visible=false;actors[23].root.visible=false;
+   }
+   if(mode==='old'||mode==='priority'){
+    movePerson(actors[21],[[-8,-6.5],[-5.2,-6.5],[-3.1,-6.5]],smooth(clamp(t/6.4)),true);
+    beacon.intensity=1.5+Math.abs(Math.sin(worldTime*6))*1.1;
+   }
+   if(['orders','add','edit','csv'].includes(mode)){
+    movePerson(actors[17],[[-23.4,15],[-22.3,14.7],[-21.4,14.7]],smooth(clamp((t-4)/4)),true);
+   }
    if(mode==='report'){
-    motion(workers.reporter,paths.report,Math.min(1,t/7.3),true);
-    const p=workers.reporter.position;
-    focus.x=lerp(focus.x,p.x+2.5,.045);
-    focus.z=lerp(focus.z,p.z+1.0,.045);
-    for(let i=0;i<3;i++){const paper=sheets[i];paper.visible=t>9.1+i*.83;if(paper.visible){const prog=Math.max(0,Math.min(1,(t-9.1-i*.83)/1.25));paper.position.set(-14.9,1.57+i*.027,17.63+.5*prog);}}
+    movePerson(actors[19],[[-22,12],[-20,12.0],[-18.3,12.0],[-16.3,15.2]],smooth(clamp((t-4)/5.8)),true);
+    showPaperAt(t,true);
    }
+   if(mode==='all'){focus.x=lerp(focus.x,0,.08);focus.z=lerp(focus.z,0,.08);targetYaw=.8+Math.sin(t/2)*.1;zoomTarget=1;}
   }
-  function finish(){if(!active)return;const a=active;active=null;ambientEpoch=nowTime;ambientPhase=0;a.resolve({cancelled:false});window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode:a.mode,elapsed:a.duration,duration:a.duration,step:'Adegan selesai',active:false}}));}
-  function play(mode='all',factoryName=''){
-   // If the world was paused, resume the scene explicitly so the panel cannot hang.
-   if(paused){paused=false;const motionButton=$('toggleMotion');motionButton?.setAttribute('aria-pressed','true');if(motionButton)motionButton.innerHTML='Ⅱ <span>Jeda dunia</span>';}
-   stop();clearStory();
-   if(mode==='factory'){
-    const x=({TRIDAYA:-19,INNA:0,KBI:19}[factoryName]??-19);
-    const person=factoryName==='INNA'?workers.roamerInna:factoryName==='KBI'?workers.roamerKbi:workers.factory;
-    person.position.set(x-3,0,-6.55);
-   }
-   const duration=durations[mode]||8;
-   const ft=focusFor(mode,factoryName);
-   focus.set(ft[0]*.3,0,ft[1]*.3);
-   const p=new Promise(resolve=>{active={mode,factoryName,duration,elapsed:0,resolve};});
-   window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode,elapsed:0,duration,step:currentStep(mode,0),active:true}}));
+  const phaseAt=(mode,t)=>{let step=phases[mode]||phases.orders;let current=step[0][1];for(const [at,txt] of step)if(t>=at)current=txt;return current;};
+  function finishStory(){if(!story)return;const st=story;story=null;st.resolve({cancelled:false});
+   window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode:st.mode,elapsed:st.duration,duration:st.duration,step:'Adegan selesai',active:false}}));}
+  function play(mode='all',factory=''){
+   stop();paused=false;const btn=$('toggleMotion');if(btn){btn.setAttribute('aria-pressed','true');btn.innerHTML='Ⅱ <span>Jeda dunia</span>';}
+   const duration=durations[mode]||9.8;
+   focus.set(0,0,0);zoomTarget=1;actors[27].root.position.set(0,0,-4.6);
+   const p=new Promise(resolve=>story={mode,factory,duration,elapsed:0,resolve});
+   window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode,elapsed:0,duration,step:phaseAt(mode,0),active:true}}));
    return p;
   }
-  function stop(){if(active){const a=active;active=null;a.resolve({cancelled:true});}ambientEpoch=nowTime;for(const w of Object.values(workers))w.userData.walking=false;}
-  function skip(){if(active){storyFrame(active.mode,active.factoryName,active.duration,active.duration);finish();}}
+  function stop(){if(story){const s=story;story=null;s.resolve({cancelled:true});}}
+  function skip(){if(story){sceneStory(story.mode,story.factory,story.duration,story.duration);finishStory();}}
+  let px=0,py=0,down=null,movingCamera=false;
   const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();
-  function hit(e){const r=canvas.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(pointer,camera);const hit=ray.intersectObjects(hitTargets,false);return hit.length?hit[0].object.userData:null;}
-  let drag=null;
-  canvas.addEventListener('pointerdown',e=>{drag={id:e.pointerId,x:e.clientX,y:e.clientY,lx:e.clientX,ly:e.clientY,moved:false};canvas.setPointerCapture(e.pointerId)});
-  canvas.addEventListener('pointermove',e=>{if(!drag){canvas.style.cursor=hit(e)?'pointer':'grab';return}if(e.pointerId!==drag.id)return;const dx=e.clientX-drag.lx,dy=e.clientY-drag.ly;drag.lx=e.clientX;drag.ly=e.clientY;
-   if(Math.hypot(drag.x-e.clientX,drag.y-e.clientY)>8)drag.moved=true;
-   if(drag.moved){targetYaw+=dx*.007;targetPitch=Math.min(1.27,Math.max(.46,targetPitch-dy*.007))}
-  });
-  canvas.addEventListener('pointerup',e=>{if(!drag)return;const dragged=drag.moved;drag=null;if(!dragged){let data=hit(e);if(data)window.MERCY_WORLD_UI?.action(data.action,data.factory||'')}});
-  canvas.addEventListener('pointercancel',()=>drag=null);
-  canvas.addEventListener('wheel',e=>{e.preventDefault();zoomTarget=Math.max(.65,Math.min(1.8,zoomTarget+Math.sign(-e.deltaY)*.10))},{passive:false});
-  let stageW=0,stageH=0;
-  function resize(){const r=stage.getBoundingClientRect();if(!r.width||!r.height)return;if(stageW===r.width&&stageH===r.height)return;stageW=r.width;stageH=r.height;
-   renderer.setSize(r.width,r.height,false);
-   const asp=r.width/r.height;
-   const visibleHeight=asp<.6?93:asp<.98?73:asp<1.5?59:47;
-   camera.top=visibleHeight/2;camera.bottom=-visibleHeight/2;camera.left=-visibleHeight*asp/2;camera.right=visibleHeight*asp/2;camera.updateProjectionMatrix();
+  const targets=[];
+  const zoneDefs=[
+   {x:-19,z:-13.2,w:15.0,d:11.8,action:'factory',factory:'TRIDAYA'},
+   {x:0,z:-13.2,w:15.0,d:11.8,action:'factory',factory:'INNA'},
+   {x:19,z:-13.2,w:15.0,d:11.8,action:'factory',factory:'KBI'},
+   {x:-19,z:16.1,w:17,d:14,action:'report'},
+   {x:0,z:16.0,w:11.0,d:11.8,action:'orders'},
+   {x:19,z:16.5,w:19,d:14.5,action:'arrived'}
+  ];
+  for(const z of zoneDefs){
+   const hit=new THREE.Mesh(new THREE.BoxGeometry(z.w,4.3,z.d),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide}));
+   hit.position.set(z.x,2.15,z.z);hit.userData=z;world.add(hit);targets.push(hit);
   }
-  if(typeof ResizeObserver!=='undefined'){new ResizeObserver(resize).observe(stage)}
-  const anchor={labelTridaya:[-19,4.7,-12.9],labelInna:[0,4.7,-12.9],labelKbi:[19,4.7,-12.9]};
+  function intersection(e){const r=canvas.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(pointer,camera);const found=ray.intersectObjects(targets,false);return found.length?found[0].object.userData:null;}
+  canvas.addEventListener('pointerdown',e=>{down={id:e.pointerId,x:e.clientX,y:e.clientY,lx:e.clientX,ly:e.clientY,drag:false};canvas.setPointerCapture(e.pointerId);});
+  canvas.addEventListener('pointermove',e=>{
+   if(!down){canvas.style.cursor=intersection(e)?'pointer':'grab';return;}
+   if(down.id!==e.pointerId)return;
+   const dx=e.clientX-down.lx,dy=e.clientY-down.ly;down.lx=e.clientX;down.ly=e.clientY;
+   if(Math.hypot(e.clientX-down.x,e.clientY-down.y)>7)down.drag=true;
+   if(down.drag){targetYaw+=dx*.006;targetPitch=clamp(targetPitch-dy*.006,.46,1.34);}
+  });
+  canvas.addEventListener('pointerup',e=>{if(!down)return;const wasDrag=down.drag;down=null;if(!wasDrag){const area=intersection(e);if(area)window.MERCY_WORLD_UI?.action(area.action,area.factory||'');}});
+  canvas.addEventListener('pointercancel',()=>down=null);
+  canvas.addEventListener('wheel',e=>{e.preventDefault();zoomTarget=clamp(zoomTarget+(e.deltaY<0?.1:-.1),.65,1.74);},{passive:false});
+  let width=0,height=0;
+  function resize(){const r=stage.getBoundingClientRect();if(!r.width||!r.height)return;
+   if(width===r.width&&height===r.height)return;width=r.width;height=r.height;renderer.setSize(width,height,false);
+   const aspect=width/height;
+   const viewHeight=aspect<.55?102:aspect<.86?88:aspect<1.35?75:aspect<1.75?61:54;
+   camera.top=viewHeight/2;camera.bottom=-viewHeight/2;camera.left=-viewHeight*aspect/2;camera.right=viewHeight*aspect/2;camera.updateProjectionMatrix();
+  }
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(resize).observe(stage);
+  const anchor={labelTridaya:[-19,5.0,-12.2],labelInna:[0,5,-12.2],labelKbi:[19,5,-12.2]};
   function updateLabels(){const r=stage.getBoundingClientRect();if(!r.width)return;
-   for(const[id,p]of Object.entries(anchor)){const e=$(id)?.closest('.floating-label');if(!e)continue;let v=new THREE.Vector3(...p);v.project(camera);const px=(v.x*.5+.5)*r.width,py=(-v.y*.5+.5)*r.height;
-    e.style.left=`${Math.max(10,Math.min(r.width-138,px-54))}px`;e.style.top=`${Math.max(86,Math.min(r.height-70,py-16))}px`;
-    e.style.display=v.z>1?'none':'';
+   for(const[id,p]of Object.entries(anchor)){
+    const item=$(id)?.closest('.floating-label');if(!item)continue;
+    const a=new THREE.Vector3(...p).project(camera);
+    const x=(a.x*.5+.5)*r.width,y=(-a.y*.5+.5)*r.height;
+    item.style.left=`${Math.max(12,Math.min(r.width-137,x-62))}px`;
+    item.style.top=`${Math.max(130,Math.min(r.height-64,y-19))}px`;
+    item.style.display=a.z>1?'none':'';
    }
   }
   canvas.hidden=false;canvas.style.display='block';$('worldFallback').hidden=true;$('worldFallback').style.display='none';
-  window.MERCY_SCENE={play,skip,stop,reset:cameraDefault,pause(v){paused=!!v;const e=$('ambientStatus');if(e&&paused)e.textContent='⏸ Aktivitas pabrik dijeda';},updateMetrics(m){window.mercySceneMetrics=m},getAmbientState(){return {phase:ambientPhase,activity:ambientActiveLabel,paused,cinematic:!!active,truck:[truck.position.x,truck.position.z],forklift:[forklift.position.x,forklift.position.z]}}};
-  cameraDefault();resize();stopListeners();
-  function render(now){requestAnimationFrame(render);
-   const dt=Math.min(.05,(now-lastTime)/1000||.016);lastTime=now;
-   if(!paused){nowTime+=dt;
-    if(active){active.elapsed+=dt;storyFrame(active.mode,active.factoryName,active.elapsed,active.duration);
-     const e=active;window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode:e.mode,elapsed:Math.min(e.elapsed,e.duration),duration:e.duration,step:currentStep(e.mode,e.elapsed),active:true}}));
-     if(e.elapsed>=e.duration)finish();}
-    if(!active)autonomousFrame();}
-   const blend=1-Math.exp(-3*dt);yaw=lerp(yaw,targetYaw,blend);pitch=lerp(pitch,targetPitch,blend);zoom=lerp(zoom,zoomTarget,blend);
-   cameraLook.lerp(focus,1-Math.exp(-2.6*dt));
-   const rad=78;
-   camera.position.set(cameraLook.x+Math.cos(yaw)*Math.cos(pitch)*rad,Math.sin(pitch)*rad,cameraLook.z+Math.sin(yaw)*Math.cos(pitch)*rad);
-   camera.lookAt(cameraLook);camera.zoom=zoom;camera.updateProjectionMatrix();
-   for(const[key,person] of Object.entries(workers)){
-    const moving=person.userData.walking&&!paused;
-    const phase=nowTime*8.8+key.length*.25,step=Math.sin(phase);
-    const model=person.children[0];
-    model.position.y=moving?Math.abs(Math.sin(phase))*.055:0;
-    if(!person.userData.limbs){
-      const found={};model.traverse(node=>{if(['Arm_Left','Arm_Right','Leg_Left','Leg_Right'].includes(node.name))found[node.name]=node;});
-      person.userData.limbs=found;
-    }
-    const limbs=person.userData.limbs;
-    for(const name of ['Arm_Left','Arm_Right','Leg_Left','Leg_Right']){
-      if(!limbs[name])continue;
-      const right=name.endsWith('Right');const arm=name.startsWith('Arm');
-      const amount=moving?(arm?.43:.50):.025;
-      limbs[name].rotation.x=amount*(right?step:-step);
-    }
-    // Idle workers operate machines with tiny hand movement, without leaving their assigned bay.
-    if(key.startsWith('static')&&limbs.Arm_Right)limbs.Arm_Right.rotation.x=.10+Math.sin(nowTime*1.9+key.length)*.13;
-   }
+  window.MERCY_SCENE={play,skip,stop,reset:cameraDefault,pause(v){paused=!!v;if(paused)$('ambientStatus').textContent='⏸ Aktivitas dunia dihentikan';},updateMetrics(m){window.mercySceneMetrics=m},getAmbientState(){return{time:worldTime,workerCount:actors.length,uniqueAssets:28,truckPhase,truckStatus,paused,cinematic:!!story,truck:[truck.position.x,truck.position.z],forklift:[forklift.position.x,forklift.position.z]}}};
+  cameraDefault();resize();sendReady();
+  let ambientTicker=-1;
+  function tick(now){requestAnimationFrame(tick);
+   const dt=Math.min(.045,(now-lastTime)/1000||.016);lastTime=now;
    if(!paused){
-    for(const {box,i} of ambientParcels){
-      // 6.0-unit straight conveyor; separated from worker aisles and road traffic.
-      box.position.z=-16.3+((i*1.70+nowTime*.57)%5.0);
+    worldTime+=dt;
+    updateBackground();
+    if(story){story.elapsed+=dt;sceneStory(story.mode,story.factory,story.elapsed,story.duration);
+     const item=story;window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode:item.mode,elapsed:Math.min(item.elapsed,item.duration),duration:item.duration,step:phaseAt(item.mode,item.elapsed),active:true}}));
+     if(item.elapsed>=item.duration)finishStory();
     }
-    if(active?.mode==='arrived'||(!active&&ambientPhase<36)){
-      truck.children[0].rotation.z=Math.sin(nowTime*18)*.002;
-      forklift.children[0].position.y=Math.abs(Math.sin(nowTime*8))*.016;
-    }
+    for(let i=0;i<actors.length;i++)animateActorPose(actors[i],worldTime);
+    for(const item of parcels)item.box.position.z=-16.3+((item.i*1.13+worldTime*.43)%5.05);
+    for(const [i,box] of heldPackages){box.visible=Math.sin(worldTime*.5+i)>-.55;box.position.y=1.07+.05*Math.sin(worldTime*1.7+i);}
+    youBadge.position.set(you.root.position.x,you.root.position.y+3.36+.06*Math.sin(worldTime*2),you.root.position.z);
+    characterShadows.forEach((m,i)=>{if(!m)return;m.position.x=actors[i].root.position.x;m.position.z=actors[i].root.position.z;});
+    const tickSec=Math.floor(worldTime/3);
+    if(tickSec!==ambientTicker){ambientTicker=tickSec;const e=$('ambientStatus');if(e&&!story)e.textContent=truckStatus+' • 28 pekerja dengan tugas berbeda';}
    }
+   const k=1-Math.exp(-3.8*dt);yaw=lerp(yaw,targetYaw,k);pitch=lerp(pitch,targetPitch,k);zoom=lerp(zoom,zoomTarget,k);
+   lookTarget.lerp(focus,1-Math.exp(-2.4*dt));
+   const d=89;
+   camera.position.set(lookTarget.x+Math.cos(yaw)*Math.cos(pitch)*d,Math.sin(pitch)*d,lookTarget.z+Math.sin(yaw)*Math.cos(pitch)*d);
+   camera.lookAt(lookTarget);camera.zoom=zoom;camera.updateProjectionMatrix();
    updateLabels();renderer.render(scene,camera);
   }
-  requestAnimationFrame(render);
- }catch(e){browserFallback(e)}
+  requestAnimationFrame(tick);
+ }catch(e){offlineFallback(e)}
 })();
 
 </script>
