@@ -4,8 +4,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="theme-color" content="#edf6f4" />
-<title>MERCY • Factory Studio 3D · Dashboard PO</title>
-<meta name="description" content="MERCY Factory Studio: satu dashboard PO Firebase dengan dunia miniatur GLB 3D hidup, animasi logistik, kantor laporan dan tiga pabrik." />
+<title>MERCY • Factory Studio V5 · Auto Living + Workspace</title>
+<meta name="description" content="MERCY Factory Studio V5: miniatur pabrik hidup otomatis dan workspace layar lebar untuk data PO, prioritas, barang datang, laporan dan CSV Firebase." />
 <style>
 :root{--paper:#f1f8f5;--panel:#fff;--border:#d9e8e6;--text:#1e3542;--muted:#79919a;--sea:#168f8e;--sea2:#2cb5a9;--mint:#dff3e9;--blue:#5e91bd;--amber:#d69753;--danger:#c56c5f;--shadow:0 16px 60px rgba(52,106,105,.1)}
 *{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--paper);color:var(--text)}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}a{color:inherit}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid #1ab7af;outline-offset:3px}button{touch-action:manipulation}::selection{background:#c3eddd;color:#135157}
@@ -41,12 +41,138 @@
 .world-stage{background:#e8f5f0}
 .top-actions .header-link{pointer-events:none;cursor:default;background:#e8f5ee;color:#4d8d7f;border:1px solid #d1eae0}
 @media(max-width:850px){.stage-title{left:14px;top:14px}.stage-title h1{font-size:24px}.stage-title p{display:none}.stage-bottom{right:14px;left:14px}}
+/* V5: readable labels, stronger colours and a subtle live-activity ticker */
+:root{--text:#163747;--muted:#566f78;--sea:#087c75;--border:#c4d9d3}
+.stage-title h1{color:#173442;text-shadow:0 2px 10px #fff8}
+.stage-title h1 em{color:#067d70}
+.stage-title p{color:#3f6467;font-weight:650;background:#ffffffbc;border-radius:7px;padding:6px 9px;max-width:330px}
+.eyebrow{color:#0e736b;text-shadow:0 1px 2px #fff}
+.nav-button{color:#455f6b}
+.nav-button.active{color:#09685e;background:#d8f1e5;border-color:#a1d7c3}
+.sidebar-foot{background:#dbf2e7;border-color:#b3dccd}
+.sidebar-foot p,.help-mini{color:#426961}
+.status-mini{color:#08705f;display:flex;align-items:center;gap:8px}
+.active-pulse,.ambient-live-dot{width:8px;height:8px;border-radius:50%;background:#13bb76;box-shadow:0 0 0 4px #17bb7430;display:inline-block;flex-shrink:0;animation:ambientBlink 2.4s ease-in-out infinite}
+.ambient-live{position:absolute;z-index:5;left:50%;bottom:23px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;max-width:calc(100% - 40px);padding:9px 13px;background:#123d46e8;color:#f4fff9;border:1px solid #37726dd9;border-radius:30px;box-shadow:0 8px 22px #153f442a;font-size:11px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;letter-spacing:.008em}
+.ambient-live span:last-child{overflow:hidden;text-overflow:ellipsis}
+.scene-dialog{background:#ffffffee;border-color:#bbdcd2;box-shadow:0 12px 38px #2b64563a}
+.scene-dialog b{color:#096d61}.scene-dialog span{color:#436c6b}
+.floating-label button{background:#fffdf9ef;border-color:#9dcbc2;color:#204851;box-shadow:0 4px 18px #173d5430}
+.floating-label small{color:#26665d;background:#dbf5e9}
+.stage-tools button{background:#fffdf5ef;color:#244e56;border-color:#adcfc6}
+.stats-strip{border-top-color:#bcd5cd}
+.stat-card span{color:#507079}
+.stat-card strong{color:#154d56}
+@keyframes ambientBlink{0%,100%{opacity:1;box-shadow:0 0 0 4px #17bb7430}50%{opacity:.60;box-shadow:0 0 0 7px #17bb7415}}
+@media(max-width:850px){.ambient-live{left:50%;bottom:44px;max-width:calc(100% - 32px);font-size:10px;padding:8px 11px}.scene-dialog{bottom:91px}.stage-title p{display:none}.stage-bottom{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.active-pulse,.ambient-live-dot{animation:none}}
+
+/* V5 WIDE DATA — full-window responsive workspace, not a cramped 660px drawer */
+.drawer.workspace{
+  position:fixed;inset:73px 0 0;width:100vw;height:calc(100dvh - 73px);max-width:none;
+  right:auto;left:0;bottom:0;z-index:45;
+  transform:translateY(102%);opacity:0;pointer-events:none;
+  transition:transform .36s cubic-bezier(.22,1,.36,1),opacity .24s ease;
+  border:0;box-shadow:0 -12px 50px #133d4530;background:#f0f6f5;
+}
+.drawer.workspace.open{transform:translateY(0);opacity:1;pointer-events:auto}
+.drawer-backdrop{display:none!important}
+.workspace-head{padding:15px clamp(16px,2.6vw,42px);min-height:100px;align-items:center;border-bottom:1px solid #dceae4;background:#fff}
+.workspace-heading{min-width:0}.workspace-heading h2{font-size:clamp(21px,2.1vw,30px);margin:4px 0 1px;font-weight:840;letter-spacing:-.045em}
+.workspace-heading p{font-size:12px;color:#52757a}
+.workspace-head-actions{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.workspace-live{font-size:11px;font-weight:750;color:#22735e;display:inline-flex;align-items:center;gap:10px;background:#e8f7ee;border:1px solid #bfe4cf;border-radius:30px;padding:10px 13px}
+.workspace-return{width:auto;height:42px;padding:0 17px;border-radius:11px;background:#155d66;color:#fff;font-size:12px;font-weight:850;white-space:nowrap;display:flex;align-items:center;gap:8px;border-color:#155d66}
+.workspace-return:hover{background:#0e4951;color:white}
+.workspace-toolbar{flex:none;min-height:58px;background:#fcfefd;border-bottom:1px solid #dbeae4;display:flex;align-items:center;gap:15px;padding:6px clamp(15px,2.5vw,42px);box-shadow:0 5px 12px #497b7110}
+.workspace-tabs{display:flex;align-items:center;gap:5px;min-width:0;flex:1;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;white-space:nowrap;padding:5px 1px}
+.workspace-tabs button{background:transparent;color:#4f7379;font-size:12px;font-weight:800;border:1px solid transparent;border-radius:9px;padding:10px 13px;flex-shrink:0;transition:background .15s,border-color .15s,color .15s}
+.workspace-tabs button:hover{background:#e6f4ee;color:#136b68}
+.workspace-tabs button.active{background:#e0f4eb;color:#087369;border-color:#a9dbca}
+.workspace-scope{white-space:nowrap;font-size:11px;font-weight:800;color:#3f6c72;display:flex;align-items:center;gap:9px;flex-shrink:0}
+.workspace-scope select{min-width:143px;border:1px solid #bcd8d0;background:white;border-radius:9px;font-size:12px;color:#215962;font-weight:750;padding:10px;min-height:39px}
+.drawer.workspace .drawer-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:clamp(16px,2.4vw,36px) clamp(16px,3vw,50px) 90px;background:#f1f7f5;scrollbar-gutter:stable}
+.drawer.workspace .drawer-body>*+*{margin-top:18px}
+.drawer.workspace .section-card{padding:clamp(17px,1.8vw,25px);border-radius:17px;box-shadow:0 6px 25px #275b4e0a}
+.drawer.workspace .section-card h3{font-size:17px;color:#1c505b}
+.drawer.workspace .section-card p{font-size:12px;color:#537379}
+.drawer.workspace .grid-metrics{grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.drawer.workspace .little-metric{padding:18px;min-height:88px}
+.drawer.workspace .little-metric b{font-size:27px}
+.drawer.workspace .little-metric span{font-size:11px;color:#55767a}
+.drawer.workspace .table-scroll{max-height:calc(100dvh - 440px);min-height:250px;overflow:auto;border-radius:12px;box-shadow:0 6px 23px #3e6d630c}
+.drawer.workspace .orders-table{min-width:1120px;white-space:normal;font-size:12px}
+.drawer.workspace .orders-table.wide-cols{min-width:1880px}
+.drawer.workspace .orders-table th{padding:13px 12px;font-size:11px;color:#255f65;z-index:2}
+.drawer.workspace .orders-table td{padding:12px;max-width:260px;vertical-align:middle;color:#426773;line-height:1.45}
+.drawer.workspace .orders-table td:nth-child(3){min-width:210px}
+.drawer.workspace .orders-table td:nth-child(4){min-width:150px}
+.drawer.workspace .filters-row{gap:10px}
+.drawer.workspace .filters-row .filter-select{flex:1 1 140px}
+.drawer.workspace .filters-row .search-input{min-width:250px;flex:2 1 360px}
+.drawer.workspace .filters-row input,.drawer.workspace .filters-row select{min-height:44px;font-size:12px}
+.drawer.workspace .filter-chip{font-size:11px;padding:8px 12px}
+.drawer.workspace .table-foot{font-size:12px}
+.drawer.workspace .paper-preview{max-height:none;min-height:390px;padding:28px 32px}
+.drawer.workspace .paper-preview h3{font-size:19px}
+.drawer.workspace .report-table{font-size:12px}
+.drawer.workspace .report-table td,.drawer.workspace .report-table th{padding:11px}
+.drawer.workspace .priority-item{padding:14px;min-height:64px}
+.drawer.workspace .priority-item strong{font-size:13px}
+.drawer.workspace .priority-item small{font-size:11px}
+.drawer.workspace .priority-days{font-size:12px}
+.drawer.workspace .field-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.drawer.workspace .field input,.drawer.workspace .field select,.drawer.workspace .field textarea{min-height:44px;font-size:13px}
+.drawer.workspace .drawer-body.view-all,.drawer.workspace .drawer-body.view-factory{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:18px}
+.drawer.workspace .drawer-body.view-all>*,.drawer.workspace .drawer-body.view-factory>*{margin-top:0}
+.drawer.workspace .drawer-body.view-all>.grid-metrics,.drawer.workspace .drawer-body.view-factory>.grid-metrics{grid-column:1/-1}
+.drawer.workspace .drawer-body.view-arrived{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:18px}
+.drawer.workspace .drawer-body.view-arrived>*{margin-top:0}
+.drawer.workspace .drawer-body.view-arrived>.notice,.drawer.workspace .drawer-body.view-arrived>.grid-metrics{grid-column:1/-1}
+.drawer.workspace .drawer-body.view-add,.drawer.workspace .drawer-body.view-edit{max-width:1350px;margin-inline:auto;width:100%}
+.drawer.workspace .drawer-body.view-csv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:20px}
+.drawer.workspace .drawer-body.view-csv>*{margin-top:0}
+.drawer.workspace .drawer-body.view-csv>.notice{grid-column:1/-1}
+.drawer.workspace .drawer-body.view-csv>.section-card:last-of-type{grid-column:1/-1}
+@media(max-width:1200px){
+ .drawer.workspace .grid-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .workspace-live{display:none}
+ .workspace-tabs button{font-size:11px;padding:10px 11px}
+ .drawer.workspace .field-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:750px){
+ .drawer.workspace{top:58px;height:calc(100dvh - 58px)}
+ .workspace-head{min-height:85px;padding:13px 15px}
+ .workspace-heading h2{font-size:21px}
+ .workspace-heading p{font-size:10px;max-width:220px}
+ .workspace-heading .drawer-kicker{font-size:8px}
+ .workspace-return{padding:0 11px;height:37px;font-size:18px}
+ .workspace-return span{display:none}
+ .workspace-toolbar{padding:5px 10px;flex-wrap:wrap;gap:3px;align-items:center}
+ .workspace-tabs{width:100%;flex:auto;order:2}
+ .workspace-scope{order:1;width:100%;justify-content:space-between;padding:3px 5px;font-size:10px}
+ .workspace-scope select{min-height:34px;padding:6px 10px;min-width:160px}
+ .drawer.workspace .drawer-body{padding:14px 12px 60px}
+ .drawer.workspace .grid-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .drawer.workspace .little-metric{padding:10px;min-height:70px}
+ .drawer.workspace .little-metric b{font-size:21px}
+ .drawer.workspace .little-metric span{font-size:10px}
+ .drawer.workspace .table-scroll{max-height:calc(100dvh - 380px);min-height:260px}
+ .drawer.workspace .orders-table{min-width:1010px}
+ .drawer.workspace .drawer-body.view-all,.drawer.workspace .drawer-body.view-factory,.drawer.workspace .drawer-body.view-arrived,.drawer.workspace .drawer-body.view-csv{display:block}
+ .drawer.workspace .drawer-body.view-all>*+*,.drawer.workspace .drawer-body.view-factory>*+*,.drawer.workspace .drawer-body.view-arrived>*+*,.drawer.workspace .drawer-body.view-csv>*+*{margin-top:13px}
+ .drawer.workspace .field-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .drawer.workspace .paper-preview{padding:13px}
+}
+@media(max-width:400px){.drawer.workspace .field-grid{grid-template-columns:1fr}.drawer.workspace .drawer-head h2{font-size:19px}}
+@media print{.drawer.workspace,.workspace-toolbar{display:none!important}}
+
 </style>
 </head>
 <body>
 <div class="shell" id="shell">
   <header class="topbar">
-    <div class="brand"><span class="brand-logo">✳</span><span><strong>MERCY<span class="brand-accent">.STUDIO</span></strong><small>GLB STUDIO WORLD • FIREBASE</small></span></div>
+    <div class="brand"><span class="brand-logo">✳</span><span><strong>MERCY<span class="brand-accent">.STUDIO</span></strong><small>AUTO-LIVING 3D • FIREBASE</small></span></div>
     <div class="top-center"><span class="top-date" id="topDate"></span><span class="sep">•</span><span>Tridaya · Inna · KBI</span></div>
     <div class="top-actions"><span class="connection connecting" id="connection" title="Menyiapkan koneksi"><i></i><span id="connectionText">Menghubungkan…</span></span><button class="header-btn" id="loginButton" type="button">Masuk admin</button><span class="header-link" title="Model GLB 3D dapat diimpor dan diedit di Blender">◈ DIORAMA 3D</span></div>
   </header>
@@ -71,13 +197,13 @@
         <button class="nav-button" data-action="csv"><span class="nav-icon">📁</span><span>Impor / ekspor CSV</span></button>
       </nav>
     </div>
-    <div class="sidebar-foot"><div class="status-mini">✨ DUNIA PABRIK AKTIF</div><p>Klik gedung, pegawai, truk, atau tombol menu. Setiap fitur diiringi aktivitas miniatur.</p><div class="help-mini">🖱 Geser: putar • Scroll: zoom</div></div>
+    <div class="sidebar-foot"><div class="status-mini"><span class="active-pulse"></span> PABRIK HIDUP OTOMATIS</div><p>Pekerja, truk, forklift, dan mesin bergerak sendiri. Klik hanya saat ingin melihat data PO atau mengikuti adegan khusus.</p><div class="help-mini">🖱 Geser: putar • Scroll: zoom</div></div>
   </aside>
   <main class="main">
     <section class="world-stage" id="worldStage" aria-label="Miniatur pabrik interaktif">
       <div class="ambient-pattern"></div>
-      <div class="stage-title"><span class="eyebrow"><i></i> LIVE FACTORY OVERVIEW</span><h1>Miniature factory.<br /><em>Hidup & interaktif.</em></h1><p>Klik pabrik atau aktivitas. Tonton adegan 3D terlebih dahulu, lalu panel data Firebase terbuka.</p></div>
-      <div class="stage-tools"><button type="button" id="resetCamera" title="Kembali ke tampilan awal">⌖ <span>Reset kamera</span></button><button type="button" id="toggleMotion" aria-pressed="true" title="Jeda atau lanjutkan animasi">Ⅱ <span>Animasi</span></button><button type="button" id="expandWorld" title="Layar penuh">⛶</button></div>
+      <div class="stage-title"><span class="eyebrow"><i></i> AUTO-LIVING FACTORY WORLD</span><h1>Miniature factory.<br /><em>Bergerak otomatis.</em></h1><p>Seluruh pabrik beraktivitas sendiri. Klik menu hanya saat ingin melihat data — adegan khusus tetap diputar lebih dulu.</p></div>
+      <div class="stage-tools"><button type="button" id="resetCamera" title="Kembali ke tampilan awal">⌖ <span>Reset kamera</span></button><button type="button" id="toggleMotion" aria-pressed="true" title="Jeda atau lanjutkan semua aktivitas otomatis">Ⅱ <span>Jeda dunia</span></button><button type="button" id="expandWorld" title="Layar penuh">⛶</button></div>
       <canvas id="worldCanvas" class="world-canvas" aria-label="Pabrik MERCY dalam tampilan 3D yang bisa diputar dan diklik" hidden></canvas>
       <div id="worldFallback" class="world-fallback" aria-label="Miniatur isometrik cadangan">
         <svg viewBox="0 0 920 650" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Miniatur Tridaya, Inna, KBI, kantor laporan, gudang dan jalan truk">
@@ -107,7 +233,7 @@
       <div class="floating-label label-tridaya"><button type="button" data-quick="TRIDAYA"><span class="label-dot teal"></span> TRIDAYA <small id="labelTridaya">— PO</small></button></div>
       <div class="floating-label label-inna"><button type="button" data-quick="INNA"><span class="label-dot blue"></span> INNA <small id="labelInna">— PO</small></button></div>
       <div class="floating-label label-kbi"><button type="button" data-quick="KBI"><span class="label-dot yellow"></span> KBI <small id="labelKbi">— PO</small></button></div>
-      <div class="scene-dialog" id="sceneDialog" aria-live="polite"><b id="dialogTitle">🏭 Pabrik sedang beraktivitas</b><span id="dialogText">Klik bangunan atau menu untuk melihat data aslinya.</span></div>
+      <div class="scene-dialog" id="sceneDialog" aria-live="polite"><b id="dialogTitle">🏭 Pabrik beroperasi otomatis</b><span id="dialogText">Pegawai bekerja, conveyor bergerak, dan logistik berjalan tanpa klik.</span></div>
       <section id="storyOverlay" class="story-overlay" aria-live="polite" hidden>
         <div class="story-topline"><span><span class="story-status-dot"></span> SEDANG BERLANGSUNG</span><span id="storyClock">00:00 / 00:00</span></div>
         <strong id="storyHeading">Menyiapkan adegan miniatur…</strong>
@@ -115,17 +241,40 @@
         <div class="story-progress-track" aria-label="Kemajuan animasi"><div class="story-progress-value" id="storyProgress"></div></div>
         <div class="story-actions"><span>Panel data terbuka <b>setelah animasi</b></span><button type="button" id="skipStory">Lewati →</button></div>
       </section>
+      <div class="ambient-live"><span class="ambient-live-dot"></span><span id="ambientStatus">Memulai aktivitas otomatis pabrik…</span></div>
       <div class="stage-bottom"><div class="mini-legend"><span><i class="legend-green"></i> Pekerja aktif</span><span><i class="legend-blue"></i> Kendaraan logistik</span><span><i class="legend-red"></i> PO perlu follow-up</span></div><div class="camera-hint">↔ Putar dunia &nbsp;·&nbsp; ± Zoom &nbsp;·&nbsp; Klik bangunan</div></div>
     </section>
     <section class="stats-strip" aria-label="Ringkasan PO Firebase"><div class="stat-card"><span>Total PO</span><strong id="statTotal">—</strong><small id="statTotalDesc">Semua pabrik</small></div><div class="stat-card accent-orange"><span>Perlu follow-up</span><strong id="statOld">—</strong><small>Belum datang · ≥30 hari</small></div><div class="stat-card accent-blue"><span>Belum datang</span><strong id="statPending">—</strong><small>Selain CANCEL</small></div><div class="stat-card accent-green"><span>Barang datang</span><strong id="statArrived">—</strong><small>Tanggal barang datang tercatat</small></div><div class="stat-card"><span>Total QTY terisi</span><strong id="statQty">—</strong><small>QTY kosong tidak dihitung</small></div></section>
   </main>
-  <section class="drawer" id="drawer" aria-label="Panel aktivitas MERCY" aria-hidden="true"><div class="drawer-head"><div><small class="drawer-kicker" id="drawerKicker">MERCY • CONTROL ROOM</small><h2 id="drawerTitle">Daftar PO</h2><p id="drawerSubtitle">Data tersambung Firebase.</p></div><button type="button" class="close-drawer" id="closeDrawer" aria-label="Tutup panel">×</button></div><div class="drawer-body" id="drawerBody"></div></section>
+  <section class="drawer workspace" id="drawer" aria-label="Workspace data MERCY layar penuh" aria-hidden="true">
+    <div class="drawer-head workspace-head">
+      <div class="workspace-heading"><small class="drawer-kicker" id="drawerKicker">MERCY • DATA CENTER</small><h2 id="drawerTitle" tabindex="-1">Daftar PO</h2><p id="drawerSubtitle">Data tersambung Firebase.</p></div>
+      <div class="workspace-head-actions">
+        <span class="workspace-live"><span class="active-pulse"></span> Miniatur terus beraktivitas</span>
+        <button type="button" class="close-drawer workspace-return" id="closeDrawer" aria-label="Kembali ke dunia pabrik 3D">↩ <span>Kembali ke Pabrik 3D</span></button>
+      </div>
+    </div>
+    <div class="workspace-toolbar" aria-label="Navigasi halaman data">
+      <nav class="workspace-tabs" aria-label="Fitur MERCY">
+        <button type="button" data-workspace-view="all">▦ Ringkasan</button>
+        <button type="button" data-workspace-view="orders">▤ Daftar PO</button>
+        <button type="button" data-workspace-view="old">◷ PO 30+ hari</button>
+        <button type="button" data-workspace-view="priority">⚑ Prioritas</button>
+        <button type="button" data-workspace-view="arrived">▣ Barang datang</button>
+        <button type="button" data-workspace-view="add">＋ Tambah PO</button>
+        <button type="button" data-workspace-view="report">▧ Laporan</button>
+        <button type="button" data-workspace-view="csv">⇄ CSV</button>
+      </nav>
+      <label class="workspace-scope" for="workspaceFactoryFilter">Pabrik <select id="workspaceFactoryFilter" aria-label="Pilih pabrik di workspace"><option value="SEMUA">Semua pabrik</option><option value="TRIDAYA">Tridaya</option><option value="INNA">Inna</option><option value="KBI">KBI</option></select></label>
+    </div>
+    <div class="drawer-body" id="drawerBody" tabindex="0"></div>
+  </section>
   <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
   <div class="toast" role="status" id="toast" aria-live="polite"></div>
   <section id="printRoot" class="print-root" aria-label="Laporan MERCY untuk dicetak"></section>
 </div>
 <script src="./config.js"></script>
-<script>window.MERCY_SCENE_READY=new Promise(resolve=>{window.addEventListener('mercy-scene-ready',()=>resolve(true),{once:true});setTimeout(()=>resolve(false),18000);});</script>
+<script>window.MERCY_SCENE_READY=new Promise(resolve=>{window.addEventListener('mercy-scene-ready',()=>resolve(true),{once:true});setTimeout(()=>resolve(false),14000);});</script>
 <script>
 /* MERCY MINI FACTORY WORLD — production interface for mercy_orders.
    Uses the existing Firebase project. No demo rows and no automatic writes. */
@@ -173,7 +322,7 @@
     nomorPo:String(r.nomorPo??''),barangDatang:String(r.barangDatang??''),barangDatangCatatan:String(r.barangDatangCatatan??''),
     harga:normalizeNum(r.harga),jumlah:normalizeNum(r.jumlah),turun:String(r.turun??''),pabrik:factory(r)
   });
-  const state={rows:[],ready:false,cache:false,failed:false,authReady:false,user:null,admin:false,scope:'SEMUA',mode:'all',view:'',filters:{q:'',month:'',customer:'',arrival:'all',age:'all',sort:'new'},statuses:new Set(),page:1,pageSize:45,cloud:null,api:null,saving:false,importRecords:[],csvMode:'merge',replaceBackupReady:false,reportOnlyPending:true,toastTimer:null,dialogTimer:null};
+  const state={rows:[],ready:false,cache:false,failed:false,authReady:false,user:null,admin:false,scope:'SEMUA',mode:'all',view:'',filters:{q:'',month:'',customer:'',arrival:'all',age:'all',sort:'new'},statuses:new Set(),page:1,pageSize:45,cloud:null,api:null,saving:false,importRecords:[],csvMode:'merge',replaceBackupReady:false,reportOnlyPending:true,showAllColumns:false,toastTimer:null,dialogTimer:null};
   window.MERCY_WORLD_STATE=state;
   const scoped=()=>state.scope==='SEMUA'?state.rows:state.rows.filter(r=>factory(r)===state.scope);
   const currentStatuses=()=>[...new Set([...BASE_STATUSES,...state.rows.map(r=>r.status||'TANPA STATUS')])];
@@ -233,11 +382,15 @@
     const meta=DRAWERS[mode]||DRAWERS.orders;
     $('drawerKicker').textContent='✳ '+meta[0];$('drawerTitle').textContent=mode==='factory'?state.scope:meta[1];$('drawerSubtitle').textContent=meta[2];
     setNavigation(mode==='edit'?'add':mode);updateSummary();
-    $('drawerBackdrop').hidden=false;$('drawer').classList.add('open');$('drawer').setAttribute('aria-hidden','false');document.body.classList.add('drawer-open');
+    $('drawerBackdrop').hidden=true;$('drawer').classList.add('open');$('drawer').setAttribute('aria-hidden','false');document.body.classList.add('drawer-open');
+    const scopeEl=$('workspaceFactoryFilter');if(scopeEl)scopeEl.value=state.scope;
+    document.querySelectorAll('[data-workspace-view]').forEach(b=>{const active=b.dataset.workspaceView===(mode==='factory'?'all':mode==='edit'?'add':mode);b.classList.toggle('active',active);b.setAttribute('aria-current',active?'page':'false');});
+    $('drawerBody').className='drawer-body view-'+mode;
     renderDrawer(params);
+    $('drawerTitle').focus({preventScroll:true});
   }
   function closeDrawer(){$('drawer').classList.remove('open');$('drawer').setAttribute('aria-hidden','true');$('drawerBackdrop').hidden=true;document.body.classList.remove('drawer-open');setNavigation(state.scope==='SEMUA'?'all':'factory');}
-  let storySeq=0,skipRequested=false;
+  let storySeq=0,skipRequested=false,resolvePendingScene=null;
   const waitScene=()=>window.MERCY_SCENE_READY || Promise.resolve(false);
   const formatClock=s=>`${String(Math.floor(Math.max(0,s)/60)).padStart(2,'0')}:${String(Math.floor(Math.max(0,s)%60)).padStart(2,'0')}`;
   window.addEventListener('mercy-story-progress',ev=>{
@@ -251,7 +404,9 @@
     const storyMap={all:['🏘️ Semua pabrik aktif','Tiga kawasan produksi siap dipantau.'],factory:[`🚶 Pegawai masuk ${f}`,'Kamera mendekati gedung, data PO pabrik dibuka.'],old:['🚨 Peringatan PO lama','Supervisor bergegas menuju gudang. Lampu indikator menyala.'],priority:['🧑‍🏭 Supervisor inspeksi','Supervisor memeriksa prioritas follow-up.'],arrived:['🚚 Truk memasuki pabrik','Forklift mengambil pallet, petugas bongkar barang.'],orders:['🗃️ Ruang data terbuka','Staf administrasi membuka database PO.'],add:['🧑‍💻 Pegawai ke kantor','Komputer administrasi menyala.'],edit:['🧑‍💻 Memeriksa dokumen PO','Pegawai memperbarui rincian PO.'],report:['🖨️ Kantor mencetak laporan','Staf masuk kantor dan printer mengeluarkan kertas.'],csv:['📁 Petugas masuk ruang arsip','Dokumen CSV siap diimpor atau diekspor.']};
     const [name,desc]=storyMap[mode]||storyMap.all;announce(name,desc);
     const fb=$('worldFallback');fb.dataset.story=mode;
-    await waitScene();
+    await Promise.race([waitScene(),new Promise(resolve=>{resolvePendingScene=resolve;if(skipRequested)resolve(false);})]);
+    resolvePendingScene=null;
+    if(skipRequested)return {cancelled:false};
     if(window.MERCY_SCENE?.play){
       const promise=window.MERCY_SCENE.play(mode,f);
       if(skipRequested)window.MERCY_SCENE.skip?.();
@@ -295,7 +450,7 @@
     else if(state.view==='priority')body.innerHTML=priorityView();
     else if(state.view==='arrived')body.innerHTML=arrivedView();
     else if(['old','orders'].includes(state.view))body.innerHTML=ordersView();
-    else if(state.view==='add'||state.view==='edit')body.innerHTML=formView(state.view==='edit'?state.rows.find(r=>r.id===params.id):null);
+    else if(state.view==='add'||state.view==='edit')body.innerHTML=formView(state.view==='edit'?state.rows.find(r=>r.id===(params.id||state.editId)):null);
     else if(state.view==='report')body.innerHTML=reportView();
     else if(state.view==='csv')body.innerHTML=csvView();
     wireDrawer();
@@ -325,11 +480,11 @@
       <div class="section-card"><h3>✅ Barang sudah diterima</h3><div style="display:grid;gap:8px;margin-top:12px">${delivered.slice(0,20).map(r=>small(r,'arrived')).join('')||'<div class="empty-state">Belum ada tanggal barang datang yang tercatat.</div>'}</div></div>`;
   }
   function ordersView(){const rows=filtered(),pageCount=Math.max(1,Math.ceil(rows.length/state.pageSize));state.page=Math.min(state.page,pageCount);const start=(state.page-1)*state.pageSize;const subset=rows.slice(start,start+state.pageSize);const customers=[...new Set(scoped().map(r=>r.customer).filter(Boolean))].sort();const months=[...new Set(scoped().map(r=>r.tgl.slice(0,7)).filter(v=>/^\d{4}-\d{2}$/.test(v)))].sort().reverse();
-    return `${unavailableHint()}<div class="h-stack"><button class="solid-btn" data-go="add">＋ Tambah PO</button><button class="soft-btn" data-download="csv">↓ Ekspor CSV</button><button class="soft-btn" data-go="report">🖨 Cetak laporan</button><button class="soft-btn" data-reset="filters">↺ Reset</button></div>
+    return `${unavailableHint()}<div class="h-stack"><button class="solid-btn" data-go="add">＋ Tambah PO</button><button class="soft-btn" data-download="csv">↓ Ekspor CSV</button><button class="soft-btn" data-go="report">🖨 Cetak laporan</button><button class="soft-btn" data-reset="filters">↺ Reset</button><button class="soft-btn" data-toggle-cols="yes">${state.showAllColumns?'▤ Kolom Ringkas':'▦ Semua Kolom'}</button></div>
       <div class="section-card"><div class="filters-row"><input class="search-input" id="searchPO" placeholder="⌕ Cari desain, kode, PO, pelanggan…" value="${escapeHTML(state.filters.q)}" aria-label="Cari PO"/><select class="filter-select" id="arrivalFilter" aria-label="Status kedatangan"><option value="all">Semua kedatangan</option><option value="pending" ${state.filters.arrival==='pending'?'selected':''}>Belum datang</option><option value="arrived" ${state.filters.arrival==='arrived'?'selected':''}>Sudah datang</option><option value="cancelled" ${state.filters.arrival==='cancelled'?'selected':''}>Dibatalkan</option></select></div>
       <div class="filters-row" style="margin-top:8px"><select class="filter-select" id="monthFilter" aria-label="Bulan PO"><option value="">Semua bulan</option>${months.map(m=>`<option ${state.filters.month===m?'selected':''} value="${m}">${m}</option>`).join('')}</select><select class="filter-select" id="customerFilter" aria-label="Pelanggan"><option value="">Semua pelanggan</option>${customers.map(c=>`<option value="${escapeHTML(c)}" ${state.filters.customer===c?'selected':''}>${escapeHTML(c)}</option>`).join('')}</select><select class="filter-select" id="ageFilter" aria-label="Usia PO"><option value="all">Semua usia</option><option value="aged" ${state.filters.age==='aged'?'selected':''}>≥30 hari</option><option value="watch" ${state.filters.age==='watch'?'selected':''}>14–29 hari</option><option value="new" ${state.filters.age==='new'?'selected':''}>0–13 hari</option><option value="arrived" ${state.filters.age==='arrived'?'selected':''}>Sudah datang</option></select><select class="filter-select" id="sortFilter" aria-label="Urutan PO"><option value="new">Tanggal terbaru</option><option value="oldest" ${state.filters.sort==='oldest'?'selected':''}>Tanggal terlama</option><option value="age" ${state.filters.sort==='age'?'selected':''}>Usia terlama</option></select></div>
       <div class="filter-chips" style="margin-top:11px"><button class="filter-chip ${!state.statuses.size?'active':''}" data-status="ALL">Semua status</button>${currentStatuses().map(s=>`<button class="filter-chip ${state.statuses.has(s)?'active':''}" data-status="${escapeHTML(s)}">${escapeHTML(s)}</button>`).join('')}</div><p style="font-size:10px;color:#8da59f;line-height:1.5;margin:9px 0 0">Status bisa dipilih lebih dari satu. Filter juga digunakan untuk ekspor dan laporan.</p></div>
-      <div class="table-scroll"><table class="orders-table"><thead><tr><th>Tanggal</th><th>Pabrik</th><th>Desain / Nomor PO</th><th>Pelanggan</th><th>QTY</th><th>Status</th><th>Usia</th><th>Barang datang</th><th>Aksi</th></tr></thead><tbody>${subset.length?subset.map(r=>`<tr class="${ageKind(r)==='aged'?'is-old':''}"><td>${dateLabel(r.tgl)}</td><td>${escapeHTML(factory(r))}</td><td><strong>${escapeHTML(r.design)}</strong><br/><span style="font-size:9px">${escapeHTML(r.nomorPo||r.kode||'—')}</span></td><td>${escapeHTML(r.customer||'—')}</td><td>${qty(r)===null?'—':money(qty(r))}</td><td>${statusBadge(r.status)}</td><td>${ageKind(r)==='aged'?'<span class="chip danger">':'<span>'}${ageDays(r)===null?arrived(r)?'Datang':cancelled(r)?'Batal':'—':ageDays(r)+' hari'}${ageKind(r)==='aged'?'</span>':'</span>'}</td><td>${arrived(r)?'<span class="chip good">'+dateLabel(arrival(r))+'</span>':cancelled(r)?'Batal':'Belum datang'}</td><td><button data-row-edit="${escapeHTML(r.id)}">Detail / Edit</button></td></tr>`).join(''):`<tr><td colspan="9" class="empty-state">${state.ready?'Tidak ada PO yang sesuai filter.':'Menyiapkan data Firebase…'}</td></tr>`}</tbody></table></div>
+      <div class="table-scroll"><table class="orders-table ${state.showAllColumns?'wide-cols':''}"><thead><tr><th>Tanggal</th><th>Pabrik</th><th>Desain / Nomor PO</th><th>Pelanggan</th>${state.showAllColumns?'<th>Warna</th><th>Kode</th>':''}<th>QTY</th>${state.showAllColumns?'<th>Harga</th><th>Jumlah</th><th>Turun</th><th>Catatan Datang</th>':''}<th>Status</th><th>Usia</th><th>Barang datang</th><th>Aksi</th></tr></thead><tbody>${subset.length?subset.map(r=>`<tr class="${ageKind(r)==='aged'?'is-old':''}"><td>${dateLabel(r.tgl)}</td><td>${escapeHTML(factory(r))}</td><td><strong>${escapeHTML(r.design)}</strong><br/><span style="font-size:9px">${escapeHTML(r.nomorPo||r.kode||'—')}</span></td><td>${escapeHTML(r.customer||'—')}</td>${state.showAllColumns?'<td>'+escapeHTML(r.warna||'—')+'</td><td>'+escapeHTML(r.kode||'—')+'</td>':''}<td>${qty(r)===null?'—':money(qty(r))}</td>${state.showAllColumns?'<td>'+currency(r.harga)+'</td><td>'+currency(r.jumlah)+'</td><td>'+escapeHTML(r.turun||'—')+'</td><td>'+escapeHTML(r.barangDatangCatatan||'—')+'</td>':''}<td>${statusBadge(r.status)}</td><td>${ageKind(r)==='aged'?'<span class="chip danger">':'<span>'}${ageDays(r)===null?arrived(r)?'Datang':cancelled(r)?'Batal':'—':ageDays(r)+' hari'}${ageKind(r)==='aged'?'</span>':'</span>'}</td><td>${arrived(r)?'<span class="chip good">'+dateLabel(arrival(r))+'</span>':cancelled(r)?'Batal':'Belum datang'}</td><td><button data-row-edit="${escapeHTML(r.id)}">Detail / Edit</button></td></tr>`).join(''):`<tr><td colspan="${state.showAllColumns?15:9}" class="empty-state">${state.ready?'Tidak ada PO yang sesuai filter.':'Menyiapkan data Firebase…'}</td></tr>`}</tbody></table></div>
       <div class="table-foot"><span>Menampilkan ${rows.length?start+1:0}–${Math.min(start+state.pageSize,rows.length)} dari ${money(rows.length)} PO</span><div class="h-stack"><button class="soft-btn" data-page="prev" ${state.page<=1?'disabled':''}>‹</button><b>${state.page}/${pageCount}</b><button class="soft-btn" data-page="next" ${state.page>=pageCount?'disabled':''}>›</button></div></div>
       <div class="notice">30+ hari yang belum datang ditandai untuk follow-up, bukan otomatis melewati tenggat. PO CANCEL tidak dihitung sebagai belum datang.</div>`;
   }
@@ -367,6 +522,7 @@
     b.querySelectorAll('[data-row-edit]').forEach(e=>e.onclick=()=>openDetail(e.dataset.rowEdit));
     b.querySelectorAll('[data-status]').forEach(e=>e.onclick=()=>{const x=e.dataset.status;if(x==='ALL')state.statuses.clear();else if(state.statuses.has(x))state.statuses.delete(x);else state.statuses.add(x);state.page=1;updateViewNoScroll();});
     b.querySelectorAll('[data-reset]').forEach(e=>e.onclick=()=>{resetFilters();updateViewNoScroll();});
+    b.querySelectorAll('[data-toggle-cols]').forEach(e=>e.onclick=()=>{state.showAllColumns=!state.showAllColumns;updateViewNoScroll();});
     b.querySelectorAll('[data-page]').forEach(e=>e.onclick=()=>{state.page+=e.dataset.page==='next'?1:-1;updateViewNoScroll();});
     const q=b.querySelector('#searchPO');if(q)q.oninput=()=>{state.filters.q=q.value;state.page=1;/* Debounce redraw without dropping typing position */clearTimeout(window.__mwInputTimer);window.__mwInputTimer=setTimeout(()=>{const pos=q.selectionStart;updateViewNoScroll();const el=$('searchPO');el?.focus();try{el?.setSelectionRange(pos,pos)}catch(_){}},240);};
     for(const [id,key] of [['arrivalFilter','arrival'],['monthFilter','month'],['customerFilter','customer'],['ageFilter','age'],['sortFilter','sort']]){const el=b.querySelector('#'+id);if(el)el.onchange=()=>{state.filters[key]=el.value;state.page=1;updateViewNoScroll();};}
@@ -410,7 +566,7 @@
   function csvString(rows){return '\uFEFF'+[HEADER_CSV,...rows.map(r=>[r.tgl,r.design,r.warna,r.qty??'',r.customer,r.barangDatang||'',r.kode,r.status,r.harga??'',r.jumlah??'',r.turun||'',r.barangDatangCatatan||'',factory(r),r.nomorPo||''])].map(a=>a.map(safeCsv).join(',')).join('\r\n');}
   function exportCSV(){if(!state.ready){showToast('Belum ada data Firebase siap diekspor.',true);return;}download(`MERCY_World_PO_${today()}.csv`,csvString(filtered()),'text/csv;charset=utf-8');showToast(`${money(filtered().length)} PO diekspor ke CSV.`);}
   function fillPrint(rows){const m=metrics(rows),date=new Date().toLocaleDateString('id-ID',{timeZone:'Asia/Jakarta',day:'numeric',month:'long',year:'numeric'});document.title='LAPORAN PO PER TANGGAL '+date.toUpperCase();$('printRoot').innerHTML=`<h1>MERCY · LAPORAN FOLLOW UP PO</h1><div class="print-sub">LAPORAN PO PER TANGGAL ${escapeHTML(date.toUpperCase())} · ${escapeHTML(state.scope)}</div><div class="print-metrics"><span><b>Jumlah PO</b> ${m.total}</span><span><b>Total QTY</b> ${money(m.qty)}</span><span><b>Follow Up ≥30 Hari</b> ${m.old}</span></div><table><thead><tr><th style="width:11%">Tanggal</th><th style="width:11%">Pabrik</th><th style="width:22%">Desain / No PO</th><th style="width:11%">QTY</th><th style="width:13%">Pelanggan</th><th style="width:12%">Status</th><th style="width:13%">Barang datang</th><th style="width:7%">Usia</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${dateLabel(r.tgl)}</td><td>${escapeHTML(factory(r))}</td><td>${escapeHTML(r.design)}<br/><small>${escapeHTML(r.nomorPo||r.kode)}</small></td><td>${qty(r)===null?'—':money(qty(r))}</td><td>${escapeHTML(r.customer)}</td><td>${escapeHTML(r.status)}</td><td>${arrived(r)?dateLabel(arrival(r)):cancelled(r)?'Batal':'Belum'}</td><td>${ageDays(r)===null?'—':ageDays(r)+' hari'}</td></tr>`).join('')}</tbody></table><footer>Dicetak dari MERCY Mini Factory World • ${escapeHTML(date)}</footer>`;}
-  function printReport(){if(!state.ready){showToast('Laporan membutuhkan data Firebase terbaru.',true);return;}const rows=reportRows();fillPrint(rows);window.print();setTimeout(()=>{document.title='MERCY • Factory Studio 3D · Dashboard PO';},1200);}
+  function printReport(){if(!state.ready){showToast('Laporan membutuhkan data Firebase terbaru.',true);return;}const rows=reportRows();fillPrint(rows);window.print();setTimeout(()=>{document.title='MERCY • Factory Studio V5 · Auto Living + Workspace';},1200);}
   function parseCSV(text,defaultFactory){
     const s=String(text).replace(/^\uFEFF/,'');const guess=s.split(/\r?\n/).slice(0,5).join('\n');const delimiter=(guess.match(/;/g)||[]).length>(guess.match(/,/g)||[]).length?';':',';
     const all=[];let row=[],val='',quoted=false;
@@ -504,10 +660,21 @@
       group.addEventListener('click',click);group.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();click();}});
     });
     $('loginButton').onclick=loginLogout;$('closeDrawer').onclick=closeDrawer;$('drawerBackdrop').onclick=closeDrawer;
-    $('skipStory').onclick=()=>{skipRequested=true;window.MERCY_SCENE?.skip?.();};
+    // Inside the wide workspace, switch data views instantly without repeating cinematic transitions.
+    document.querySelectorAll('[data-workspace-view]').forEach(btn=>btn.onclick=()=>{
+      if(state.saving){showToast('Selesaikan penyimpanan data terlebih dahulu.',true);return;}
+      const mode=btn.dataset.workspaceView;
+      if(mode==='old'){resetFilters();state.filters.age='aged';state.filters.arrival='pending';state.filters.sort='age';}
+      else if(mode==='priority'){resetFilters();state.filters.arrival='pending';state.filters.sort='age';}
+      else if(mode==='arrived'){resetFilters();state.filters.arrival='arrived';}
+      else if(mode==='orders')resetFilters();
+      openDrawer(mode);
+    });
+    $('workspaceFactoryFilter').onchange=e=>{state.scope=e.target.value;state.page=1;state.filters.customer='';updateSummary();openDrawer(state.view==='factory'?'all':state.view,{id:state.editId});};
+    $('skipStory').onclick=()=>{skipRequested=true;resolvePendingScene?.(false);window.MERCY_SCENE?.skip?.();};
     document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('drawer').classList.contains('open'))closeDrawer();});
     $('resetCamera').onclick=()=>{window.MERCY_SCENE?.reset();announce('⌖ Tampilan awal','Kamera kembali menampilkan seluruh kawasan.');};
-    $('toggleMotion').onclick=e=>{const b=e.currentTarget,before=b.getAttribute('aria-pressed')==='true';b.setAttribute('aria-pressed',String(!before));b.innerHTML=before?'▶ <span>Lanjutkan</span>':'Ⅱ <span>Animasi</span>';window.MERCY_SCENE?.pause(before);};
+    $('toggleMotion').onclick=e=>{const b=e.currentTarget,before=b.getAttribute('aria-pressed')==='true';b.setAttribute('aria-pressed',String(!before));b.innerHTML=before?'▶ <span>Lanjutkan dunia</span>':'Ⅱ <span>Jeda dunia</span>';window.MERCY_SCENE?.pause(before);};
     $('expandWorld').onclick=()=>{const el=$('worldStage');if(document.fullscreenElement)document.exitFullscreen();else el.requestFullscreen?.().catch(()=>showToast('Mode layar penuh tidak tersedia di browser ini.',true));};
     window.MERCY_WORLD_UI={action,story,announce};
     updateSummary();connectFirebase();
@@ -553,16 +720,16 @@ function browserFallback(error){
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,window.innerWidth<=768?1.15:1.5));
-  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.27;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.02; // keep actual GLB material colours visible
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-  const scene=new THREE.Scene();scene.background=new THREE.Color('#e9f6f2');scene.fog=new THREE.Fog('#e9f6f2',120,195);
-  scene.add(new THREE.HemisphereLight(0xfafffb,0x9ab4a4,2.55));
-  scene.add(new THREE.AmbientLight(0xe7ffef,.56));
-  const sun=new THREE.DirectionalLight(0xfff2da,3.30);sun.position.set(-21,54,36);
+  const scene=new THREE.Scene();scene.background=new THREE.Color('#dfefe7');scene.fog=new THREE.Fog('#dfefe7',120,195);
+  scene.add(new THREE.HemisphereLight(0xffffff,0x839d95,1.12));
+  scene.add(new THREE.AmbientLight(0xffffff,.29));
+  const sun=new THREE.DirectionalLight(0xffedcc,2.00);sun.position.set(-21,54,36);
   sun.castShadow=true;sun.shadow.mapSize.set(window.innerWidth<=768?768:1536,window.innerWidth<=768?768:1536);
   Object.assign(sun.shadow.camera,{left:-42,right:42,top:42,bottom:-42,near:.1,far:180});sun.shadow.bias=-.00025;sun.shadow.normalBias=.035;
   sun.shadow.radius=3;scene.add(sun);
-  const soft=new THREE.DirectionalLight(0xbdedff,.85);soft.position.set(29,31,-30);scene.add(soft);
+  const soft=new THREE.DirectionalLight(0xc9eaff,.62);soft.position.set(29,31,-30);scene.add(soft);
   const world=new THREE.Group();scene.add(world);
   const camera=new THREE.OrthographicCamera(-27,27,18,-18,.1,270);
   const gltf=new GLTFLoader();
@@ -571,23 +738,53 @@ function browserFallback(error){
    gltf.loadAsync(base+'mercy_factory_diorama.glb'),gltf.loadAsync(base+'mercy_truck.glb'),gltf.loadAsync(base+'mercy_forklift.glb'),gltf.loadAsync(base+'mercy_worker.glb')
   ]);
   const surface=diorama.scene;world.add(surface);
-  surface.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true; if(o.material){o.material.envMapIntensity=.3;}}});
-  function cloneModel(gltf,name,scale=1){const wrapper=new THREE.Group();wrapper.name=name;const c=gltf.scene.clone(true);c.scale.setScalar(scale);wrapper.add(c);world.add(wrapper);c.traverse(m=>{if(m.isMesh){m.castShadow=true;m.receiveShadow=true}});return wrapper}
+  // Textured signs in the original GLB had flipped UVs on certain viewing angles.
+  // Hide those legacy meshes and replace them with crisp camera-facing 3D boards.
+  surface.traverse(o=>{if(o.isMesh){if(o.name.startsWith('SIGN_')){o.visible=false;return;}o.castShadow=true;o.receiveShadow=true;if(o.material)o.material.envMapIntensity=.15;}});
+  function readableBoard(text,x,y,z,w=7.1,h=.90,bg='#165a61',border='#ffd88b'){
+    const texCanvas=document.createElement('canvas');texCanvas.width=1280;texCanvas.height=174;
+    const g=texCanvas.getContext('2d');
+    g.fillStyle=bg;g.beginPath();g.roundRect(9,9,1262,156,28);g.fill();
+    g.lineWidth=9;g.strokeStyle=border;g.stroke();
+    g.fillStyle='#ffffff';g.textAlign='center';g.textBaseline='middle';
+    // Fit long names without changing the 800 font weight or reversing the board.
+    let fontSize=72;
+    do {g.font=`800 ${fontSize}px system-ui, sans-serif`;if(g.measureText(text).width<=1120)break;fontSize-=2;}while(fontSize>=34);
+    g.fillText(text,640,91);
+    const texture=new THREE.CanvasTexture(texCanvas);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
+    const sign=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,depthTest:true,depthWrite:false,toneMapped:false}));
+    sign.position.set(x,y,z);sign.scale.set(w,h,1);sign.renderOrder=4;world.add(sign);return sign;
+  }
+  // Sprites always face the camera, so text stays upright and never mirrors on rotation.
+  for(const [name,x,y,z,w,bg,edge] of [
+   ['TRIDAYA · LINE 01',-19,4.65,-7.15,7.15,'#0d6862','#c4e9cb'],
+   ['INNA · LINE 02',0,4.65,-7.15,7.15,'#246c9a','#b8dcff'],
+   ['KBI · LINE 03',19,4.65,-7.15,7.15,'#986026','#ffe3a0'],
+   ['GUDANG · LOADING',19,4.25,23.4,9.1,'#214f63','#f4cd75'],
+   ['KANTOR · LAPORAN',-19,4.38,23.25,9.0,'#276457','#f8dfa3'],
+   ['ADMIN · DATA PO',0,4.33,22.3,8.9,'#285b78','#f8dfa3']
+  ])readableBoard(name,x,y,z,w,.83,bg,edge);
+  function cloneModel(gltf,name,scale=1){const wrapper=new THREE.Group();wrapper.name=name;const c=gltf.scene.clone(true);c.scale.setScalar(scale);wrapper.add(c);world.add(wrapper);c.traverse(m=>{if(m.isMesh){if(m.name.startsWith('SIGN_')){m.visible=false;return;}m.castShadow=true;m.receiveShadow=true}});return wrapper}
   function place(o,x,z,y=0){o.position.set(x,y,z);return o}
   const workers={
    factory:place(cloneModel(workerGLB,'Pegawai pabrik'),-22,-6.55),
    supervisor:place(cloneModel(workerGLB,'Supervisor'),-6.5,-6.55),
    admin:place(cloneModel(workerGLB,'Staf administrasi'),0,8.1),
    reporter:place(cloneModel(workerGLB,'Pegawai laporan'),-19,7.8),
-   loader:place(cloneModel(workerGLB,'Petugas gudang'),16.8,12.2),
-   static1:place(cloneModel(workerGLB,'Pekerja Tridaya',.87),-24.3,-14),
-   static2:place(cloneModel(workerGLB,'Pekerja Inna',.87),-4.0,-13.9),
-   static3:place(cloneModel(workerGLB,'Pekerja KBI',.87),23.7,-13.9),
+   loader:place(cloneModel(workerGLB,'Petugas gudang'),17.0,10.45),
+   static1:place(cloneModel(workerGLB,'Pekerja Tridaya',.87),-19.2,-13.65),
+   static2:place(cloneModel(workerGLB,'Pekerja Inna',.87),.2,-13.65),
+   static3:place(cloneModel(workerGLB,'Pekerja KBI',.87),18.8,-13.65),
    static4:place(cloneModel(workerGLB,'Pekerja rak gudang',.85),26.3,17),
-   static5:place(cloneModel(workerGLB,'Staf kantor',.85),-23.6,14.7)
+   static5:place(cloneModel(workerGLB,'Staf kantor',.85),-23.6,14.7),
+   roamerInna:place(cloneModel(workerGLB,'Petugas INNA',.94),-3,-6.55),
+   roamerKbi:place(cloneModel(workerGLB,'Petugas KBI',.94),16,-6.55)
   };
-  const homes={factory:[-22,-6.55],supervisor:[-6.5,-6.55],admin:[0,8.1],reporter:[-19,7.8],loader:[16.8,12.2]};
+  const homes={factory:[-22,-6.55],supervisor:[-6.5,-6.55],admin:[0,8.1],reporter:[-19,7.8],loader:[17.0,10.45]};
   const truck=place(cloneModel(truckGLB,'Truk pengiriman'),37,1.4);truck.userData.forward='negativeX';
+  // High contrast label stays readable, including during a truck turn.
+  const truckBadge=readableBoard('MERCY LOGISTIK',0,3.44,0,4.9,.57,'#155e66','#ffe4a5');
+  world.remove(truckBadge);truck.add(truckBadge);
   const forklift=place(cloneModel(forkGLB,'Forklift gudang'),17,14.9);forklift.userData.forward='positiveX';
   // Imported asset files: truck model is oriented with its front toward -X.
   const cargo=new THREE.Group();const pallet=new THREE.Mesh(new THREE.BoxGeometry(1.52,.22,1.12),new THREE.MeshStandardMaterial({color:'#c59c73',roughness:.84}));cargo.add(pallet);
@@ -624,6 +821,7 @@ function browserFallback(error){
   ];
   for(const t of zoneDefs){const mesh=new THREE.Mesh(new THREE.BoxGeometry(t.w,4.3,t.d),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false,color:0xffffff}));mesh.position.set(t.x,2.15,t.z);mesh.userData={action:t.action,factory:t.factory};world.add(mesh);hitTargets.push(mesh);}
   const focus=new THREE.Vector3(0,0,0),cameraLook=new THREE.Vector3();
+  let ambientEpoch=0,ambientPhase=0,ambientActiveLabel='',lastAmbientSecond=-1;const AMBIENT_CYCLE=43;
   let yaw=.74,pitch=.81,targetYaw=yaw,targetPitch=pitch,zoom=1,zoomTarget=1,paused=false,nowTime=0,lastTime=performance.now(),active=null,initialSceneReady=false;
   const cameraDefault=()=>{focus.set(0,0,0);zoomTarget=1;targetYaw=.74;targetPitch=.81};
   const lerp=(a,b,t)=>a+(b-a)*t;
@@ -633,7 +831,7 @@ function browserFallback(error){
    old:[[-6.5,-6.55],[-3.0,-6.55],[1,-6.55],[4.0,-6.55],[4.0,-4.65]],
    admin:[[0,8.1],[0,9.7],[0,11.8],[0,13.9]],
    report:[[-19,7.8],[-19,9.2],[-19,10.2],[-17.45,10.2],[-17.45,16.2],[-15.9,16.2]],
-   loader:[[16.8,12.2],[15.7,12.2],[14.1,12.2]],
+   loader:[[17.0,10.45],[15.7,10.45],[14.0,10.45]],
    forklift:[[17.0,14.9],[14.0,14.9],[11.45,14.9],[9.73,13.4]],
    truck:[[36.5,1.4],[27,1.4],[17,1.4],[12,1.4],[9.7,2.3],[7.4,4.55],[7.3,7.0],[7.3,11.1]]
   };
@@ -661,12 +859,66 @@ function browserFallback(error){
    if(['report'].includes(mode))return [-19,15];if(['orders','add','edit','csv'].includes(mode))return [0,15];
    if(mode==='arrived')return [10.5,9.5];if(['old','priority'].includes(mode))return [1,-3];return [0,0]};
   function clearStory(){for(const k of ['factory','supervisor','admin','reporter','loader']){const a=workers[k];a.position.set(...[homes[k][0],0,homes[k][1]]);a.rotation.set(0,0,0);a.userData.walking=false}truck.position.set(37,0,1.4);truck.rotation.y=0;forklift.position.set(17,0,14.9);forklift.rotation.y=0;cargo.visible=false;beacon.intensity=0;for(const paper of sheets)paper.visible=false;}
+
+  // Autonomous shift: self-running factory floor with segregated logistics and walking lanes.
+  // Timeline is deterministic, not random: vehicles never choose arbitrary coordinates.
+  const WANDERS=[
+   {name:'factory',path:pathFactory(-19),offset:0,cycle:22,travel:7,hold:3},
+   {name:'roamerInna',path:pathFactory(0),offset:7,cycle:24,travel:7.5,hold:3},
+   {name:'roamerKbi',path:pathFactory(19),offset:14,cycle:25,travel:8,hold:2.5},
+   {name:'supervisor',path:paths.old,offset:8,cycle:32,travel:10,hold:4},
+   {name:'admin',path:paths.admin,offset:5,cycle:26,travel:6.8,hold:4},
+   {name:'reporter',path:paths.report,offset:11,cycle:35,travel:9,hold:7},
+   {name:'loader',path:paths.loader,offset:0,cycle:20,travel:5,hold:4}
+  ];
+  function patrol(person,points,t,travel,hold,cycle){
+    const s=((t%cycle)+cycle)%cycle;
+    if(s<travel)motion(person,points,s/travel,true);
+    else if(s<travel+hold)motion(person,points,1,false);
+    else if(s<travel*2+hold)motion(person,points,1-(s-travel-hold)/travel,true);
+    else motion(person,points,0,false);
+  }
+  const reverseTruck=[...paths.truck].reverse();
+  function autonomousFrame(){
+    const t=(nowTime-ambientEpoch+1.25+AMBIENT_CYCLE*100)%AMBIENT_CYCLE;
+    ambientPhase=t;
+    // A delivery enters, unloads, leaves; another can arrive on the next cycle.
+    // Forklift only moves when the truck is stationary, on its own perpendicular aisle.
+    if(t<10.8)driveSmooth(truck,paths.truck,t/10.8);
+    else if(t<25.2)driveSmooth(truck,paths.truck,1);
+    else if(t<36.0)driveSmooth(truck,reverseTruck,(t-25.2)/10.8);
+    else truck.position.set(37,0,1.4);
+    if(t>=12 && t<18)motion(forklift,paths.forklift,(t-12)/6);
+    else if(t>=18&&t<24)motion(forklift,paths.forklift,1-(t-18)/6);
+    else motion(forklift,paths.forklift,0);
+    cargo.visible=t>=15&&t<24;
+    // Individual employees have different shifts. Paths stay out of the vehicle lane.
+    for(const w of WANDERS)patrol(workers[w.name],w.path,nowTime+w.offset,w.travel,w.hold,w.cycle);
+    // Printer starts running from time to time even without a report click.
+    for(let i=0;i<sheets.length;i++){
+      const paper=sheets[i],s=(nowTime+i*0.14)%24;
+      paper.visible=s>10.2+i*.58 && s<14.8+i*.58;
+      if(paper.visible){const progress=Math.min(1,Math.max(0,(s-10.2-i*.58)/2.0));paper.position.set(-14.9,1.57+i*.027,17.63+progress*.49);}
+    }
+    const aged=Number(window.mercySceneMetrics?.old||0);
+    beacon.intensity=aged>0?(0.32+Math.sin(nowTime*3.5)**2*.56):0;
+    let label=t<10.8?'🚚 Truk mengantar barang ke loading dock':
+      t<14.5?'📦 Truk parkir · pekerja menyiapkan muatan':
+      t<24?'🏗️ Forklift mengangkut pallet ke gudang':
+      t<36?'🚚 Truk kembali keluar melalui gerbang':'🏭 Mesin produksi, kantor, dan pekerja tetap beraktivitas';
+    ambientActiveLabel=label;
+    const sec=Math.floor(nowTime);
+    if(sec!==lastAmbientSecond){lastAmbientSecond=sec;const e=$('ambientStatus');if(e)e.textContent=label;}
+  }
+
   function currentStep(mode,t){const steps=phaseDescriptions[mode]||phaseDescriptions.all;let result=steps[0][1];for(const [at,txt]of steps)if(t>=at)result=txt;return result;}
   function storyFrame(mode,f,t,d){const p=Math.max(0,Math.min(1,t/d));
    const [fx,fz]=focusFor(mode,f); const drift=Math.min(1,t/3.0);
    focus.x=lerp(focus.x,fx,.035+drift*.022);focus.z=lerp(focus.z,fz,.035+drift*.022);
    zoomTarget=(mode==='factory'?1.12:mode==='all'?1:1.13);
-   if(mode==='factory'){const xx=({TRIDAYA:-19,INNA:0,KBI:19}[f]??-19);motion(workers.factory,pathFactory(xx),Math.min(1,t/7.0),true);}
+   if(mode==='factory'){const xx=({TRIDAYA:-19,INNA:0,KBI:19}[f]??-19);
+    const person=f==='INNA'?workers.roamerInna:f==='KBI'?workers.roamerKbi:workers.factory;
+    motion(person,pathFactory(xx),Math.min(1,t/7.0),true);}
    if(mode==='old'||mode==='priority'){motion(workers.supervisor,paths.old,Math.min(1,t/7.4),true);beacon.intensity=2.8+Math.sin(nowTime*11)*1.4;}
    if(mode==='arrived'){
     // No forklift motion until truck has parked; vehicles use disjoint centerlines.
@@ -694,12 +946,15 @@ function browserFallback(error){
     for(let i=0;i<3;i++){const paper=sheets[i];paper.visible=t>9.1+i*.83;if(paper.visible){const prog=Math.max(0,Math.min(1,(t-9.1-i*.83)/1.25));paper.position.set(-14.9,1.57+i*.027,17.63+.5*prog);}}
    }
   }
-  function finish(){if(!active)return;const a=active;active=null;a.resolve({cancelled:false});window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode:a.mode,elapsed:a.duration,duration:a.duration,step:'Adegan selesai',active:false}}));}
+  function finish(){if(!active)return;const a=active;active=null;ambientEpoch=nowTime;ambientPhase=0;a.resolve({cancelled:false});window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode:a.mode,elapsed:a.duration,duration:a.duration,step:'Adegan selesai',active:false}}));}
   function play(mode='all',factoryName=''){
+   // If the world was paused, resume the scene explicitly so the panel cannot hang.
+   if(paused){paused=false;const motionButton=$('toggleMotion');motionButton?.setAttribute('aria-pressed','true');if(motionButton)motionButton.innerHTML='Ⅱ <span>Jeda dunia</span>';}
    stop();clearStory();
    if(mode==='factory'){
     const x=({TRIDAYA:-19,INNA:0,KBI:19}[factoryName]??-19);
-    workers.factory.position.set(x-3,0,-6.55); // same start as the chosen factory route
+    const person=factoryName==='INNA'?workers.roamerInna:factoryName==='KBI'?workers.roamerKbi:workers.factory;
+    person.position.set(x-3,0,-6.55);
    }
    const duration=durations[mode]||8;
    const ft=focusFor(mode,factoryName);
@@ -708,7 +963,7 @@ function browserFallback(error){
    window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode,elapsed:0,duration,step:currentStep(mode,0),active:true}}));
    return p;
   }
-  function stop(){if(active){const a=active;active=null;a.resolve({cancelled:true});}for(const w of Object.values(workers))w.userData.walking=false;}
+  function stop(){if(active){const a=active;active=null;a.resolve({cancelled:true});}ambientEpoch=nowTime;for(const w of Object.values(workers))w.userData.walking=false;}
   function skip(){if(active){storyFrame(active.mode,active.factoryName,active.duration,active.duration);finish();}}
   const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();
   function hit(e){const r=canvas.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(pointer,camera);const hit=ray.intersectObjects(hitTargets,false);return hit.length?hit[0].object.userData:null;}
@@ -737,14 +992,15 @@ function browserFallback(error){
    }
   }
   canvas.hidden=false;canvas.style.display='block';$('worldFallback').hidden=true;$('worldFallback').style.display='none';
-  window.MERCY_SCENE={play,skip,stop,reset:cameraDefault,pause(v){paused=!!v},updateMetrics(m){window.mercySceneMetrics=m}};
+  window.MERCY_SCENE={play,skip,stop,reset:cameraDefault,pause(v){paused=!!v;const e=$('ambientStatus');if(e&&paused)e.textContent='⏸ Aktivitas pabrik dijeda';},updateMetrics(m){window.mercySceneMetrics=m},getAmbientState(){return {phase:ambientPhase,activity:ambientActiveLabel,paused,cinematic:!!active,truck:[truck.position.x,truck.position.z],forklift:[forklift.position.x,forklift.position.z]}}};
   cameraDefault();resize();stopListeners();
   function render(now){requestAnimationFrame(render);
    const dt=Math.min(.05,(now-lastTime)/1000||.016);lastTime=now;
    if(!paused){nowTime+=dt;
     if(active){active.elapsed+=dt;storyFrame(active.mode,active.factoryName,active.elapsed,active.duration);
      const e=active;window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode:e.mode,elapsed:Math.min(e.elapsed,e.duration),duration:e.duration,step:currentStep(e.mode,e.elapsed),active:true}}));
-     if(e.elapsed>=e.duration)finish();}}
+     if(e.elapsed>=e.duration)finish();}
+    if(!active)autonomousFrame();}
    const blend=1-Math.exp(-3*dt);yaw=lerp(yaw,targetYaw,blend);pitch=lerp(pitch,targetPitch,blend);zoom=lerp(zoom,zoomTarget,blend);
    cameraLook.lerp(focus,1-Math.exp(-2.6*dt));
    const rad=78;
@@ -774,7 +1030,7 @@ function browserFallback(error){
       // 6.0-unit straight conveyor; separated from worker aisles and road traffic.
       box.position.z=-16.3+((i*1.70+nowTime*.57)%5.0);
     }
-    if(active?.mode==='arrived'){
+    if(active?.mode==='arrived'||(!active&&ambientPhase<36)){
       truck.children[0].rotation.z=Math.sin(nowTime*18)*.002;
       forklift.children[0].position.y=Math.abs(Math.sin(nowTime*8))*.016;
     }
