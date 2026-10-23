@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#edf6f4" />
+<title>MERCY • Factory Studio 3D · Dashboard PO</title>
+<meta name="description" content="MERCY Factory Studio: satu dashboard PO Firebase dengan dunia miniatur GLB 3D hidup, animasi logistik, kantor laporan dan tiga pabrik." />
+<style>
+:root{--paper:#f1f8f5;--panel:#fff;--border:#d9e8e6;--text:#1e3542;--muted:#79919a;--sea:#168f8e;--sea2:#2cb5a9;--mint:#dff3e9;--blue:#5e91bd;--amber:#d69753;--danger:#c56c5f;--shadow:0 16px 60px rgba(52,106,105,.1)}
+*{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--paper);color:var(--text)}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}a{color:inherit}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid #1ab7af;outline-offset:3px}button{touch-action:manipulation}::selection{background:#c3eddd;color:#135157}
+.shell{height:100vh;min-height:690px;overflow:hidden;display:grid;grid-template-columns:226px minmax(0,1fr);grid-template-rows:73px minmax(0,1fr);background:#f1f8f5}
+.topbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 23px;border-bottom:1px solid #ddebe6;background:#fff;z-index:30;box-shadow:0 1px 10px #426b6110}.brand{display:flex;align-items:center;gap:11px;white-space:nowrap}.brand-logo{width:40px;height:40px;border-radius:13px;background:linear-gradient(145deg,#53c9b7,#138c86);color:white;display:grid;place-items:center;font-size:26px;box-shadow:0 5px 14px #44a99c40}.brand strong{display:block;letter-spacing:.08em;font-size:17px}.brand-accent{color:var(--sea)}.brand small{font-size:9px;display:block;letter-spacing:.2em;color:#9aafb1;font-weight:750;margin-top:3px}.top-center{color:#8ca3a5;font-size:11px;letter-spacing:.04em}.top-center .sep{padding:0 10px}.top-actions{display:flex;align-items:center;gap:9px}.connection{font-size:10px;font-weight:800;background:#eff7f5;border:1px solid #d4e8e4;padding:9px 12px;border-radius:30px;color:#698c85;display:flex;align-items:center;gap:7px;white-space:nowrap}.connection i{height:7px;width:7px;border-radius:50%;background:#c4a25c;box-shadow:0 0 0 3px #e8dbc15c}.connection.live{background:#e8f7f0;color:#25846d;border-color:#c6e8d6}.connection.live i{background:#2abb83;box-shadow:0 0 0 3px #2abb831c}.connection.error{background:#fff1ee;color:#ae695d;border-color:#efcac2}.connection.error i{background:#d57266}.connection.cached{background:#fff6e9;color:#9c7139;border-color:#eddfc3}.header-btn,.header-link{font-size:11px;font-weight:800;white-space:nowrap;border:1px solid #d6e8e3;background:white;color:#315b60;text-decoration:none;padding:10px 13px;border-radius:10px}.header-btn:hover,.header-link:hover{background:#e9f8f4;border-color:#98cfc6}.header-btn.admin{background:#e9f8f4;color:#238c7d}
+.sidebar{grid-row:2;grid-column:1;position:relative;display:flex;flex-direction:column;min-height:0;background:#fff;border-right:1px solid #ddebe7;z-index:15;padding:21px 12px 18px}.scroll-nav{overflow:auto;scrollbar-width:thin;flex:1}.menu-label{color:#9caeaf;font-size:10px;font-weight:900;letter-spacing:.18em;margin:11px 10px 13px}.nav{display:grid;gap:4px}.nav-button{width:100%;display:flex;align-items:center;gap:10px;border:1px solid transparent;border-radius:11px;text-align:left;background:transparent;color:#708893;font-size:12px;font-weight:700;padding:12px 10px;transition:background .2s,color .2s}.nav-button:hover{background:#f4f9f7;color:#276b66}.nav-button.active{background:#e6f6ef;color:#13796e;border-color:#c6e8dc}.nav-icon{font-size:16px;width:23px;text-align:center}.nav-count{margin-left:auto;font-size:10px;color:#8da5aa}.nav-count.alert{color:#ba7850}.nav-separator{border-top:1px solid #e7eeeb;margin:22px 10px 17px}.sidebar-foot{padding:14px 13px;background:#eaf7f2;border:1px solid #d3eae2;border-radius:14px}.sidebar-foot p{font-size:10px;line-height:1.65;color:#63867e;margin:8px 0}.status-mini{font-size:9px;font-weight:900;color:#32937d;letter-spacing:.08em}.help-mini{font-size:10px;font-weight:750;color:#6f918b}
+.main{grid-row:2;grid-column:2;min-height:0;display:flex;flex-direction:column;overflow:hidden}.world-stage{flex:1;min-height:0;position:relative;overflow:hidden;background:radial-gradient(ellipse at 49% 56%,#e1f5e9 0%,#e8f5f1 42%,#f1f9f7 75%,#f7fbf9 100%)}.ambient-pattern{position:absolute;inset:0;background-image:radial-gradient(#8dbfb544 .9px,transparent 1px);background-size:26px 26px;opacity:.32;pointer-events:none}.stage-title{position:absolute;top:28px;left:35px;z-index:4;pointer-events:none}.eyebrow{font-size:10px;letter-spacing:.2em;font-weight:900;color:#418f84;display:flex;align-items:center;gap:7px}.eyebrow i{height:7px;width:7px;border-radius:50%;background:#39b991;box-shadow:0 0 0 4px #39b99122}.stage-title h1{margin:14px 0 9px;font-size:clamp(24px,2.8vw,42px);line-height:1.07;letter-spacing:-.045em;font-weight:850;color:#203c47}.stage-title h1 em{font-style:normal;color:#20a792}.stage-title p{font-size:12px;line-height:1.5;color:#88a1a5;margin:0;max-width:300px}.stage-tools{position:absolute;z-index:8;top:25px;right:26px;display:flex;gap:6px}.stage-tools button{border:1px solid #d1e7df;background:#ffffffdb;color:#61847e;border-radius:10px;padding:10px 12px;font-size:11px;font-weight:800;box-shadow:0 6px 25px #60998913}.stage-tools button:hover{background:white;border-color:#73c4b3;color:#328d79}.world-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;outline:0;z-index:1;display:block}.world-canvas[hidden]{display:none}.world-fallback{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center}.world-fallback svg{width:min(95%,1080px);height:90%;max-height:800px;overflow:visible;filter:drop-shadow(0 18px 25px #468c7630)}.fallback-building,.fallback-truck{cursor:pointer;transform-box:fill-box;transform-origin:center;transition:filter .2s,transform .2s}.fallback-building:hover,.fallback-building:focus-visible{filter:brightness(1.07);transform:translateY(-8px)}.fallback-truck{animation:truckFallback 9s ease-in-out infinite}.fallback-worker{animation:workFallback 2s ease-in-out infinite;transform-origin:440px 370px}.worker-two{animation-delay:-.9s}.worker-three{animation-delay:-.4s}.fallback-note{position:absolute;bottom:55px;color:#88a09b;font-size:10px;text-align:center}.floating-label{position:absolute;z-index:4;pointer-events:auto;transition:transform .35s;filter:drop-shadow(0 6px 10px #467d7720)}.floating-label button{border:1px solid #e5efea;background:#fffc;border-radius:10px;padding:10px 11px;font-size:11px;font-weight:900;letter-spacing:.05em;display:flex;align-items:center;gap:7px;color:#355f65;white-space:nowrap}.floating-label button:hover{border-color:#4bb99d;background:white;transform:translateY(-2px)}.floating-label small{background:#edf8f3;border-radius:6px;padding:4px 6px;color:#7c9f9c;font-size:9px}.label-dot{height:8px;width:8px;border-radius:50%;background:#39bea2}.label-dot.blue{background:#75a6d2}.label-dot.yellow{background:#e0b171}.label-tridaya{top:35%;left:16%}.label-inna{top:18%;left:53%}.label-kbi{top:49%;left:75%}.scene-dialog{position:absolute;z-index:7;bottom:66px;left:50%;transform:translate(-50%,0);display:grid;gap:5px;min-width:min(320px,84%);text-align:center;border-radius:16px;border:1px solid #d8ebe4;background:#fffffff2;box-shadow:0 16px 45px #466f6628;padding:13px 20px;pointer-events:none;transition:opacity .25s}.scene-dialog b{font-size:12px;color:#337e73}.scene-dialog span{font-size:10px;color:#829f9c}.scene-dialog.pulse{animation:dialogPulse .3s}.stage-bottom{position:absolute;bottom:15px;left:29px;right:25px;display:flex;justify-content:space-between;align-items:center;z-index:4;color:#8aaca5;font-size:10px;pointer-events:none;gap:12px}.mini-legend{display:flex;gap:16px}.mini-legend span{display:flex;gap:6px;align-items:center}.mini-legend i{width:7px;height:7px;border-radius:50%;background:#4bb99e}.mini-legend .legend-blue{background:#6e9ed3}.mini-legend .legend-red{background:#da9379}.camera-hint{font-weight:700}.stats-strip{height:116px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding:10px 17px 14px;background:#f7fbf9;border-top:1px solid #e0eee8}.stat-card{background:white;border:1px solid #e0eee7;border-radius:14px;padding:13px 15px;min-width:0;box-shadow:0 5px 20px #5596880c}.stat-card span{display:block;font-size:10px;font-weight:850;letter-spacing:.04em;color:#8fa7a9}.stat-card strong{display:block;font-size:29px;letter-spacing:-.06em;color:#2a6369;margin:0}.stat-card small{font-size:9px;color:#9daeb0;line-height:1.25;display:block}.stat-card.accent-orange strong{color:#ce885e}.stat-card.accent-blue strong{color:#6396ba}.stat-card.accent-green strong{color:#35a482}
+.drawer-backdrop{position:fixed;inset:73px 0 0;z-index:38;background:#264e5659;backdrop-filter:blur(2px)}.drawer{position:fixed;z-index:40;right:0;top:73px;bottom:0;width:min(660px,100%);display:flex;flex-direction:column;transform:translateX(105%);transition:transform .35s cubic-bezier(.22,1,.36,1);background:#f8fcfa;box-shadow:-15px 0 70px #255e5540;border-left:1px solid #bcded0}.drawer.open{transform:translateX(0)}.drawer-head{flex:none;display:flex;justify-content:space-between;gap:10px;background:#fff;padding:22px 25px 19px;border-bottom:1px solid #e0ece7}.drawer-kicker{font-weight:900;color:#3fa48d;letter-spacing:.18em;font-size:10px}.drawer-head h2{font-size:25px;letter-spacing:-.035em;margin:7px 0;color:#20444c}.drawer-head p{font-size:12px;color:#8da8a6;margin:3px 0 0;line-height:1.5}.close-drawer{background:#f0f8f5;border:1px solid #d8e7e0;color:#6b9290;border-radius:11px;font-size:24px;line-height:1;height:36px;width:36px}.drawer-body{overflow-y:auto;overscroll-behavior:contain;padding:22px 25px 50px;flex:1}.drawer-body>*+*{margin-top:16px}.section-card{background:white;border:1px solid #e0ece8;border-radius:16px;padding:17px;box-shadow:0 6px 22px #618b8310}.section-card h3{font-size:15px;margin:0 0 7px;color:#306267}.section-card p{color:#849a9b;font-size:12px;line-height:1.65;margin:0}.h-stack{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.h-stack.end{justify-content:flex-end}.solid-btn,.soft-btn,.warn-btn{background:#219f90;color:white;border:1px solid #219f90;border-radius:10px;padding:11px 14px;font-weight:800;font-size:11px;transition:transform .2s,background .2s;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}.solid-btn:hover{background:#188c7e;transform:translateY(-1px)}.soft-btn{background:#fff;color:#417b79;border-color:#cde3db}.soft-btn:hover{background:#e8f7f0}.warn-btn{background:#fff1ef;color:#b95b4c;border-color:#edc6bc}.chip{display:inline-flex;gap:4px;align-items:center;border-radius:20px;padding:5px 9px;font-size:10px;font-weight:850;background:#eef5f3;color:#6e9393}.chip.warn{background:#fff0e4;color:#b17842}.chip.danger{background:#fff0ed;color:#ca7162}.chip.good{background:#e6f8ed;color:#2eaa79}.chip.blue{background:#eaf2fc;color:#5e88b7}.chip.cancel{background:#efefef;color:#939393}.notice{background:#eaf7f2;border:1px solid #cbe8df;padding:11px 14px;font-size:11px;line-height:1.6;color:#5e8b83;border-radius:10px}.notice.warning{background:#fff6e8;color:#ab7744;border-color:#ecd8b8}.notice.danger{background:#fff2f1;color:#af6256;border-color:#e8c8c2}.grid-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.little-metric{border:1px solid #e0ece8;border-radius:12px;background:white;padding:12px}.little-metric b{font-size:22px;display:block;color:#2c7973}.little-metric span{font-size:10px;color:#8da4a2;line-height:1.4}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.field{display:grid;gap:6px;font-size:11px;font-weight:800;color:#557477;min-width:0}.field.wide{grid-column:1/-1}.field input,.field select,.field textarea,.search-input,.filter-select,.filter-input{border:1px solid #d5e5df;border-radius:10px;min-height:40px;padding:10px 11px;background:#fdfefe;color:#28525c;outline:0;width:100%;font-size:12px;font-weight:500}.field input:focus,.field select:focus,.field textarea:focus,.search-input:focus,.filter-select:focus,.filter-input:focus{border-color:#2bb29b;box-shadow:0 0 0 3px #2bb29b15}.field textarea{resize:vertical;min-height:60px}.field .field-help{font-size:10px;color:#8ea6a4;line-height:1.45;font-weight:500}.filters-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.filters-row .search-input{flex:1;min-width:180px}.filters-row .filter-select{flex:0 0 132px}.filter-chips{display:flex;gap:6px;flex-wrap:wrap}.filter-chip{border:1px solid #dcebe4;background:white;border-radius:22px;padding:7px 10px;color:#719390;font-size:10px;font-weight:800}.filter-chip.active{background:#dbf5e9;color:#168f82;border-color:#a0d6c6}.table-scroll{overflow-x:auto;max-height:58vh;overflow-y:auto;border:1px solid #e3ebe9;border-radius:12px;background:white}.orders-table{border-collapse:collapse;white-space:nowrap;width:100%;font-size:11px}.orders-table th{position:sticky;top:0;background:#edf7f3;color:#6c9191;z-index:1;text-align:left;padding:12px 11px;font-size:10px;letter-spacing:.02em}.orders-table td{border-top:1px solid #edf3f0;padding:12px 11px;color:#5f7b80;max-width:190px;overflow:hidden;text-overflow:ellipsis}.orders-table tr:hover td{background:#f5fbf8}.orders-table tr.is-old td:first-child{box-shadow:inset 3px 0 #d98b76}.orders-table td strong{color:#37666c}.orders-table button{font-size:10px;border-radius:6px;padding:5px 7px;background:#e6f5f0;color:#277d74;border:0;cursor:pointer}.orders-table button.delete{background:#fff0ed;color:#b76558}.table-foot{display:flex;justify-content:space-between;gap:8px;align-items:center;color:#8da5a0;font-size:10px;padding:8px 2px}.empty-state{text-align:center;padding:32px 12px;color:#879e9a;font-size:12px;line-height:1.7}.priority-item{display:flex;align-items:center;gap:11px;padding:12px;border:1px solid #e4eee9;border-radius:12px;background:white}.priority-item strong{font-size:12px;color:#365e67}.priority-item small{display:block;color:#90a7a7;margin-top:4px;font-size:10px}.priority-days{margin-left:auto;white-space:nowrap;font-size:11px;font-weight:850;color:#b67457}.paper-preview{background:white;border:1px solid #dfebe7;border-radius:8px;box-shadow:0 7px 23px #52766913;padding:20px 18px;max-height:42vh;overflow-y:auto}.paper-preview h3{font-size:16px;letter-spacing:.08em;color:#345b60;margin:0}.paper-preview .paper-meta{font-size:10px;color:#789390;margin:8px 0 16px}.report-table{border-collapse:collapse;width:100%;font-size:10px}.report-table th{background:#e9f5f0;text-align:left;color:#567d7a;padding:7px;border-bottom:1px solid #cde4dd}.report-table td{padding:7px;border-bottom:1px solid #e6eeeb;color:#4c7272}.csv-upload{border:2px dashed #add8c8;border-radius:14px;background:#f4fbf8;padding:23px;text-align:center}.csv-upload input{max-width:100%;font-size:11px}.two-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.icon-bubble{height:42px;width:42px;background:#e0f3ec;border-radius:12px;display:grid;place-items:center;font-size:22px;flex-shrink:0}.toast{position:fixed;z-index:100;left:50%;bottom:22px;transform:translate(-50%,30px);background:#274f50;color:#fff;font-size:12px;padding:12px 20px;max-width:min(90vw,500px);border-radius:12px;opacity:0;pointer-events:none;box-shadow:0 12px 30px #305a5940;transition:opacity .25s,transform .25s;text-align:center}.toast.visible{opacity:1;transform:translate(-50%,0)}.toast.danger{background:#9e574d}.print-root{display:none}body.drawer-open{overflow:hidden}@keyframes truckFallback{0%,15%,100%{transform:translate(0,0)}50%{transform:translate(-42px,22px)}85%{transform:translate(0,0)}}@keyframes workFallback{50%{transform:translateY(-7px)}}@keyframes dialogPulse{50%{transform:translate(-50%,-7px)}}
+@media(max-width:1180px){.top-center{display:none}.shell{grid-template-columns:202px minmax(0,1fr)}.sidebar{padding-left:8px;padding-right:8px}.stage-title{top:24px;left:24px}.stage-title h1{font-size:30px}.stats-strip{gap:5px;padding:7px}.stat-card{padding:11px 8px}.stat-card strong{font-size:24px}.camera-hint{display:none}}
+@media(max-width:850px){.shell{grid-template-columns:66px minmax(0,1fr)}.sidebar{padding:13px 7px}.sidebar .menu-label,.sidebar .nav-separator,.sidebar-foot,.nav-button span:not(.nav-icon),.nav-count{display:none}.nav{gap:5px}.nav-button{justify-content:center;padding:10px 4px}.nav-icon{font-size:21px}.topbar{padding:0 12px}.brand strong{font-size:14px}.header-link{display:none}.stage-title p{display:none}.stage-title h1{font-size:25px}.stage-tools{top:85px;right:10px}.stats-strip{height:105px;grid-template-columns:repeat(5,minmax(0,1fr))}.stat-card small{display:none}.stat-card span{font-size:9px}.stat-card strong{font-size:22px}.floating-label button{padding:7px;font-size:10px}.floating-label small{display:none}.stage-bottom{bottom:10px}.mini-legend{gap:8px;font-size:9px}}
+@media(max-width:590px){.shell{min-height:580px;grid-template-rows:58px minmax(0,1fr)}.topbar{height:58px}.brand-logo{width:31px;height:31px;border-radius:9px;font-size:20px}.brand small{font-size:7px}.brand strong{font-size:12px}.top-actions{gap:5px}.header-btn{padding:8px 7px;font-size:9px}.connection{padding:7px 8px;font-size:9px}.connection span{max-width:85px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}.main,.sidebar{grid-row:2}.stage-title{left:13px;top:14px}.stage-title h1{font-size:23px;margin-top:8px}.eyebrow{font-size:8px}.stage-tools{top:75px;right:5px}.stage-tools button{padding:7px;font-size:10px}.stage-tools button span{display:none}.world-fallback svg{width:145%;max-width:none;flex:none;height:95%;transform:translateX(-4%)}.world-stage{min-height:0}.floating-label button{font-size:9px}.label-tridaya{left:7%;top:38%}.label-inna{left:49%;top:25%}.label-kbi{left:66%;top:57%}.scene-dialog{bottom:40px;padding:9px;min-width:85%}.scene-dialog b{font-size:10px}.scene-dialog span{font-size:9px}.stage-bottom{display:none}.stats-strip{height:111px;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,1fr);gap:4px;padding:6px}.stat-card{border-radius:9px;padding:6px 7px}.stat-card span{font-size:8px}.stat-card strong{font-size:18px}.drawer,.drawer-backdrop{top:58px}.drawer-head{padding:17px 15px}.drawer-head h2{font-size:20px}.drawer-body{padding:15px 14px 35px}.field-grid{gap:9px}.grid-metrics{gap:5px}.little-metric{padding:9px}.little-metric b{font-size:18px}.filters-row .filter-select{flex:1 1 100px}.sidebar .nav-icon{font-size:18px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media print{@page{size:A4 portrait;margin:12mm}body,html{height:auto;background:white;color:#111}.shell{display:block;height:auto;min-height:0;overflow:visible;background:white}.topbar,.sidebar,.main,.drawer,.drawer-backdrop,.toast{display:none!important}.print-root{display:block!important;font:10pt Arial,sans-serif;color:#111}.print-root h1{font-size:16pt;margin:0 0 4mm}.print-root .print-sub{font-size:9pt;color:#444;margin-bottom:6mm}.print-root .print-metrics{display:flex;gap:13mm;margin-bottom:6mm;font-size:9pt}.print-root table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:8pt}.print-root th,.print-root td{border:1px solid #999;padding:5px;text-align:left;overflow-wrap:anywhere;vertical-align:top}.print-root th{background:#e6f0eb!important;print-color-adjust:exact}.print-root tr{break-inside:avoid}.print-root footer{font-size:8pt;text-align:right;margin-top:8mm;color:#555}}
+
+.world-fallback[hidden]{display:none!important}
+
+/* v3: cinematic animation playback (drawer intentionally opens AFTER the scene) */
+.story-overlay[hidden]{display:none!important}
+.story-overlay{position:absolute;z-index:9;bottom:72px;left:50%;transform:translateX(-50%);width:min(450px,calc(100% - 28px));padding:16px 18px 13px;border:1px solid #cde2dc;background:linear-gradient(140deg,#fffffff5,#f7fffbf5);backdrop-filter:blur(15px);box-shadow:0 16px 50px #214d3e42;border-radius:18px;color:#28535c;animation:appearStory .22s ease-out}
+.story-overlay .story-topline{display:flex;justify-content:space-between;gap:8px;align-items:center;color:#58a692;font-weight:900;letter-spacing:.14em;font-size:9px}.story-status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#2ac7a6;box-shadow:0 0 0 4px #2ac7a623;margin-right:5px}
+.story-overlay strong{font-size:17px;letter-spacing:-.04em;display:block;margin-top:8px}.story-overlay p{font-size:11px;line-height:1.4;color:#769a94;margin:6px 0 12px;min-height:15px}.story-progress-track{height:7px;background:#dcebe4;border-radius:12px;overflow:hidden}.story-progress-value{height:100%;width:0%;background:linear-gradient(90deg,#2fbea7,#76cdb7);border-radius:12px;transition:width .12s linear}.story-actions{margin-top:10px;display:flex;justify-content:space-between;gap:8px;align-items:center;color:#94aba7;font-size:10px}.story-actions b{color:#3c887c}.story-actions button{border-radius:9px;border:1px solid #b7dcd0;background:#e4f8f0;color:#247b6f;font-weight:850;padding:8px 11px;font-size:10px;white-space:nowrap}.story-actions button:hover{background:#d2f4e7}
+@keyframes appearStory{from{opacity:0;transform:translate(-50%,13px)}to{opacity:1;transform:translate(-50%,0)}}
+.story-overlay+ .stage-bottom{opacity:.58}
+.world-canvas{background:#eaf4f0}.scene-dialog{bottom:10px;left:16px;transform:none;min-width:0;max-width:310px;opacity:.96;padding:8px 12px;text-align:left;box-shadow:0 8px 23px #466f6616}.scene-dialog b{font-size:10px}.scene-dialog span{font-size:9px}
+.stage-bottom{bottom:12px;left:auto;right:20px}.stage-bottom .mini-legend{display:none}
+@media(max-width:850px){.story-overlay{bottom:30px;width:min(390px,calc(100% - 20px))}.scene-dialog{display:none}.stage-title{top:14px}.stage-title h1{font-size:25px}.stage-title p{display:none}}
+@media(max-width:590px){.story-overlay{bottom:18px;padding:13px 13px 11px}.story-overlay strong{font-size:14px}.story-overlay p{font-size:10px}.story-actions{font-size:9px}.story-overlay .story-topline{font-size:8px}}
+
+/* GLB cinematic polish */
+.stage-title{filter:drop-shadow(0 1px 18px #edf8f9)}
+.stage-title h1{font-size:clamp(25px,2.55vw,39px)}
+.stage-title p{color:#71928e;font-weight:550}
+.world-stage{background:#e8f5f0}
+.top-actions .header-link{pointer-events:none;cursor:default;background:#e8f5ee;color:#4d8d7f;border:1px solid #d1eae0}
+@media(max-width:850px){.stage-title{left:14px;top:14px}.stage-title h1{font-size:24px}.stage-title p{display:none}.stage-bottom{right:14px;left:14px}}
+</style>
+</head>
+<body>
+<div class="shell" id="shell">
+  <header class="topbar">
+    <div class="brand"><span class="brand-logo">✳</span><span><strong>MERCY<span class="brand-accent">.STUDIO</span></strong><small>GLB STUDIO WORLD • FIREBASE</small></span></div>
+    <div class="top-center"><span class="top-date" id="topDate"></span><span class="sep">•</span><span>Tridaya · Inna · KBI</span></div>
+    <div class="top-actions"><span class="connection connecting" id="connection" title="Menyiapkan koneksi"><i></i><span id="connectionText">Menghubungkan…</span></span><button class="header-btn" id="loginButton" type="button">Masuk admin</button><span class="header-link" title="Model GLB 3D dapat diimpor dan diedit di Blender">◈ DIORAMA 3D</span></div>
+  </header>
+  <aside class="sidebar">
+    <div class="scroll-nav">
+      <p class="menu-label">JELAJAHI PABRIK</p>
+      <nav class="nav" aria-label="Navigasi pabrik">
+        <button class="nav-button active" data-action="all"><span class="nav-icon">🏘️</span><span>Semua area</span><b class="nav-count">03</b></button>
+        <button class="nav-button" data-action="factory" data-factory="TRIDAYA"><span class="nav-icon">🏭</span><span>Tridaya</span><b class="nav-count" id="countTridaya">—</b></button>
+        <button class="nav-button" data-action="factory" data-factory="INNA"><span class="nav-icon">🏭</span><span>Inna</span><b class="nav-count" id="countInna">—</b></button>
+        <button class="nav-button" data-action="factory" data-factory="KBI"><span class="nav-icon">🏭</span><span>KBI</span><b class="nav-count" id="countKbi">—</b></button>
+      </nav>
+      <div class="nav-separator"></div>
+      <p class="menu-label">AKTIVITAS MINIATUR</p>
+      <nav class="nav" aria-label="Aktivitas data">
+        <button class="nav-button attention" data-action="old"><span class="nav-icon">🚨</span><span>PO lama / 30+ hari</span><b class="nav-count alert" id="countOld">—</b></button>
+        <button class="nav-button" data-action="priority"><span class="nav-icon">📋</span><span>Prioritas harian</span></button>
+        <button class="nav-button" data-action="arrived"><span class="nav-icon">🚚</span><span>Barang datang</span></button>
+        <button class="nav-button" data-action="orders"><span class="nav-icon">🗃️</span><span>Daftar & filter PO</span></button>
+        <button class="nav-button" data-action="add"><span class="nav-icon">🧑‍💻</span><span>Tambah / edit PO</span></button>
+        <button class="nav-button" data-action="report"><span class="nav-icon">🖨️</span><span>Ruang laporan</span></button>
+        <button class="nav-button" data-action="csv"><span class="nav-icon">📁</span><span>Impor / ekspor CSV</span></button>
+      </nav>
+    </div>
+    <div class="sidebar-foot"><div class="status-mini">✨ DUNIA PABRIK AKTIF</div><p>Klik gedung, pegawai, truk, atau tombol menu. Setiap fitur diiringi aktivitas miniatur.</p><div class="help-mini">🖱 Geser: putar • Scroll: zoom</div></div>
+  </aside>
+  <main class="main">
+    <section class="world-stage" id="worldStage" aria-label="Miniatur pabrik interaktif">
+      <div class="ambient-pattern"></div>
+      <div class="stage-title"><span class="eyebrow"><i></i> LIVE FACTORY OVERVIEW</span><h1>Miniature factory.<br /><em>Hidup & interaktif.</em></h1><p>Klik pabrik atau aktivitas. Tonton adegan 3D terlebih dahulu, lalu panel data Firebase terbuka.</p></div>
+      <div class="stage-tools"><button type="button" id="resetCamera" title="Kembali ke tampilan awal">⌖ <span>Reset kamera</span></button><button type="button" id="toggleMotion" aria-pressed="true" title="Jeda atau lanjutkan animasi">Ⅱ <span>Animasi</span></button><button type="button" id="expandWorld" title="Layar penuh">⛶</button></div>
+      <canvas id="worldCanvas" class="world-canvas" aria-label="Pabrik MERCY dalam tampilan 3D yang bisa diputar dan diklik" hidden></canvas>
+      <div id="worldFallback" class="world-fallback" aria-label="Miniatur isometrik cadangan">
+        <svg viewBox="0 0 920 650" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Miniatur Tridaya, Inna, KBI, kantor laporan, gudang dan jalan truk">
+          <defs><linearGradient id="ground" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c4eadd"/><stop offset="1" stop-color="#91c6b5"/></linearGradient><linearGradient id="roof" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f9fdff"/><stop offset="1" stop-color="#d3e8e8"/></linearGradient><pattern id="pave" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M18 0H0V18" stroke="#5faaa3" stroke-opacity=".15" fill="none"/></pattern><filter id="shadow"><feDropShadow dx="0" dy="12" stdDeviation="9" flood-color="#49767d" flood-opacity=".2"/></filter></defs>
+          <path d="M470 75 876 286 460 559 42 330Z" fill="#6baca2" opacity=".18" transform="translate(0 31)"/>
+          <path d="M470 60 882 279 462 551 44 324Z" fill="url(#ground)" stroke="#8cc2b8" stroke-width="3"/>
+          <path d="M470 60 882 279 462 551 44 324Z" fill="url(#pave)"/>
+          <path d="M109 334 403 483 534 405 229 258Z" fill="#769b99" opacity=".58"/><path d="M380 456 504 516 839 302 716 244Z" fill="#829fa1" opacity=".63"/>
+          <path d="m125 344 262 133m31 15 286-173" stroke="#fff3d0" stroke-dasharray="13 19" stroke-width="3" opacity=".85"/>
+          <g class="fallback-building fb-tridaya" data-zone="TRIDAYA" filter="url(#shadow)" tabindex="0" role="button" aria-label="Buka pabrik Tridaya">
+            <path d="m140 260 130-73 119 64-135 77Z" fill="#d9f4ee" stroke="#6bafb2" stroke-width="3"/><path d="m140 260 114 68v104l-114-67Z" fill="#84c7ba"/><path d="m254 328 135-77v113l-135 68Z" fill="#60a9a8"/><path d="m140 260 130-73 119 64-135 77Z" fill="#c7eee3" stroke="#6eaba7" stroke-width="3"/><path d="m188 288 37 20v39l-37-19Z" fill="#427d84"/><path d="m270 338 65-38v69l-65 35Z" fill="#396e7e"/><path d="m166 254 68-39 42 21-69 42Z" fill="#e9fffa" stroke="#81c5bd" stroke-width="2"/><path d="m274 210 65 35-17 10-64-34Z" fill="#8ebdb9"/><text x="245" y="245" fill="#2f6767" font-size="13" font-weight="800" transform="rotate(27 245 245)">TRIDAYA</text>
+          </g>
+          <g class="fallback-building fb-inna" data-zone="INNA" filter="url(#shadow)" tabindex="0" role="button" aria-label="Buka pabrik Inna">
+            <path d="m350 164 120-68 121 64-124 73Z" fill="#f0f7fc" stroke="#a1c8da" stroke-width="3"/><path d="m350 164 117 69v105l-117-68Z" fill="#b4d3e7"/><path d="m467 233 124-73v110l-124 68Z" fill="#87aecb"/><path d="m350 164 120-68 121 64-124 73Z" fill="url(#roof)" stroke="#85b6d0" stroke-width="3"/><path d="m401 216 35 19v52l-35-17Z" fill="#6b9fc2"/><path d="m485 239 61-36v69l-61 33Z" fill="#5d8eb2"/><path d="m400 166 80-43 43 20-82 47Z" fill="#d9ecf4" stroke="#abd6e7" stroke-width="2"/><text x="452" y="168" fill="#4c789d" font-size="15" font-weight="800" transform="rotate(27 452 168)">INNA</text>
+          </g>
+          <g class="fallback-building fb-kbi" data-zone="KBI" filter="url(#shadow)" tabindex="0" role="button" aria-label="Buka pabrik KBI">
+            <path d="m526 315 131-79 116 66-133 80Z" fill="#fff0d2" stroke="#deb58d" stroke-width="3"/><path d="m526 315 114 67v102l-114-68Z" fill="#e6c09a"/><path d="m640 382 133-80v110l-133 72Z" fill="#ba987e"/><path d="m526 315 131-79 116 66-133 80Z" fill="#fbe8c9" stroke="#d7aa80" stroke-width="3"/><path d="m561 334 34 18v47l-34-19Z" fill="#ac8064"/><path d="m664 395 57-34v65l-57 32Z" fill="#986e60"/><text x="642" y="302" fill="#91674b" font-size="15" font-weight="800" transform="rotate(27 642 302)">KBI</text>
+          </g>
+          <g class="fallback-building fb-office" data-zone="OFFICE" filter="url(#shadow)" tabindex="0" role="button" aria-label="Masuk kantor laporan"><path d="m205 418 93-52 97 51-101 59Z" fill="#fcfaf4" stroke="#d1cbbb" stroke-width="3"/><path d="m205 418 89 58v52l-89-55Z" fill="#e3d9ca"/><path d="m294 476 101-59v52l-101 59Z" fill="#b9d3c9"/><path d="m205 418 93-52 97 51-101 59Z" fill="#faf5e9"/><path d="m245 432 36-20 30 15-36 20Z" fill="#a9c3ce"/><path d="m345 425 27-15v16l-27 14Z" fill="#8fb5b2"/><text x="270" y="433" fill="#6c7b73" font-size="11" font-weight="800" transform="rotate(27 270 433)">KANTOR</text></g>
+          <g class="fallback-truck" data-zone="ARRIVED" tabindex="0" role="button" aria-label="Barang datang"><path d="m676 369 79-45 66 35-78 47Z" fill="#fff8e7" stroke="#d7b67f" stroke-width="2"/><path d="m676 369 67 37v31l-67-36Z" fill="#fff3d7"/><path d="m743 406 78-47v30l-78 48Z" fill="#edc990"/><circle cx="705" cy="423" r="9" fill="#384c59"/><circle cx="782" cy="394" r="8" fill="#384c59"/></g>
+          <g class="fallback-worker"><circle cx="439" cy="369" r="12" fill="#f4c89a"/><path d="M430 381h18v23h-18Z" fill="#2d9b94"/><path d="m435 403-7 18m15-18 8 18" stroke="#3f5f75" stroke-width="7" stroke-linecap="round"/></g>
+          <g class="fallback-worker worker-two"><circle cx="622" cy="437" r="11" fill="#edb88e"/><path d="M612 447h20v24h-20Z" fill="#4e8bab"/><path d="m618 468-8 17m17-17 9 15" stroke="#486071" stroke-width="6" stroke-linecap="round"/></g>
+          <g class="fallback-worker worker-three"><circle cx="332" cy="394" r="10" fill="#edbb8f"/><path d="M321 402h20v24h-20Z" fill="#e2a66a"/><path d="m327 422-8 13m17-13 8 14" stroke="#516f75" stroke-width="6" stroke-linecap="round"/></g>
+        </svg>
+        <div class="fallback-note">Sedang memuat aset pabrik 3D. Jika tetap di ilustrasi, pastikan folder assets telah diunggah dan WebGL aktif.</div>
+      </div>
+      <div class="floating-label label-tridaya"><button type="button" data-quick="TRIDAYA"><span class="label-dot teal"></span> TRIDAYA <small id="labelTridaya">— PO</small></button></div>
+      <div class="floating-label label-inna"><button type="button" data-quick="INNA"><span class="label-dot blue"></span> INNA <small id="labelInna">— PO</small></button></div>
+      <div class="floating-label label-kbi"><button type="button" data-quick="KBI"><span class="label-dot yellow"></span> KBI <small id="labelKbi">— PO</small></button></div>
+      <div class="scene-dialog" id="sceneDialog" aria-live="polite"><b id="dialogTitle">🏭 Pabrik sedang beraktivitas</b><span id="dialogText">Klik bangunan atau menu untuk melihat data aslinya.</span></div>
+      <section id="storyOverlay" class="story-overlay" aria-live="polite" hidden>
+        <div class="story-topline"><span><span class="story-status-dot"></span> SEDANG BERLANGSUNG</span><span id="storyClock">00:00 / 00:00</span></div>
+        <strong id="storyHeading">Menyiapkan adegan miniatur…</strong>
+        <p id="storyStep">Kamera akan mengikuti aktivitas sampai selesai.</p>
+        <div class="story-progress-track" aria-label="Kemajuan animasi"><div class="story-progress-value" id="storyProgress"></div></div>
+        <div class="story-actions"><span>Panel data terbuka <b>setelah animasi</b></span><button type="button" id="skipStory">Lewati →</button></div>
+      </section>
+      <div class="stage-bottom"><div class="mini-legend"><span><i class="legend-green"></i> Pekerja aktif</span><span><i class="legend-blue"></i> Kendaraan logistik</span><span><i class="legend-red"></i> PO perlu follow-up</span></div><div class="camera-hint">↔ Putar dunia &nbsp;·&nbsp; ± Zoom &nbsp;·&nbsp; Klik bangunan</div></div>
+    </section>
+    <section class="stats-strip" aria-label="Ringkasan PO Firebase"><div class="stat-card"><span>Total PO</span><strong id="statTotal">—</strong><small id="statTotalDesc">Semua pabrik</small></div><div class="stat-card accent-orange"><span>Perlu follow-up</span><strong id="statOld">—</strong><small>Belum datang · ≥30 hari</small></div><div class="stat-card accent-blue"><span>Belum datang</span><strong id="statPending">—</strong><small>Selain CANCEL</small></div><div class="stat-card accent-green"><span>Barang datang</span><strong id="statArrived">—</strong><small>Tanggal barang datang tercatat</small></div><div class="stat-card"><span>Total QTY terisi</span><strong id="statQty">—</strong><small>QTY kosong tidak dihitung</small></div></section>
+  </main>
+  <section class="drawer" id="drawer" aria-label="Panel aktivitas MERCY" aria-hidden="true"><div class="drawer-head"><div><small class="drawer-kicker" id="drawerKicker">MERCY • CONTROL ROOM</small><h2 id="drawerTitle">Daftar PO</h2><p id="drawerSubtitle">Data tersambung Firebase.</p></div><button type="button" class="close-drawer" id="closeDrawer" aria-label="Tutup panel">×</button></div><div class="drawer-body" id="drawerBody"></div></section>
+  <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+  <div class="toast" role="status" id="toast" aria-live="polite"></div>
+  <section id="printRoot" class="print-root" aria-label="Laporan MERCY untuk dicetak"></section>
+</div>
+<script src="./config.js"></script>
+<script>window.MERCY_SCENE_READY=new Promise(resolve=>{window.addEventListener('mercy-scene-ready',()=>resolve(true),{once:true});setTimeout(()=>resolve(false),18000);});</script>
+<script>
+/* MERCY MINI FACTORY WORLD — production interface for mercy_orders.
+   Uses the existing Firebase project. No demo rows and no automatic writes. */
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const config = window.MERCY_CONFIG || {};
+  const FACTORIES = ['TRIDAYA','INNA','KBI'];
+  const BASE_STATUSES = ['TUNGGU ACC','REV SO','SO','ACC','REPEAT','CANCEL'];
+  const HEADER_CSV = ['TGL','DESIGN','WARNA','QTY','CUSTOMER','BARANG DATANG','KODE','KET','HARGA','JUMLAH','TURUN','CATATAN DATANG','PABRIK','NOMOR PO'];
+  const today = () => new Date().toLocaleDateString('sv-SE', {timeZone:'Asia/Jakarta'});
+  const money = n => new Intl.NumberFormat('id-ID').format(n || 0);
+  const escapeHTML = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const factory = r => {
+    const f=String(r?.pabrik||'TRIDAYA').trim().toUpperCase();
+    return f==='TRI DAYA'?'TRIDAYA':FACTORIES.includes(f)?f:'TRIDAYA';
+  };
+  const cancelled = r => /^(CANCEL|CANCELLED|BATAL|DIBATALKAN)$/i.test(String(r?.status || '').trim()) || /^(CANCEL|CANCELLED|BATAL|DIBATALKAN)$/i.test(String(r?.barangDatang || '').trim());
+  const toDate = input => {
+    if(input === undefined || input===null || input==='') return '';
+    let v=String(input).replace(/^[^0-9]*/, '').trim().replace(/\s+/g,' ');
+    let m=v.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+    if(m) return validDate(`${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`);
+    m=v.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})/);
+    if(m) return validDate(`${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`);
+    const months={JAN:1,JANUARI:1,FEB:2,FEBRUARI:2,MAR:3,MARET:3,APR:4,APRIL:4,MEI:5,MAY:5,JUN:6,JUNI:6,JUL:7,JULI:7,AGU:8,AGUSTUS:8,AGS:8,SEP:9,SEPTEMBER:9,OKT:10,OKTOBER:10,NOV:11,NOVEMBER:11,DES:12,DESEMBER:12};
+    m=v.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{2,4})/);
+    if(m && months[m[2].toUpperCase()]){let y=Number(m[3]);if(y<100)y+=2000;return validDate(`${y}-${String(months[m[2].toUpperCase()]).padStart(2,'0')}-${m[1].padStart(2,'0')}`);}
+    if(/^\d{5}$/.test(v)){const d = new Date(Date.UTC(1899,11,30)+Number(v)*86400000);return d.toISOString().slice(0,10);}
+    return '';
+  };
+  function validDate(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s))return '';const d=new Date(`${s}T12:00:00Z`);return !Number.isNaN(d.getTime()) && d.toISOString().slice(0,10)===s?s:'';}
+  const arrival = r => toDate(r?.barangDatang);
+  const arrived = r => !cancelled(r) && Boolean(arrival(r));
+  const pending = r => !cancelled(r) && !arrived(r);
+  function ageDays(r){if(!pending(r)||!validDate(String(r.tgl||'')))return null;let n=(Date.parse(today()+'T00:00:00Z')-Date.parse(r.tgl+'T00:00:00Z'))/86400000;return n>=0?Math.round(n):null;}
+  const ageKind=r=>cancelled(r)?'cancelled':arrived(r)?'arrived':ageDays(r)===null?'unknown':ageDays(r)>=30?'aged':ageDays(r)>=14?'watch':'new';
+  const qty=r=>r.qty===null||r.qty===undefined||r.qty===''?null:Number(r.qty);
+  const currency = n => n===null||n===undefined||n===''?'—':'Rp '+money(Number(n));
+  const dateLabel = s => validDate(String(s||''))?new Date(`${s}T12:00:00`).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}):'—';
+  const normalizeNum = v => {if(v===null||v===undefined||String(v).trim()==='')return null;let s=String(v).trim().replace(/\s/g,'');if(/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(s))s=s.replace(/\./g,'').replace(',','.');else if(/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(s))s=s.replace(/,/g,'');else if(/^\d+,\d+$/.test(s))s=s.replace(',','.');let v2=Number(s);return Number.isFinite(v2)&&v2>=0?v2:null;};
+  const normRecord=r=>({
+    ...r,id:String(r.id),tgl:toDate(r.tgl),design:String(r.design??''),warna:String(r.warna??''),
+    qty:normalizeNum(r.qty),customer:String(r.customer??''),kode:String(r.kode??''),status:String(r.status??'').trim().toUpperCase(),
+    nomorPo:String(r.nomorPo??''),barangDatang:String(r.barangDatang??''),barangDatangCatatan:String(r.barangDatangCatatan??''),
+    harga:normalizeNum(r.harga),jumlah:normalizeNum(r.jumlah),turun:String(r.turun??''),pabrik:factory(r)
+  });
+  const state={rows:[],ready:false,cache:false,failed:false,authReady:false,user:null,admin:false,scope:'SEMUA',mode:'all',view:'',filters:{q:'',month:'',customer:'',arrival:'all',age:'all',sort:'new'},statuses:new Set(),page:1,pageSize:45,cloud:null,api:null,saving:false,importRecords:[],csvMode:'merge',replaceBackupReady:false,reportOnlyPending:true,toastTimer:null,dialogTimer:null};
+  window.MERCY_WORLD_STATE=state;
+  const scoped=()=>state.scope==='SEMUA'?state.rows:state.rows.filter(r=>factory(r)===state.scope);
+  const currentStatuses=()=>[...new Set([...BASE_STATUSES,...state.rows.map(r=>r.status||'TANPA STATUS')])];
+  function statusBadge(s){const x=String(s||'TANPA STATUS'),cls=/CANCEL|BATAL/i.test(x)?'cancel':/ACC|REPEAT/.test(x)?'good':/REV/.test(x)?'warn':'blue';return `<span class="chip ${cls}">${escapeHTML(x)}</span>`;}
+  function filtered(){
+    const f=state.filters,q=f.q.trim().toLowerCase();
+    let result=scoped().filter(r=>{
+      if(q && ![r.design,r.customer,r.kode,r.warna,r.nomorPo,r.status,factory(r)].join(' ').toLowerCase().includes(q))return false;
+      if(f.month && !r.tgl.startsWith(f.month))return false;
+      if(f.customer && r.customer!==f.customer)return false;
+      if(state.statuses.size && !state.statuses.has(r.status||'TANPA STATUS'))return false;
+      if(f.age!=='all' && (f.age==='aged'?ageKind(r)!=='aged':f.age==='watch'?ageKind(r)!=='watch':f.age==='new'?ageKind(r)!=='new':ageKind(r)!=='arrived'))return false;
+      if(f.arrival==='pending'&&!pending(r))return false;
+      if(f.arrival==='arrived'&&!arrived(r))return false;
+      if(f.arrival==='cancelled'&&!cancelled(r))return false;
+      return true;
+    });
+    return result.sort((a,b)=>{
+      if(f.sort==='oldest')return (a.tgl||'9999').localeCompare(b.tgl||'9999');
+      if(f.sort==='age')return (ageDays(b)||-1)-(ageDays(a)||-1)||(a.tgl||'').localeCompare(b.tgl||'');
+      return (b.tgl||'').localeCompare(a.tgl||'');
+    });
+  }
+  function metrics(rows){return {total:rows.length,old:rows.filter(r=>ageKind(r)==='aged').length,pending:rows.filter(pending).length,arrived:rows.filter(arrived).length,qty:rows.reduce((s,r)=>s+(qty(r)||0),0),watch:rows.filter(r=>ageKind(r)==='watch').length,cancelled:rows.filter(cancelled).length,missing:rows.filter(r=>qty(r)===null).length};}
+  function showToast(txt,isError=false){const toast=$('toast');toast.textContent=txt;toast.classList.toggle('danger',isError);toast.classList.add('visible');clearTimeout(state.toastTimer);state.toastTimer=setTimeout(()=>toast.classList.remove('visible'),4500);}
+  function setConnection(mode,label){const e=$('connection');e.classList.remove('live','error','cached','connecting');e.classList.add(mode);$('connectionText').textContent=label;e.title=label;}
+  function announce(title,text){$('dialogTitle').textContent=title;$('dialogText').textContent=text;const e=$('sceneDialog');e.classList.remove('pulse');void e.offsetWidth;e.classList.add('pulse');}
+  function enableOnlyOnline(){if(!state.ready||state.cache){showToast('Database belum tersambung online. Tidak ada data yang diubah.',true);return false;}if(!state.admin){showToast('Masuk dengan akun Google admin untuk menambah atau mengubah PO.',true);return false;}return true;}
+  function updateSummary(){
+    const rows=scoped(),m=metrics(rows);
+    const n=()=>state.ready?null:'—';
+    $('statTotal').textContent=n()??money(m.total);$('statOld').textContent=n()??money(m.old);$('statPending').textContent=n()??money(m.pending);$('statArrived').textContent=n()??money(m.arrived);$('statQty').textContent=n()??money(m.qty);
+    $('statTotalDesc').textContent=state.scope==='SEMUA'?'Semua pabrik':state.scope;
+    for(const f of FACTORIES){const count=state.rows.filter(r=>factory(r)===f).length;const name=f==='KBI'?'Kbi':f==='INNA'?'Inna':'Tridaya';$("count"+name).textContent=n()??money(count);$("label"+name).textContent=n()?'— PO':money(count)+' PO';}
+    $('countOld').textContent=n()??money(metrics(state.rows).old);
+    if(window.MERCY_SCENE?.updateMetrics)window.MERCY_SCENE.updateMetrics({old:m.old,arrived:m.arrived,pending:m.pending});
+  }
+  function resetFilters(){state.filters={q:'',month:'',customer:'',arrival:'all',age:'all',sort:'new'};state.statuses.clear();state.page=1;}
+  const DRAWERS={
+    all:['PUSAT KENDALI','Seluruh Kawasan Pabrik','Ringkasan PO dan kegiatan tiga pabrik.'],
+    factory:['KAWASAN PRODUKSI','Data Pabrik','Pegawai berjalan memasuki pabrik terpilih.'],
+    old:['GUDANG PERINGATAN','PO Lama • Follow Up','Usia ≥30 hari, belum ada tanggal Barang Datang; bukan otomatis lewat tenggat.'],
+    priority:['SUPERVISOR INSPECTION','Prioritas Harian','Supervisor memeriksa daftar PO yang perlu ditindaklanjuti.'],
+    arrived:['LOADING & LOGISTICS','Barang Datang','Truk dan forklift menandai proses barang datang.'],
+    orders:['RUANG DATA','Daftar & Filter PO','Cari PO berdasarkan desain, kode, status, usia, dan pabrik.'],
+    add:['RUANG ADMINISTRASI','Tambah PO Baru','Pegawai memasuki ruang administrasi untuk mengelola data.'],
+    report:['KANTOR LAPORAN','Cetak Laporan','Pegawai menuju printer, laporan A4 disiapkan dari data aktual.'],
+    csv:['RUANG ARSIP','Impor & Ekspor CSV','Petugas arsip menyiapkan berkas CSV tanpa mengubah data otomatis.'],
+    edit:['RUANG ADMINISTRASI','Edit PO','Perubahan hanya dapat disimpan oleh admin.']
+  };
+  function setNavigation(mode){document.querySelectorAll('.nav-button').forEach(b=>b.classList.toggle('active',b.dataset.action===mode && (mode!=='factory'||b.dataset.factory===state.scope)));}
+  function openDrawer(mode,params={}){
+    state.editId=mode==='edit'?params.id:null;
+    if(params.scope && FACTORIES.includes(params.scope))state.scope=params.scope;
+    if(params.reset)resetFilters();
+    state.mode=mode;state.view=mode;state.editId=mode==='edit'?params.id:null;
+    const meta=DRAWERS[mode]||DRAWERS.orders;
+    $('drawerKicker').textContent='✳ '+meta[0];$('drawerTitle').textContent=mode==='factory'?state.scope:meta[1];$('drawerSubtitle').textContent=meta[2];
+    setNavigation(mode==='edit'?'add':mode);updateSummary();
+    $('drawerBackdrop').hidden=false;$('drawer').classList.add('open');$('drawer').setAttribute('aria-hidden','false');document.body.classList.add('drawer-open');
+    renderDrawer(params);
+  }
+  function closeDrawer(){$('drawer').classList.remove('open');$('drawer').setAttribute('aria-hidden','true');$('drawerBackdrop').hidden=true;document.body.classList.remove('drawer-open');setNavigation(state.scope==='SEMUA'?'all':'factory');}
+  let storySeq=0,skipRequested=false;
+  const waitScene=()=>window.MERCY_SCENE_READY || Promise.resolve(false);
+  const formatClock=s=>`${String(Math.floor(Math.max(0,s)/60)).padStart(2,'0')}:${String(Math.floor(Math.max(0,s)%60)).padStart(2,'0')}`;
+  window.addEventListener('mercy-story-progress',ev=>{
+    if($('storyOverlay').hidden)return;
+    const {elapsed=0,duration=1,step='Mengikuti kegiatan pabrik'}=ev.detail||{};
+    $('storyStep').textContent=step;
+    $('storyProgress').style.width=`${Math.min(100,Math.max(0,elapsed/duration*100))}%`;
+    $('storyClock').textContent=`${formatClock(elapsed)} / ${formatClock(duration)}`;
+  });
+  async function story(mode,f=''){
+    const storyMap={all:['🏘️ Semua pabrik aktif','Tiga kawasan produksi siap dipantau.'],factory:[`🚶 Pegawai masuk ${f}`,'Kamera mendekati gedung, data PO pabrik dibuka.'],old:['🚨 Peringatan PO lama','Supervisor bergegas menuju gudang. Lampu indikator menyala.'],priority:['🧑‍🏭 Supervisor inspeksi','Supervisor memeriksa prioritas follow-up.'],arrived:['🚚 Truk memasuki pabrik','Forklift mengambil pallet, petugas bongkar barang.'],orders:['🗃️ Ruang data terbuka','Staf administrasi membuka database PO.'],add:['🧑‍💻 Pegawai ke kantor','Komputer administrasi menyala.'],edit:['🧑‍💻 Memeriksa dokumen PO','Pegawai memperbarui rincian PO.'],report:['🖨️ Kantor mencetak laporan','Staf masuk kantor dan printer mengeluarkan kertas.'],csv:['📁 Petugas masuk ruang arsip','Dokumen CSV siap diimpor atau diekspor.']};
+    const [name,desc]=storyMap[mode]||storyMap.all;announce(name,desc);
+    const fb=$('worldFallback');fb.dataset.story=mode;
+    await waitScene();
+    if(window.MERCY_SCENE?.play){
+      const promise=window.MERCY_SCENE.play(mode,f);
+      if(skipRequested)window.MERCY_SCENE.skip?.();
+      return await promise;
+    }
+    await new Promise(resolve=>setTimeout(resolve,1100));
+    return {cancelled:false};
+  }
+  async function action(mode,factoryName='',params={}){
+    const seq=++storySeq;
+    skipRequested=false;
+    window.MERCY_SCENE?.stop?.();
+    if($('drawer').classList.contains('open'))closeDrawer();
+    const title=(DRAWERS[mode]||DRAWERS.all)[1];
+    $('storyHeading').textContent=mode==='factory'?`Masuk Pabrik ${factoryName}`:title;
+    $('storyStep').textContent='Menyiapkan kamera dan karakter miniatur…';
+    $('storyProgress').style.width='0%';$('storyClock').textContent='00:00 / 00:00';$('storyOverlay').hidden=false;
+    if(mode==='factory'){state.scope=factoryName||'TRIDAYA';resetFilters();}
+    else if(mode==='all'){state.scope='SEMUA';resetFilters();}
+    else if(mode==='old'){resetFilters();state.filters.age='aged';state.filters.arrival='pending';state.filters.sort='age';}
+    else if(mode==='priority'){resetFilters();state.filters.arrival='pending';state.filters.sort='age';}
+    else if(mode==='arrived'){resetFilters();state.filters.arrival='arrived';}
+    else if(mode==='orders'){resetFilters();}
+    else if(mode==='report'){state.reportOnlyPending=true;}
+    setNavigation(mode);
+    try{
+      const result=await story(mode,factoryName);
+      if(seq!==storySeq || result?.cancelled)return;
+      $('storyOverlay').hidden=true;
+      openDrawer(mode,params);
+    }catch(e){
+      if(seq!==storySeq)return;
+      $('storyOverlay').hidden=true;
+      showToast('Animasi bermasalah, data tetap dapat dibuka.',true);
+      openDrawer(mode,params);
+    }
+  }
+  function renderDrawer(params={}){
+    const body=$('drawerBody');body.scrollTop=0;
+    if(['all','factory'].includes(state.view))body.innerHTML=summaryView();
+    else if(state.view==='priority')body.innerHTML=priorityView();
+    else if(state.view==='arrived')body.innerHTML=arrivedView();
+    else if(['old','orders'].includes(state.view))body.innerHTML=ordersView();
+    else if(state.view==='add'||state.view==='edit')body.innerHTML=formView(state.view==='edit'?state.rows.find(r=>r.id===params.id):null);
+    else if(state.view==='report')body.innerHTML=reportView();
+    else if(state.view==='csv')body.innerHTML=csvView();
+    wireDrawer();
+  }
+  function unavailableHint(){return state.ready?'':`<div class="notice warning">${state.failed?'Firebase gagal tersambung. Periksa koneksi dan pengaturan Firestore.':'Sedang menunggu data asli dari Firebase. Tidak memakai angka atau PO contoh.'}</div>`;}
+  function summaryView(){
+    const m=metrics(scoped());
+    return `${unavailableHint()}<div class="grid-metrics"><div class="little-metric"><b>${state.ready?money(m.total):'—'}</b><span>Total PO</span></div><div class="little-metric"><b>${state.ready?money(m.old):'—'}</b><span>Perlu follow-up 30+ hari</span></div><div class="little-metric"><b>${state.ready?money(m.arrived):'—'}</b><span>Barang sudah datang</span></div><div class="little-metric"><b>${state.ready?money(m.pending):'—'}</b><span>Belum datang</span></div><div class="little-metric"><b>${state.ready?money(m.qty):'—'}</b><span>Total QTY terisi</span></div><div class="little-metric"><b>${state.ready?money(m.watch):'—'}</b><span>Perlu dipantau 14–29 hari</span></div></div>
+      <article class="section-card"><h3>🏭 ${state.scope==='SEMUA'?'Tiga pabrik, satu pusat kendali':escapeHTML(state.scope)}</h3><p>Setiap angka berasal dari koleksi <b>mercy_orders</b>. PO tanpa pabrik mengikuti aturan dashboard lama: masuk Tridaya. Pilih gedung lain di miniatur untuk memantau bagian berbeda.</p><div class="h-stack" style="margin-top:13px"><button class="solid-btn" data-go="orders">Lihat semua PO ↗</button><button class="soft-btn" data-go="old">Lihat PO lama</button><button class="soft-btn" data-go="report">Cetak laporan</button></div></article>
+      <article class="section-card"><h3>📊 Sebaran status PO</h3>${statusBars(scoped())}</article>
+      <article class="section-card"><h3>🚨 Follow-up terlama</h3>${priorityItems(scoped().filter(r=>ageKind(r)==='aged').sort((a,b)=>(ageDays(b)||0)-(ageDays(a)||0)).slice(0,5))}</article>`;
+  }
+  function statusBars(rows){
+    if(!state.ready)return '<p>Menunggu data online…</p>';
+    const sts=currentStatuses().map(s=>[s,rows.filter(r=>(r.status||'TANPA STATUS')===s).length]).filter(x=>x[1]);
+    return sts.length?sts.map(([status,n])=>`<div style="display:grid;grid-template-columns:105px 1fr 33px;align-items:center;gap:10px;margin-top:12px;font-size:10px;color:#678d87"><b>${escapeHTML(status)}</b><span style="height:8px;background:#e7f3ee;border-radius:9px;overflow:hidden"><span style="display:block;height:100%;width:${rows.length?Math.round(n*100/rows.length):0}%;background:#45ad9c;border-radius:9px"></span></span><strong>${money(n)}</strong></div>`).join(''):'<p>Belum ada PO.</p>';
+  }
+  function priorityItems(rows){return rows.length?rows.map(r=>`<div class="priority-item"><div class="icon-bubble">${ageKind(r)==='aged'?'🚨':'📋'}</div><div style="min-width:0;flex:1"><strong>${escapeHTML(r.design)}</strong><small>${escapeHTML(factory(r))} • ${escapeHTML(r.status)} • ${dateLabel(r.tgl)}</small></div><span class="priority-days">${ageDays(r)??'—'} hari</span><button class="soft-btn" style="padding:6px 9px" data-row-edit="${escapeHTML(r.id)}">Detail</button></div>`).join(''):'<div class="empty-state">Belum ada PO yang masuk daftar prioritas ini.</div>';}
+  function priorityView(){const rows=scoped().filter(r=>pending(r)&&ageDays(r)!==null).sort((a,b)=>(ageDays(b)||0)-(ageDays(a)||0));const m=metrics(scoped());return `${unavailableHint()}<div class="notice">PO 30+ hari = prioritas follow-up; 14–29 hari = pantau. Ini tidak berarti pesanan melewati tenggat karena dashboard tidak menggunakan tanggal target.</div><div class="grid-metrics"><div class="little-metric"><b>${state.ready?m.old:'—'}</b><span>Follow-up 30+ hari</span></div><div class="little-metric"><b>${state.ready?m.watch:'—'}</b><span>Pantau 14–29 hari</span></div><div class="little-metric"><b>${state.ready?m.pending:'—'}</b><span>Total belum datang</span></div></div><h3 style="font-size:14px;color:#4c7976">Urutan prioritas (paling lama di atas)</h3>${priorityItems(rows.slice(0,60))}<div class="h-stack"><button class="solid-btn" data-go="old">Lihat PO 30+ hari</button><button class="soft-btn" data-go="report">Cetak follow-up</button></div>`;}
+  function arrivedView(){
+    const rows=scoped(),delivered=rows.filter(arrived).sort((a,b)=>arrival(b).localeCompare(arrival(a))),inbound=rows.filter(pending).sort((a,b)=>(ageDays(b)||0)-(ageDays(a)||0));
+    const m=metrics(rows);
+    const small=(r,purpose)=>`<div class="priority-item"><div class="icon-bubble">${purpose==='arrived'?'📦':'🚚'}</div><div style="min-width:0;flex:1"><strong>${escapeHTML(r.design||'Tanpa nama')}</strong><small>${escapeHTML(factory(r))} • ${escapeHTML(r.customer||'—')} • ${escapeHTML(r.status||'—')}</small></div><span class="priority-days">${purpose==='arrived'?dateLabel(arrival(r)):(ageDays(r)??'—')+' hari'}</span><button type="button" class="soft-btn" style="padding:7px 9px" data-row-edit="${escapeHTML(r.id)}">${purpose==='arrived'?'Detail':'Catat datang'}</button></div>`;
+    return `${unavailableHint()}<div class="notice">🚚 Truk dan pekerja yang bergerak adalah ilustrasi aktivitas logistik. Tanggal Barang Datang hanya berubah setelah admin menyimpan tanggal PO di Firebase. Angka di bawah adalah data asli, bukan perhitungan dari animasi.</div>
+      <div class="grid-metrics"><div class="little-metric"><b>${state.ready?money(m.arrived):'—'}</b><span>Sudah datang</span></div><div class="little-metric"><b>${state.ready?money(m.pending):'—'}</b><span>Belum datang</span></div><div class="little-metric"><b>${state.ready?money(m.old):'—'}</b><span>PO belum datang ≥30 hari</span></div></div>
+      <div class="section-card"><h3>📥 Siap dicatat sebagai barang datang</h3><p>Admin: klik “Catat datang”, isi tanggal Barang Datang pada formulir, lalu simpan. Sistem langsung tersinkron di seluruh dashboard.</p><div style="display:grid;gap:8px;margin-top:12px">${inbound.slice(0,20).map(r=>small(r,'pending')).join('')||'<div class="empty-state">Tidak ada PO yang menunggu kedatangan.</div>'}</div><div class="h-stack" style="margin-top:12px"><button type="button" class="soft-btn" data-go="orders">Cari PO lain di daftar lengkap</button></div></div>
+      <div class="section-card"><h3>✅ Barang sudah diterima</h3><div style="display:grid;gap:8px;margin-top:12px">${delivered.slice(0,20).map(r=>small(r,'arrived')).join('')||'<div class="empty-state">Belum ada tanggal barang datang yang tercatat.</div>'}</div></div>`;
+  }
+  function ordersView(){const rows=filtered(),pageCount=Math.max(1,Math.ceil(rows.length/state.pageSize));state.page=Math.min(state.page,pageCount);const start=(state.page-1)*state.pageSize;const subset=rows.slice(start,start+state.pageSize);const customers=[...new Set(scoped().map(r=>r.customer).filter(Boolean))].sort();const months=[...new Set(scoped().map(r=>r.tgl.slice(0,7)).filter(v=>/^\d{4}-\d{2}$/.test(v)))].sort().reverse();
+    return `${unavailableHint()}<div class="h-stack"><button class="solid-btn" data-go="add">＋ Tambah PO</button><button class="soft-btn" data-download="csv">↓ Ekspor CSV</button><button class="soft-btn" data-go="report">🖨 Cetak laporan</button><button class="soft-btn" data-reset="filters">↺ Reset</button></div>
+      <div class="section-card"><div class="filters-row"><input class="search-input" id="searchPO" placeholder="⌕ Cari desain, kode, PO, pelanggan…" value="${escapeHTML(state.filters.q)}" aria-label="Cari PO"/><select class="filter-select" id="arrivalFilter" aria-label="Status kedatangan"><option value="all">Semua kedatangan</option><option value="pending" ${state.filters.arrival==='pending'?'selected':''}>Belum datang</option><option value="arrived" ${state.filters.arrival==='arrived'?'selected':''}>Sudah datang</option><option value="cancelled" ${state.filters.arrival==='cancelled'?'selected':''}>Dibatalkan</option></select></div>
+      <div class="filters-row" style="margin-top:8px"><select class="filter-select" id="monthFilter" aria-label="Bulan PO"><option value="">Semua bulan</option>${months.map(m=>`<option ${state.filters.month===m?'selected':''} value="${m}">${m}</option>`).join('')}</select><select class="filter-select" id="customerFilter" aria-label="Pelanggan"><option value="">Semua pelanggan</option>${customers.map(c=>`<option value="${escapeHTML(c)}" ${state.filters.customer===c?'selected':''}>${escapeHTML(c)}</option>`).join('')}</select><select class="filter-select" id="ageFilter" aria-label="Usia PO"><option value="all">Semua usia</option><option value="aged" ${state.filters.age==='aged'?'selected':''}>≥30 hari</option><option value="watch" ${state.filters.age==='watch'?'selected':''}>14–29 hari</option><option value="new" ${state.filters.age==='new'?'selected':''}>0–13 hari</option><option value="arrived" ${state.filters.age==='arrived'?'selected':''}>Sudah datang</option></select><select class="filter-select" id="sortFilter" aria-label="Urutan PO"><option value="new">Tanggal terbaru</option><option value="oldest" ${state.filters.sort==='oldest'?'selected':''}>Tanggal terlama</option><option value="age" ${state.filters.sort==='age'?'selected':''}>Usia terlama</option></select></div>
+      <div class="filter-chips" style="margin-top:11px"><button class="filter-chip ${!state.statuses.size?'active':''}" data-status="ALL">Semua status</button>${currentStatuses().map(s=>`<button class="filter-chip ${state.statuses.has(s)?'active':''}" data-status="${escapeHTML(s)}">${escapeHTML(s)}</button>`).join('')}</div><p style="font-size:10px;color:#8da59f;line-height:1.5;margin:9px 0 0">Status bisa dipilih lebih dari satu. Filter juga digunakan untuk ekspor dan laporan.</p></div>
+      <div class="table-scroll"><table class="orders-table"><thead><tr><th>Tanggal</th><th>Pabrik</th><th>Desain / Nomor PO</th><th>Pelanggan</th><th>QTY</th><th>Status</th><th>Usia</th><th>Barang datang</th><th>Aksi</th></tr></thead><tbody>${subset.length?subset.map(r=>`<tr class="${ageKind(r)==='aged'?'is-old':''}"><td>${dateLabel(r.tgl)}</td><td>${escapeHTML(factory(r))}</td><td><strong>${escapeHTML(r.design)}</strong><br/><span style="font-size:9px">${escapeHTML(r.nomorPo||r.kode||'—')}</span></td><td>${escapeHTML(r.customer||'—')}</td><td>${qty(r)===null?'—':money(qty(r))}</td><td>${statusBadge(r.status)}</td><td>${ageKind(r)==='aged'?'<span class="chip danger">':'<span>'}${ageDays(r)===null?arrived(r)?'Datang':cancelled(r)?'Batal':'—':ageDays(r)+' hari'}${ageKind(r)==='aged'?'</span>':'</span>'}</td><td>${arrived(r)?'<span class="chip good">'+dateLabel(arrival(r))+'</span>':cancelled(r)?'Batal':'Belum datang'}</td><td><button data-row-edit="${escapeHTML(r.id)}">Detail / Edit</button></td></tr>`).join(''):`<tr><td colspan="9" class="empty-state">${state.ready?'Tidak ada PO yang sesuai filter.':'Menyiapkan data Firebase…'}</td></tr>`}</tbody></table></div>
+      <div class="table-foot"><span>Menampilkan ${rows.length?start+1:0}–${Math.min(start+state.pageSize,rows.length)} dari ${money(rows.length)} PO</span><div class="h-stack"><button class="soft-btn" data-page="prev" ${state.page<=1?'disabled':''}>‹</button><b>${state.page}/${pageCount}</b><button class="soft-btn" data-page="next" ${state.page>=pageCount?'disabled':''}>›</button></div></div>
+      <div class="notice">30+ hari yang belum datang ditandai untuk follow-up, bukan otomatis melewati tenggat. PO CANCEL tidak dihitung sebagai belum datang.</div>`;
+  }
+  function formView(record){
+    const edit=Boolean(record),sel=(name,v)=>String(name)===String(v)?'selected':'';
+    const statusOptions=[...new Set([...BASE_STATUSES,record?.status].filter(Boolean))];
+    return `${!state.admin?'<div class="notice warning">Masuk sebagai admin terverifikasi untuk menyimpan perubahan. Semua bidang dapat dilihat, tetapi penyimpanan hanya tersedia untuk admin.</div>':''}${unavailableHint()}<form id="poForm" class="section-card"><div class="field-grid">
+      <label class="field">Pabrik *<select name="pabrik" required>${FACTORIES.map(f=>`<option value="${f}" ${sel(f,record?.pabrik|| (state.scope==='SEMUA'?'TRIDAYA':state.scope))}>${f}</option>`).join('')}</select></label>
+      <label class="field">Nomor PO <input name="nomorPo" maxlength="120" value="${escapeHTML(record?.nomorPo||'')}" placeholder="Opsional" /></label>
+      <label class="field">Tanggal PO *<input name="tgl" type="date" required value="${escapeHTML(record?.tgl||today())}" /></label>
+      <label class="field">Pelanggan *<input name="customer" maxlength="120" required value="${escapeHTML(record?.customer||'MERCY')}" /></label>
+      <label class="field wide">Nama desain / PO *<input name="design" maxlength="180" required value="${escapeHTML(record?.design||'')}" placeholder="Nama desain" /></label>
+      <label class="field">Warna <input name="warna" maxlength="150" value="${escapeHTML(record?.warna||'')}" /></label>
+      <label class="field">QTY (pcs) <input name="qty" type="number" min="0" max="999999999" step="1" value="${record?.qty??''}" placeholder="Boleh kosong" /></label>
+      <label class="field">Kode desain / produk <input name="kode" value="${escapeHTML(record?.kode||'')}" maxlength="150" /></label>
+      <label class="field">Status *<select name="status" id="editStatus" required>${statusOptions.map(s=>`<option value="${escapeHTML(s)}" ${sel(s,record?.status||'TUNGGU ACC')}>${escapeHTML(s)}</option>`).join('')}</select></label>
+      <label class="field">Tanggal Barang Datang <input name="barangDatang" type="date" id="editArrival" value="${escapeHTML(arrival(record)||'')}" /><span class="field-help">Kosongkan bila belum datang.</span></label>
+      <label class="field">Harga / unit (Rp) <input name="harga" type="number" min="0" step="any" value="${record?.harga??''}" /></label>
+      <label class="field">Jumlah (kolom Excel) <input name="jumlah" type="number" min="0" step="any" value="${record?.jumlah??''}" /></label>
+      <label class="field">Turun <input name="turun" maxlength="220" value="${escapeHTML(record?.turun||'')}" /></label>
+      <label class="field wide">Catatan Barang Datang <textarea name="barangDatangCatatan" maxlength="500">${escapeHTML(record?.barangDatangCatatan||'')}</textarea></label>
+    </div><div class="notice" style="margin:15px 0">Menyimpan di Firebase hanya dilakukan setelah tombol Simpan diklik, dan akses diperiksa oleh Firestore Rules.</div>
+    <div class="h-stack"><button class="solid-btn" type="submit" ${!state.admin||!state.ready||state.cache||state.saving?'disabled':''}>${edit?'✓ Simpan perubahan':'＋ Simpan PO'}</button><button class="soft-btn" type="button" data-go="orders">Kembali ke daftar</button>${edit?`<button class="warn-btn" type="button" data-delete="${escapeHTML(record.id)}" ${!state.admin?'disabled':''}>Hapus PO</button>`:''}</div></form>`;
+  }
+  function reportRows(){return filtered().filter(r=>!state.reportOnlyPending||pending(r)).sort((a,b)=>(a.tgl||'').localeCompare(b.tgl||''));}
+  function reportView(){const rows=reportRows(),m=metrics(rows),preview=rows.slice(0,13);return `${unavailableHint()}<div class="section-card"><label style="font-size:12px;color:#527c75;display:flex;align-items:center;gap:9px"><input type="checkbox" id="reportPending" ${state.reportOnlyPending?'checked':''} /> Hanya barang yang belum datang</label><p style="font-size:10px;color:#8ca59f;margin-top:8px">Laporan memakai filter daftar PO yang sedang aktif (${escapeHTML(state.scope)}). Seluruh baris hasil filter tercetak, bukan hanya pratinjau.</p><div class="h-stack" style="margin-top:13px"><button class="solid-btn" data-print="now">🖨 Cetak / Simpan PDF</button><button class="soft-btn" data-go="orders">Atur filter daftar PO</button></div></div><div class="grid-metrics"><div class="little-metric"><b>${state.ready?money(m.total):'—'}</b><span>Jumlah PO</span></div><div class="little-metric"><b>${state.ready?money(m.qty):'—'}</b><span>QTY terisi</span></div><div class="little-metric"><b>${state.ready?money(m.old):'—'}</b><span>Usia ≥30 hari</span></div></div><article class="paper-preview"><h3>MERCY · LAPORAN FOLLOW UP PO</h3><p class="paper-meta">Pabrik: ${escapeHTML(state.scope)} • ${new Date().toLocaleDateString('id-ID',{timeZone:'Asia/Jakarta',dateStyle:'long'})}</p><table class="report-table"><thead><tr><th>Desain</th><th>Pabrik</th><th>Status</th><th>Usia</th></tr></thead><tbody>${preview.length?preview.map(r=>`<tr><td>${escapeHTML(r.design)}</td><td>${escapeHTML(factory(r))}</td><td>${escapeHTML(r.status)}</td><td>${ageDays(r)===null?'—':ageDays(r)+' hari'}</td></tr>`).join(''):'<tr><td colspan="4">Tidak ada PO pada filter ini.</td></tr>'}</tbody></table>${rows.length>preview.length?`<p class="paper-meta">… dan ${money(rows.length-preview.length)} PO lainnya tercakup dalam hasil cetak.</p>`:''}</article><div class="notice">Saat tombol Cetak dipilih, gunakan tujuan “Simpan sebagai PDF” atau printer. Laporan ukuran A4 tidak mengubah database.</div>`;}
+  function csvView(){return `${unavailableHint()}<article class="section-card"><h3>📤 Ekspor seluruh hasil filter</h3><p>Ekspor memakai filter dari daftar PO, termasuk pabrik, status, bulan, dan pencarian. File memakai header yang kompatibel dengan dashboard MERCY lama.</p><div class="h-stack" style="margin-top:12px"><button class="solid-btn" data-download="csv">↓ Ekspor ${money(filtered().length)} PO (CSV)</button><button class="soft-btn" data-go="orders">Atur filter</button></div></article><article class="section-card"><h3>📥 Impor CSV (gabungkan aman)</h3><p>Petugas arsip membaca CSV Excel, memeriksa header, lalu menawarkan hanya PO yang belum ada. Tidak ada data yang dihapus otomatis.</p><div class="csv-upload" style="margin-top:15px"><div style="font-size:27px;margin-bottom:8px">🗂️</div><input type="file" id="csvFile" accept=".csv,text/csv" aria-label="Pilih file CSV"/><p style="font-size:10px;color:#9aaca8;margin-top:9px">Kolom: TGL, DESIGN, WARNA, QTY, CUSTOMER, BARANG DATANG, KODE, KET, HARGA, JUMLAH, TURUN, CATATAN DATANG, PABRIK, NOMOR PO.</p></div><label class="field" style="margin-top:10px">Pabrik default bila CSV tidak memiliki kolom PABRIK<select id="csvFactory">${FACTORIES.map(f=>`<option value="${f}" ${state.scope===f?'selected':''}>${f}</option>`).join('')}</select></label><div id="csvPreviewArea" style="margin-top:12px">${csvPreviewHTML()}</div></article><article class="section-card"><h3>🔐 Ganti seluruh data dengan CSV (admin)</h3><p>Fitur lanjutan ini menghapus dan mengganti PO dalam satu transaksi Firebase atomik. Untuk mencegah data hilang, tindakan memerlukan backup, kata konfirmasi, login admin, dan jumlah operasi maksimal 450. Tidak berjalan otomatis.</p><div class="notice warning" style="margin-top:12px">⚠️ Harap periksa pratinjau file. Semua PO lama akan diganti. Jika lebih dari 450 operasi, penggantian diblokir demi keamanan; gunakan impor gabung atau lakukan migrasi terencana.</div><div class="h-stack" style="margin-top:12px"><button class="soft-btn" id="csvDownloadBackup" type="button" ${!state.ready||state.cache?'disabled':''}>↓ Unduh BACKUP seluruh PO</button></div><label class="field" style="margin-top:12px">Setelah backup selesai disimpan, ketik GANTI<input id="csvReplaceKeyword" autocomplete="off" placeholder="Ketik GANTI (huruf besar)"/></label><button class="warn-btn" type="button" id="csvReplaceSubmit" disabled>Ganti seluruh data di Firebase</button></article>`;}
+  function csvPreviewHTML(){if(!state.importRecords.length)return '<div class="notice">Belum ada file CSV yang dipilih. Tidak ada data yang akan diubah.</div>';const duplicates=new Set(state.rows.map(identity));const fresh=state.importRecords.filter(r=>!duplicates.has(identity(r)));return `<div class="notice"><b>${money(state.importRecords.length)} baris ditemukan</b> • ${money(fresh.length)} baru • ${money(state.importRecords.length-fresh.length)} terdeteksi sudah ada.<br/>Pratinjau (maks. 7 baris): ${fresh.slice(0,7).map(r=>escapeHTML(r.design)).join(', ')||'semua sudah ada'}.</div><button class="solid-btn" id="csvImportSubmit" type="button" style="margin-top:10px" ${!state.admin||!state.ready||state.cache||!fresh.length?'disabled':''}>↑ Impor ${money(fresh.length)} PO baru ke Firebase</button>`;}
+  const identity=r=>JSON.stringify([r.tgl||'',String(r.design||'').trim().toUpperCase(),String(r.warna||'').trim().toUpperCase(),r.qty===null||r.qty===''||r.qty===undefined?'':Number(r.qty),String(r.customer||'').trim().toUpperCase(),String(r.kode||'').trim().toUpperCase(),String(r.status||'').trim().toUpperCase(),factory(r),String(r.nomorPo||'').trim().toUpperCase()]);
+  function updateViewNoScroll(){const y=$('drawerBody').scrollTop;renderDrawer();$('drawerBody').scrollTop=y;}
+  function wireDrawer(){
+    const b=$('drawerBody');
+    b.querySelectorAll('[data-go]').forEach(e=>e.onclick=()=>action(e.dataset.go));
+    b.querySelectorAll('[data-download]').forEach(e=>e.onclick=exportCSV);
+    b.querySelectorAll('[data-row-edit]').forEach(e=>e.onclick=()=>openDetail(e.dataset.rowEdit));
+    b.querySelectorAll('[data-status]').forEach(e=>e.onclick=()=>{const x=e.dataset.status;if(x==='ALL')state.statuses.clear();else if(state.statuses.has(x))state.statuses.delete(x);else state.statuses.add(x);state.page=1;updateViewNoScroll();});
+    b.querySelectorAll('[data-reset]').forEach(e=>e.onclick=()=>{resetFilters();updateViewNoScroll();});
+    b.querySelectorAll('[data-page]').forEach(e=>e.onclick=()=>{state.page+=e.dataset.page==='next'?1:-1;updateViewNoScroll();});
+    const q=b.querySelector('#searchPO');if(q)q.oninput=()=>{state.filters.q=q.value;state.page=1;/* Debounce redraw without dropping typing position */clearTimeout(window.__mwInputTimer);window.__mwInputTimer=setTimeout(()=>{const pos=q.selectionStart;updateViewNoScroll();const el=$('searchPO');el?.focus();try{el?.setSelectionRange(pos,pos)}catch(_){}},240);};
+    for(const [id,key] of [['arrivalFilter','arrival'],['monthFilter','month'],['customerFilter','customer'],['ageFilter','age'],['sortFilter','sort']]){const el=b.querySelector('#'+id);if(el)el.onchange=()=>{state.filters[key]=el.value;state.page=1;updateViewNoScroll();};}
+    const form=b.querySelector('#poForm');if(form)form.onsubmit=savePO;
+    b.querySelectorAll('[data-delete]').forEach(e=>e.onclick=()=>deletePO(e.dataset.delete));
+    const st=b.querySelector('#editStatus');if(st){const sync=()=>{$('editArrival').disabled=st.value==='CANCEL';if(st.value==='CANCEL')$('editArrival').value='';};st.onchange=sync;sync();}
+    const rp=b.querySelector('#reportPending');if(rp)rp.onchange=()=>{state.reportOnlyPending=rp.checked;updateViewNoScroll();};
+    const pr=b.querySelector('[data-print]');if(pr)pr.onclick=printReport;
+    const file=b.querySelector('#csvFile');if(file)file.onchange=loadCSV;
+    const importButton=b.querySelector('#csvImportSubmit');if(importButton)importButton.onclick=importCSV;
+    const backupButton=b.querySelector('#csvDownloadBackup');if(backupButton)backupButton.onclick=backupEntireCSV;
+    const keyword=b.querySelector('#csvReplaceKeyword'),replaceButton=b.querySelector('#csvReplaceSubmit');
+    const validateReplace=()=>{if(replaceButton)replaceButton.disabled=!(state.replaceBackupReady&&state.ready&&!state.cache&&state.admin&&!state.saving&&state.importRecords.length>0&&keyword?.value==='GANTI'&&state.rows.length+state.importRecords.length<=450)};
+    if(keyword)keyword.oninput=validateReplace;
+    if(replaceButton)replaceButton.onclick=replaceEntireCSV;
+    validateReplace();
+  }
+  function openDetail(id){const r=state.rows.find(x=>x.id===id);if(!r){showToast('PO sudah berubah, muat ulang daftar.',true);return;}action('edit','',{id});}
+  async function savePO(event){
+    event.preventDefault();if(state.saving||!enableOnlyOnline())return;
+    const form=event.currentTarget,fd=new FormData(form);const row={
+      pabrik:fd.get('pabrik'),nomorPo:String(fd.get('nomorPo')||'').trim(),tgl:fd.get('tgl'),customer:String(fd.get('customer')||'').trim().toUpperCase(),design:String(fd.get('design')||'').trim(),
+      warna:String(fd.get('warna')||'').trim().toUpperCase(),qty:fd.get('qty')===''?null:Number(fd.get('qty')),kode:String(fd.get('kode')||'').trim(),status:String(fd.get('status')||'').trim(),
+      barangDatang:fd.get('status')==='CANCEL'?'':fd.get('barangDatang'),barangDatangCatatan:String(fd.get('barangDatangCatatan')||'').trim(),
+      harga:fd.get('harga')===''?null:Number(fd.get('harga')),jumlah:fd.get('jumlah')===''?null:Number(fd.get('jumlah')),turun:String(fd.get('turun')||'').trim()
+    };
+    if(!FACTORIES.includes(row.pabrik)||!validDate(row.tgl)||!row.customer||!row.design||!row.status){showToast('Pabrik, tanggal, pelanggan, desain, dan status wajib valid.',true);return;}
+    if(row.qty!==null&&(!Number.isSafeInteger(row.qty)||row.qty<0||row.qty>999999999)){showToast('QTY harus bilangan bulat 0–999.999.999.',true);return;}
+    if([row.harga,row.jumlah].some(n=>n!==null&&(!Number.isFinite(n)||n<0))){showToast('Harga dan jumlah harus angka tidak negatif.',true);return;}
+    const exactCancel=/^(CANCEL|CANCELLED|BATAL|DIBATALKAN)$/i;if(exactCancel.test(row.barangDatangCatatan))row.barangDatangCatatan='';
+    const id=state.view==='edit'?state.editId||$('drawerBody').querySelector('[data-delete]')?.dataset.delete:null;
+    state.saving=true;const saveButton=form.querySelector('[type="submit"]');saveButton.disabled=true;saveButton.textContent='Menyimpan…';
+    try{const db=state.cloud.db,fs=state.cloud.fs,orders=fs.collection(db,'mercy_orders');if(id)await fs.updateDoc(fs.doc(db,'mercy_orders',id),{...row,updatedAt:fs.serverTimestamp()});else await fs.addDoc(orders,{...row,createdAt:fs.serverTimestamp(),updatedAt:fs.serverTimestamp()});showToast(id?'Perubahan PO tersimpan ✓':'PO baru berhasil disimpan ✓');action('orders');}
+    catch(e){showToast('Gagal menyimpan: '+safeError(e),true);saveButton.disabled=false;saveButton.textContent=id?'✓ Simpan perubahan':'＋ Simpan PO';}
+    finally{state.saving=false;}
+  }
+  async function deletePO(id){if(!enableOnlyOnline())return;const r=state.rows.find(r=>r.id===id);if(!r)return;const confirm1=confirm(`Hapus PO “${r.design}” dari Firebase?\n\nSemua pengguna akan kehilangan baris ini. Tidak bisa di-undo.`);if(!confirm1)return;const typed=prompt('Konfirmasi akhir: ketik HAPUS');if(typed!=='HAPUS'){showToast('Hapus dibatalkan.');return;}try{await state.cloud.fs.deleteDoc(state.cloud.fs.doc(state.cloud.db,'mercy_orders',id));showToast('PO berhasil dihapus ✓');action('orders');}catch(e){showToast('Gagal hapus: '+safeError(e),true);}}
+  function safeError(e){return String(e?.message||e||'Koneksi gagal').slice(0,250);}
+  const safeCsv=v=>{let s=String(v??'');if(/^\s*[=+@\-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';};
+  function download(name,body,type){const url=URL.createObjectURL(new Blob([body],{type}));const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);}
+  function csvString(rows){return '\uFEFF'+[HEADER_CSV,...rows.map(r=>[r.tgl,r.design,r.warna,r.qty??'',r.customer,r.barangDatang||'',r.kode,r.status,r.harga??'',r.jumlah??'',r.turun||'',r.barangDatangCatatan||'',factory(r),r.nomorPo||''])].map(a=>a.map(safeCsv).join(',')).join('\r\n');}
+  function exportCSV(){if(!state.ready){showToast('Belum ada data Firebase siap diekspor.',true);return;}download(`MERCY_World_PO_${today()}.csv`,csvString(filtered()),'text/csv;charset=utf-8');showToast(`${money(filtered().length)} PO diekspor ke CSV.`);}
+  function fillPrint(rows){const m=metrics(rows),date=new Date().toLocaleDateString('id-ID',{timeZone:'Asia/Jakarta',day:'numeric',month:'long',year:'numeric'});document.title='LAPORAN PO PER TANGGAL '+date.toUpperCase();$('printRoot').innerHTML=`<h1>MERCY · LAPORAN FOLLOW UP PO</h1><div class="print-sub">LAPORAN PO PER TANGGAL ${escapeHTML(date.toUpperCase())} · ${escapeHTML(state.scope)}</div><div class="print-metrics"><span><b>Jumlah PO</b> ${m.total}</span><span><b>Total QTY</b> ${money(m.qty)}</span><span><b>Follow Up ≥30 Hari</b> ${m.old}</span></div><table><thead><tr><th style="width:11%">Tanggal</th><th style="width:11%">Pabrik</th><th style="width:22%">Desain / No PO</th><th style="width:11%">QTY</th><th style="width:13%">Pelanggan</th><th style="width:12%">Status</th><th style="width:13%">Barang datang</th><th style="width:7%">Usia</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${dateLabel(r.tgl)}</td><td>${escapeHTML(factory(r))}</td><td>${escapeHTML(r.design)}<br/><small>${escapeHTML(r.nomorPo||r.kode)}</small></td><td>${qty(r)===null?'—':money(qty(r))}</td><td>${escapeHTML(r.customer)}</td><td>${escapeHTML(r.status)}</td><td>${arrived(r)?dateLabel(arrival(r)):cancelled(r)?'Batal':'Belum'}</td><td>${ageDays(r)===null?'—':ageDays(r)+' hari'}</td></tr>`).join('')}</tbody></table><footer>Dicetak dari MERCY Mini Factory World • ${escapeHTML(date)}</footer>`;}
+  function printReport(){if(!state.ready){showToast('Laporan membutuhkan data Firebase terbaru.',true);return;}const rows=reportRows();fillPrint(rows);window.print();setTimeout(()=>{document.title='MERCY • Factory Studio 3D · Dashboard PO';},1200);}
+  function parseCSV(text,defaultFactory){
+    const s=String(text).replace(/^\uFEFF/,'');const guess=s.split(/\r?\n/).slice(0,5).join('\n');const delimiter=(guess.match(/;/g)||[]).length>(guess.match(/,/g)||[]).length?';':',';
+    const all=[];let row=[],val='',quoted=false;
+    for(let i=0;i<s.length;i++){const c=s[i];if(c==='"'){if(quoted&&s[i+1]==='"'){val+='"';i++;}else quoted=!quoted;}
+      else if(c===delimiter&&!quoted){row.push(val);val='';}
+      else if((c==='\r'||c==='\n')&&!quoted){if(c==='\r'&&s[i+1]==='\n')i++;row.push(val);val='';if(row.some(x=>String(x).trim()))all.push(row);row=[];}
+      else val+=c;
+    }
+    if(quoted)throw Error('Tanda petik CSV tidak berpasangan.');row.push(val);if(row.some(x=>String(x).trim()))all.push(row);
+    const hn=x=>String(x||'').toUpperCase().replace(/\u00a0/g,' ').replace(/\s+/g,' ').trim();const ix=all.findIndex(r=>r.some(v=>['DESIGN','DESAIN'].includes(hn(v))));if(ix<0)throw Error('Header DESIGN atau DESAIN tidak ditemukan.');
+    const col=new Map(all[ix].map((h,i)=>[hn(h),i]));function get(r,names){for(const name of names)if(col.has(name))return r[col.get(name)]||'';return '';}
+    const parsed=[],bad=[];
+    for(let i=ix+1;i<all.length;i++){
+      const r=all[i],design=String(get(r,['DESIGN','DESAIN','NAMA DESIGN'])).trim();if(!design||/^TOTAL\b/i.test(design))continue;
+      let pabrik=String(get(r,['PABRIK','FACTORY','NAMA PABRIK'])||defaultFactory).trim().toUpperCase().replace(/\s+/g,' ');if(pabrik==='TRI DAYA')pabrik='TRIDAYA';
+      const v={tgl:toDate(get(r,['TGL','TANGGAL','DATE'])),design,warna:String(get(r,['WARNA','COLOR'])).trim().toUpperCase(),qty:normalizeNum(get(r,['QTY','QUANTITY'])),customer:String(get(r,['CUSTOMER','PELANGGAN'])).trim().toUpperCase(),kode:String(get(r,['KODE','CODE','KODE PO'])).trim(),status:String(get(r,['KET','STATUS','KETERANGAN'])).trim().toUpperCase(),pabrik,nomorPo:String(get(r,['NOMOR PO','NO PO','NO. PO'])).trim(),barangDatang:String(get(r,['BARANG DATANG','BARANG_DATANG','KEDATANGAN'])).trim(),barangDatangCatatan:String(get(r,['CATATAN DATANG','CATATAN BARANG DATANG','BARANG_DATANG_CATATAN'])).trim(),harga:normalizeNum(get(r,['HARGA','PRICE'])),jumlah:normalizeNum(get(r,['JUMLAH','SISA','BALANCE'])),turun:String(get(r,['TURUN'])).trim()};
+      const badNumbers=[['QTY',v.qty],['HARGA',v.harga],['JUMLAH',v.jumlah]].some(([key,num])=>String(get(r,[key])).trim()&&num===null);
+      if(!v.tgl||!v.design||!v.customer||!v.status||!FACTORIES.includes(pabrik)||badNumbers){bad.push(i+1);continue;}
+      if(v.status==='CANCEL')v.barangDatang='';parsed.push(v);
+    }
+    if(bad.length)throw Error(`${bad.length} baris tidak valid (baris ${bad.slice(0,5).join(', ')}). Periksa tanggal, QTY, status, pabrik, dan pelanggan.`);
+    if(!parsed.length)throw Error('Tidak ada PO yang bisa diimpor.');if(parsed.length>2000)throw Error('Maksimal 2.000 PO sekali impor.');return parsed;
+  }
+  async function loadCSV(event){state.importRecords=[];state.replaceBackupReady=false;const file=event.currentTarget.files?.[0];if(!file)return;if(file.size>3*1024*1024){showToast('CSV terlalu besar (maks. 3 MB).',true);return;}try{const def=$('csvFactory')?.value||'TRIDAYA';const records=parseCSV(await file.text(),def);state.importRecords=records;showToast(`${money(records.length)} PO terbaca. Silakan periksa pratinjau.`);}catch(e){showToast(safeError(e),true);}const area=$('csvPreviewArea');if(area){area.innerHTML=csvPreviewHTML();const btn=$('csvImportSubmit');if(btn)btn.onclick=importCSV;}}
+  async function importCSV(){if(state.saving||!enableOnlyOnline())return;const existing=new Set(state.rows.map(identity));const dedup=new Set();const fresh=state.importRecords.filter(r=>{const key=identity(r);if(existing.has(key)||dedup.has(key))return false;dedup.add(key);return true;});if(!fresh.length){showToast('Tidak ada baris PO baru untuk diimpor.');return;}if(!confirm(`Tambahkan ${fresh.length} PO baru ke Firebase?\n\nTidak ada PO lama yang dihapus atau ditimpa.`))return;
+    state.saving=true;const btn=$('csvImportSubmit');if(btn){btn.disabled=true;btn.textContent='Sedang mengimpor…';}
+    try{const fs=state.cloud.fs,db=state.cloud.db;let done=0;while(done<fresh.length){const slice=fresh.slice(done,done+200),batch=fs.writeBatch(db);slice.forEach(r=>{const ref=fs.doc(fs.collection(db,'mercy_orders'));batch.set(ref,{...r,createdAt:fs.serverTimestamp(),updatedAt:fs.serverTimestamp()});});await batch.commit();done+=slice.length;const e=$('csvImportSubmit');if(e)e.textContent=`Tersimpan ${done}/${fresh.length}…`;}
+      state.importRecords=[];showToast(`${money(fresh.length)} PO baru berhasil disimpan!`);action('orders');
+    }catch(e){showToast('Impor berhenti: '+safeError(e)+'. Periksa data online sebelum mencoba lagi.',true);if(btn)btn.disabled=false;}
+    finally{state.saving=false;}
+  }
+  function backupEntireCSV(){
+    if(!state.ready||state.cache){showToast('Backup memerlukan data Firebase online, bukan cache.',true);return;}
+    download(`MERCY_BACKUP_SEBELUM_GANTI_${today()}.csv`,csvString(state.rows),'text/csv;charset=utf-8');
+    state.replaceBackupReady=true;
+    const keyword=$('csvReplaceKeyword');if(keyword){keyword.value='';keyword.focus();}
+    showToast(`Cadangan ${money(state.rows.length)} PO diunduh. Pastikan file tersimpan di perangkat sebelum lanjut.`);
+  }
+  async function replaceEntireCSV(){
+    if(state.saving||!enableOnlyOnline())return;
+    if(!state.replaceBackupReady||!state.importRecords.length||$('csvReplaceKeyword')?.value!=='GANTI')return;
+    if(state.rows.length+state.importRecords.length>450){showToast('Melebihi 450 operasi. Penggantian diblokir untuk keamanan.',true);return;}
+    if(!confirm(`PERINGATAN: HAPUS SEMUA ${state.rows.length} PO lama dan GANTI dengan ${state.importRecords.length} PO dari CSV?\n\nPastikan file cadangan sudah tersimpan. Operasi ini tidak dapat di-undo.`))return;
+    const typed=prompt('Konfirmasi terakhir. Ketik persis: HAPUS DAN GANTI');
+    if(typed!=='HAPUS DAN GANTI'){showToast('Penggantian data dibatalkan.');return;}
+    state.saving=true;const button=$('csvReplaceSubmit');if(button){button.disabled=true;button.textContent='Memproses penggantian…';}
+    try{
+      const fs=state.cloud.fs,db=state.cloud.db,col=fs.collection(db,'mercy_orders');
+      const live=await fs.getDocsFromServer(col);
+      const knownIDs=new Set(state.rows.map(r=>String(r.id)));
+      if(live.docs.length!==knownIDs.size||live.docs.some(d=>!knownIDs.has(d.id)))throw Error('Database telah berubah sejak backup. Unduh ulang cadangan dan ulangi setelah data tersinkron.');
+      if(live.size+state.importRecords.length>450)throw Error('Jumlah operasi melewati batas aman 450; penggantian dibatalkan.');
+      const batch=fs.writeBatch(db);
+      live.docs.forEach(doc=>batch.delete(doc.ref));
+      state.importRecords.forEach(record=>batch.set(fs.doc(col),{...record,importedFrom:'CSV',createdAt:fs.serverTimestamp(),updatedAt:fs.serverTimestamp()}));
+      await batch.commit();
+      const imported=state.importRecords.length;state.importRecords=[];state.replaceBackupReady=false;
+      showToast(`Penggantian selesai: ${money(live.size)} PO lama diganti ${money(imported)} PO dari CSV.`);
+      action('orders');
+    }catch(e){showToast('Penggantian gagal/dibatalkan: '+safeError(e),true);if(button)button.textContent='Ganti seluruh data di Firebase';}
+    finally{state.saving=false;}
+  }
+  function firebaseError(e){state.failed=true;state.ready=false;setConnection('error','Koneksi gagal');updateSummary();showToast('Firebase: '+safeError(e),true);if($('drawer').classList.contains('open'))updateViewNoScroll();}
+  async function connectFirebase(){
+    try{
+      const ver='13.0.0';
+      if(!config.firebase?.apiKey||!config.firebase?.projectId)throw Error('config.js tidak ada atau belum benar. Jangan hapus config.js dari repository MERCY.');
+      const [app,auth,fs]=await Promise.all([
+        import(`https://www.gstatic.com/firebasejs/${ver}/firebase-app.js`),
+        import(`https://www.gstatic.com/firebasejs/${ver}/firebase-auth.js`),
+        import(`https://www.gstatic.com/firebasejs/${ver}/firebase-firestore.js`)
+      ]);
+      const fb=app.initializeApp(config.firebase,'mercy-world');const db=fs.getFirestore(fb);const au=auth.getAuth(fb);
+      state.cloud={db,auth:au,fs,authMethods:auth};
+      auth.onAuthStateChanged(au,user=>{state.user=user;state.authReady=true;state.admin=Boolean(user?.emailVerified&&String(user?.email||'').toLowerCase()===String(config.adminEmail||'').toLowerCase());const button=$('loginButton');button.textContent=state.admin?'Admin ✓ • Keluar':user?'Keluar':'Masuk admin';button.classList.toggle('admin',state.admin);button.title=user?String(user.email||''):'Login dengan Google';if($('drawer').classList.contains('open'))updateViewNoScroll();},err=>showToast('Autentikasi: '+safeError(err),true));
+      fs.onSnapshot(fs.collection(db,'mercy_orders'),snapshot=>{
+        state.rows=snapshot.docs.map(d=>normRecord({id:d.id,...d.data()}));state.ready=true;state.cache=snapshot.metadata.fromCache;state.failed=false;setConnection(state.cache?'cached':'live',state.cache?'Data cache / offline':'Firebase live • '+money(state.rows.length)+' PO');updateSummary();if($('drawer').classList.contains('open')){
+          if(state.view==='add'||state.view==='edit'){/* jangan menghapus isian form saat snapshot masuk */}
+          else updateViewNoScroll();
+        }
+      },firebaseError);
+    }catch(e){firebaseError(e);}
+  }
+  async function loginLogout(){if(!state.cloud){showToast('Firebase belum siap atau internet terputus.',true);return;}try{if(state.user){await state.cloud.authMethods.signOut(state.cloud.auth);showToast('Berhasil keluar dari admin.');}else{await state.cloud.authMethods.signInWithPopup(state.cloud.auth,new state.cloud.authMethods.GoogleAuthProvider());showToast('Berhasil masuk Google.');}}catch(e){showToast('Login: '+safeError(e),true);}}
+  function init(){
+    $('topDate').textContent=new Date().toLocaleDateString('id-ID',{timeZone:'Asia/Jakarta',weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    document.querySelectorAll('[data-action]').forEach(btn=>btn.addEventListener('click',()=>action(btn.dataset.action,btn.dataset.factory)));
+    document.querySelectorAll('[data-quick]').forEach(btn=>btn.addEventListener('click',()=>action('factory',btn.dataset.quick)));
+    document.querySelectorAll('[data-zone]').forEach(group=>{
+      const click=()=>{const z=group.dataset.zone;if(z==='OFFICE')action('report');else if(z==='ARRIVED')action('arrived');else action('factory',z);};
+      group.addEventListener('click',click);group.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();click();}});
+    });
+    $('loginButton').onclick=loginLogout;$('closeDrawer').onclick=closeDrawer;$('drawerBackdrop').onclick=closeDrawer;
+    $('skipStory').onclick=()=>{skipRequested=true;window.MERCY_SCENE?.skip?.();};
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('drawer').classList.contains('open'))closeDrawer();});
+    $('resetCamera').onclick=()=>{window.MERCY_SCENE?.reset();announce('⌖ Tampilan awal','Kamera kembali menampilkan seluruh kawasan.');};
+    $('toggleMotion').onclick=e=>{const b=e.currentTarget,before=b.getAttribute('aria-pressed')==='true';b.setAttribute('aria-pressed',String(!before));b.innerHTML=before?'▶ <span>Lanjutkan</span>':'Ⅱ <span>Animasi</span>';window.MERCY_SCENE?.pause(before);};
+    $('expandWorld').onclick=()=>{const el=$('worldStage');if(document.fullscreenElement)document.exitFullscreen();else el.requestFullscreen?.().catch(()=>showToast('Mode layar penuh tidak tersedia di browser ini.',true));};
+    window.MERCY_WORLD_UI={action,story,announce};
+    updateSummary();connectFirebase();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+
+</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"}}</script>
+<script type="module">
+/* MERCY Blender-ready glTF diorama • static high-detail geometry and moving 3D characters.
+   Each animation is a fixed cinematic route; no random object movement through walls. */
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+
+const canvas=document.getElementById('worldCanvas'),stage=document.getElementById('worldStage');
+const $=id=>document.getElementById(id);
+const durations={all:5.0,factory:9.2,old:9.0,priority:9.0,arrived:19.8,orders:8.3,add:8.3,edit:8.3,report:13.9,csv:9.4};
+const phaseDescriptions={
+ all:[[0,'Kamera menjelajahi kawasan produksi'],[3,'Pabrik Tridaya, Inna, KBI siap dipantau']],
+ factory:[[0,'Pegawai memakai helm keselamatan'],[1.5,'Pegawai berjalan di jalur pejalan kaki'],[4.5,'Mendekati pintu produksi'],[6.5,'Masuk ruang produksi'],[8,'Data pabrik siap dibuka']],
+ old:[[0,'Sinyal perhatian PO lama aktif'],[2.7,'Supervisor berjalan ke pusat inspeksi'],[6.8,'Memeriksa catatan PO usia 30+ hari']],
+ priority:[[0,'Supervisor mengambil daftar prioritas'],[3,'Memeriksa area produksi'],[6.7,'Mengurutkan pekerjaan follow-up']],
+ arrived:[[0,'Truk memasuki gerbang utama'],[3,'Truk berjalan di jalur logistik'],[8,'Truk berbelok perlahan ke loading dock'],[11,'Truk parkir dan mesin berhenti'],[13.0,'Forklift menuju muatan'],[15.2,'Forklift membawa pallet ke gudang'],[18,'Bongkar barang selesai']],
+ orders:[[0,'Staf menuju ruang administrasi'],[3,'Staf memasuki kantor'],[6,'Menyalakan komputer dan membuka PO']],
+ add:[[0,'Staf menuju ruang administrasi'],[3,'Staf memasuki kantor'],[6,'Komputer siap untuk menambah PO']],
+ edit:[[0,'Staf membawa berkas ke kantor'],[3,'Staf memeriksa komputer'],[6,'Form edit PO siap dibuka']],
+ report:[[0,'Petugas berjalan menuju kantor'],[3,'Petugas memasuki ruang laporan'],[6,'Petugas menghampiri mesin printer'],[8.5,'Printer memproses data laporan'],[11,'Kertas laporan mulai tercetak']],
+ csv:[[0,'Petugas menuju kantor administrasi'],[3.5,'Petugas menyiapkan berkas arsip'],[7.5,'CSV siap diproses']]
+};
+const stopListeners=()=>window.dispatchEvent(new Event('mercy-scene-ready'));
+function browserFallback(error){
+ console.error('MERCY diorama GLB:',error);
+ $('worldFallback').hidden=false;$('worldFallback').style.display='flex';
+ $('worldFallback').querySelector('.fallback-note').textContent='Tidak dapat memuat model 3D. Pastikan assets/*.glb sudah diunggah dan internet aktif. Fitur data tetap dapat digunakan.';
+ canvas.hidden=true;
+ let storyActive=null;
+ window.MERCY_SCENE={play(mode){return new Promise(resolve=>{storyActive=resolve;window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode,elapsed:0,duration:1,step:'Mode tanpa WebGL — panel data tetap tersedia'}}));setTimeout(()=>{if(storyActive===resolve){storyActive=null;resolve({cancelled:false})}},1400)})},skip(){if(storyActive){storyActive({cancelled:false});storyActive=null}},stop(){if(storyActive){storyActive({cancelled:true});storyActive=null}},reset(){},pause(){},updateMetrics(){}};
+ stopListeners();
+}
+(async()=>{
+ try{
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,window.innerWidth<=768?1.15:1.5));
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.27;
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  const scene=new THREE.Scene();scene.background=new THREE.Color('#e9f6f2');scene.fog=new THREE.Fog('#e9f6f2',120,195);
+  scene.add(new THREE.HemisphereLight(0xfafffb,0x9ab4a4,2.55));
+  scene.add(new THREE.AmbientLight(0xe7ffef,.56));
+  const sun=new THREE.DirectionalLight(0xfff2da,3.30);sun.position.set(-21,54,36);
+  sun.castShadow=true;sun.shadow.mapSize.set(window.innerWidth<=768?768:1536,window.innerWidth<=768?768:1536);
+  Object.assign(sun.shadow.camera,{left:-42,right:42,top:42,bottom:-42,near:.1,far:180});sun.shadow.bias=-.00025;sun.shadow.normalBias=.035;
+  sun.shadow.radius=3;scene.add(sun);
+  const soft=new THREE.DirectionalLight(0xbdedff,.85);soft.position.set(29,31,-30);scene.add(soft);
+  const world=new THREE.Group();scene.add(world);
+  const camera=new THREE.OrthographicCamera(-27,27,18,-18,.1,270);
+  const gltf=new GLTFLoader();
+  const base='./assets/';
+  const [diorama,truckGLB,forkGLB,workerGLB]=await Promise.all([
+   gltf.loadAsync(base+'mercy_factory_diorama.glb'),gltf.loadAsync(base+'mercy_truck.glb'),gltf.loadAsync(base+'mercy_forklift.glb'),gltf.loadAsync(base+'mercy_worker.glb')
+  ]);
+  const surface=diorama.scene;world.add(surface);
+  surface.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true; if(o.material){o.material.envMapIntensity=.3;}}});
+  function cloneModel(gltf,name,scale=1){const wrapper=new THREE.Group();wrapper.name=name;const c=gltf.scene.clone(true);c.scale.setScalar(scale);wrapper.add(c);world.add(wrapper);c.traverse(m=>{if(m.isMesh){m.castShadow=true;m.receiveShadow=true}});return wrapper}
+  function place(o,x,z,y=0){o.position.set(x,y,z);return o}
+  const workers={
+   factory:place(cloneModel(workerGLB,'Pegawai pabrik'),-22,-6.55),
+   supervisor:place(cloneModel(workerGLB,'Supervisor'),-6.5,-6.55),
+   admin:place(cloneModel(workerGLB,'Staf administrasi'),0,8.1),
+   reporter:place(cloneModel(workerGLB,'Pegawai laporan'),-19,7.8),
+   loader:place(cloneModel(workerGLB,'Petugas gudang'),16.8,12.2),
+   static1:place(cloneModel(workerGLB,'Pekerja Tridaya',.87),-24.3,-14),
+   static2:place(cloneModel(workerGLB,'Pekerja Inna',.87),-4.0,-13.9),
+   static3:place(cloneModel(workerGLB,'Pekerja KBI',.87),23.7,-13.9),
+   static4:place(cloneModel(workerGLB,'Pekerja rak gudang',.85),26.3,17),
+   static5:place(cloneModel(workerGLB,'Staf kantor',.85),-23.6,14.7)
+  };
+  const homes={factory:[-22,-6.55],supervisor:[-6.5,-6.55],admin:[0,8.1],reporter:[-19,7.8],loader:[16.8,12.2]};
+  const truck=place(cloneModel(truckGLB,'Truk pengiriman'),37,1.4);truck.userData.forward='negativeX';
+  const forklift=place(cloneModel(forkGLB,'Forklift gudang'),17,14.9);forklift.userData.forward='positiveX';
+  // Imported asset files: truck model is oriented with its front toward -X.
+  const cargo=new THREE.Group();const pallet=new THREE.Mesh(new THREE.BoxGeometry(1.52,.22,1.12),new THREE.MeshStandardMaterial({color:'#c59c73',roughness:.84}));cargo.add(pallet);
+  for(let i=0;i<3;i++){
+   let m=new THREE.Mesh(new THREE.BoxGeometry(.94,.60,.90),new THREE.MeshStandardMaterial({color:['#cfa47d','#94b3a2','#bba188'][i],roughness:.93}));m.position.set(0,.46+i*.60,0);cargo.add(m);
+  }
+  cargo.position.set(2.10,.49,0);forklift.add(cargo);cargo.visible=false;
+  // Closed-loop moving parcels: each remains on top of an actual machine line.
+  const ambientParcels=[];
+  for(const cx of [-19,0,19]){
+    for(const side of [-1,1]){
+      for(let i=0;i<3;i++){
+        const c=['#c99d70','#92b5a2','#d8b484'][(i+(cx===19?2:cx===0?1:0))%3];
+        const box=new THREE.Mesh(new THREE.BoxGeometry(.43,.27,.35),new THREE.MeshStandardMaterial({color:c,roughness:.78}));
+        box.position.set(cx+side*3.65,1.24,-16.4+i*1.6);
+        box.castShadow=true;world.add(box);ambientParcels.push({box,cx,side,i});
+      }
+    }
+  }
+  const beacon=new THREE.PointLight('#f44336',0,6);beacon.position.set(10.5,4.35,7.4);world.add(beacon);
+  const sheetMat=new THREE.MeshStandardMaterial({color:'#fff9e6',side:THREE.DoubleSide,roughness:.98});
+  const sheets=[];for(let i=0;i<3;i++){
+   const m=new THREE.Mesh(new THREE.BoxGeometry(.68,.025,.49),sheetMat);
+   m.position.set(-14.9,1.55,17.7);m.visible=false;m.castShadow=true;world.add(m);sheets.push(m);
+  }
+  const hitTargets=[];
+  const zoneDefs=[
+   {x:-19,z:-13.2,w:15.2,d:11.8,action:'factory',factory:'TRIDAYA'},
+   {x:0,z:-13.2,w:15.2,d:11.8,action:'factory',factory:'INNA'},
+   {x:19,z:-13.2,w:15.2,d:11.8,action:'factory',factory:'KBI'},
+   {x:-19,z:16.1,w:17,d:14,action:'report'},
+   {x:0,z:16.0,w:11.2,d:11.8,action:'orders'},
+   {x:19,z:16.5,w:19,d:14.4,action:'arrived'}
+  ];
+  for(const t of zoneDefs){const mesh=new THREE.Mesh(new THREE.BoxGeometry(t.w,4.3,t.d),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false,color:0xffffff}));mesh.position.set(t.x,2.15,t.z);mesh.userData={action:t.action,factory:t.factory};world.add(mesh);hitTargets.push(mesh);}
+  const focus=new THREE.Vector3(0,0,0),cameraLook=new THREE.Vector3();
+  let yaw=.74,pitch=.81,targetYaw=yaw,targetPitch=pitch,zoom=1,zoomTarget=1,paused=false,nowTime=0,lastTime=performance.now(),active=null,initialSceneReady=false;
+  const cameraDefault=()=>{focus.set(0,0,0);zoomTarget=1;targetYaw=.74;targetPitch=.81};
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  const ease=t=>{let p=Math.max(0,Math.min(1,t));return p*p*(3-2*p)};
+  const pathFactory=x=>[[x-3,-6.55],[x-1.2,-6.55],[x-1.2,-8.1],[x-.5,-9.5]];
+  const paths={
+   old:[[-6.5,-6.55],[-3.0,-6.55],[1,-6.55],[4.0,-6.55],[4.0,-4.65]],
+   admin:[[0,8.1],[0,9.7],[0,11.8],[0,13.9]],
+   report:[[-19,7.8],[-19,9.2],[-19,10.2],[-17.45,10.2],[-17.45,16.2],[-15.9,16.2]],
+   loader:[[16.8,12.2],[15.7,12.2],[14.1,12.2]],
+   forklift:[[17.0,14.9],[14.0,14.9],[11.45,14.9],[9.73,13.4]],
+   truck:[[36.5,1.4],[27,1.4],[17,1.4],[12,1.4],[9.7,2.3],[7.4,4.55],[7.3,7.0],[7.3,11.1]]
+  };
+  function motion(obj,points,amount,walk=false){
+   let t=ease(amount);t=Math.max(0,Math.min(1,t));const lengths=points.slice(1).map((p,i)=>Math.hypot(p[0]-points[i][0],p[1]-points[i][1]));const full=lengths.reduce((s,n)=>s+n,0);let distance=t*full;
+   for(let i=0;i<lengths.length;i++){if(distance<=lengths[i]||i===lengths.length-1){const seg=Math.max(.001,lengths[i]);const pct=Math.min(1,distance/seg);
+    const start=points[i],end=points[i+1],dx=end[0]-start[0],dz=end[1]-start[1];
+    obj.position.x=lerp(start[0],end[0],pct);obj.position.z=lerp(start[1],end[1],pct);
+    // Front of vehicles/characters faces negative X at zero yaw in mesh design.
+    const angle=Math.atan2(dz,dx);
+    obj.rotation.y=obj.userData.forward==='positiveX'?-angle:obj.userData.forward==='negativeX'?Math.PI-angle:Math.atan2(dx,dz);
+    obj.userData.walking=walk&&t>0&&t<1;
+    return;
+   }distance-=lengths[i];}
+  }
+  function driveSmooth(obj,points,t){
+    // Road centerline follows a reserved traffic corridor, with smoothly sampled turn.
+    const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(p[0],0,p[1])),false,'centripetal',.25);
+    const at=Math.max(0,Math.min(1,ease(t)));
+    const location=curve.getPointAt(at),tangent=curve.getTangentAt(at);
+    obj.position.set(location.x,0,location.z);
+    obj.rotation.y=Math.PI-Math.atan2(tangent.z,tangent.x);
+  }
+  const focusFor=(mode,f)=>{if(mode==='factory')return [({TRIDAYA:-19,INNA:0,KBI:19}[f]??-19),-13];
+   if(['report'].includes(mode))return [-19,15];if(['orders','add','edit','csv'].includes(mode))return [0,15];
+   if(mode==='arrived')return [10.5,9.5];if(['old','priority'].includes(mode))return [1,-3];return [0,0]};
+  function clearStory(){for(const k of ['factory','supervisor','admin','reporter','loader']){const a=workers[k];a.position.set(...[homes[k][0],0,homes[k][1]]);a.rotation.set(0,0,0);a.userData.walking=false}truck.position.set(37,0,1.4);truck.rotation.y=0;forklift.position.set(17,0,14.9);forklift.rotation.y=0;cargo.visible=false;beacon.intensity=0;for(const paper of sheets)paper.visible=false;}
+  function currentStep(mode,t){const steps=phaseDescriptions[mode]||phaseDescriptions.all;let result=steps[0][1];for(const [at,txt]of steps)if(t>=at)result=txt;return result;}
+  function storyFrame(mode,f,t,d){const p=Math.max(0,Math.min(1,t/d));
+   const [fx,fz]=focusFor(mode,f); const drift=Math.min(1,t/3.0);
+   focus.x=lerp(focus.x,fx,.035+drift*.022);focus.z=lerp(focus.z,fz,.035+drift*.022);
+   zoomTarget=(mode==='factory'?1.12:mode==='all'?1:1.13);
+   if(mode==='factory'){const xx=({TRIDAYA:-19,INNA:0,KBI:19}[f]??-19);motion(workers.factory,pathFactory(xx),Math.min(1,t/7.0),true);}
+   if(mode==='old'||mode==='priority'){motion(workers.supervisor,paths.old,Math.min(1,t/7.4),true);beacon.intensity=2.8+Math.sin(nowTime*11)*1.4;}
+   if(mode==='arrived'){
+    // No forklift motion until truck has parked; vehicles use disjoint centerlines.
+    driveSmooth(truck,paths.truck,Math.min(1,t/11.0));
+    if(t<11){cargo.visible=false;}
+    if(t>=11.5){motion(forklift,paths.forklift,Math.min(1,(t-11.5)/3.1));}
+    if(t>=14.6){cargo.visible=true;}
+    if(t>15.1){
+      // Forklift backs away in reverse, preserving heading and loaded fork direction.
+      motion(forklift,paths.forklift,Math.max(0,1-(t-15.1)/3.5));
+    }
+    if(t>=13)motion(workers.loader,paths.loader,Math.min(1,(t-13)/4.0),true);
+    const subject=t<11.3?truck:forklift;
+    const lookX=Math.max(-21,Math.min(23,subject.position.x-(t<11.3?6:1.8)));
+    const lookZ=t<11.3?Math.max(-2,subject.position.z):subject.position.z;
+    focus.x=lerp(focus.x,lookX,.085);
+    focus.z=lerp(focus.z,lookZ,.085);
+   }
+   if(['orders','add','edit','csv'].includes(mode))motion(workers.admin,paths.admin,Math.min(1,t/6.4),true);
+   if(mode==='report'){
+    motion(workers.reporter,paths.report,Math.min(1,t/7.3),true);
+    const p=workers.reporter.position;
+    focus.x=lerp(focus.x,p.x+2.5,.045);
+    focus.z=lerp(focus.z,p.z+1.0,.045);
+    for(let i=0;i<3;i++){const paper=sheets[i];paper.visible=t>9.1+i*.83;if(paper.visible){const prog=Math.max(0,Math.min(1,(t-9.1-i*.83)/1.25));paper.position.set(-14.9,1.57+i*.027,17.63+.5*prog);}}
+   }
+  }
+  function finish(){if(!active)return;const a=active;active=null;a.resolve({cancelled:false});window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode:a.mode,elapsed:a.duration,duration:a.duration,step:'Adegan selesai',active:false}}));}
+  function play(mode='all',factoryName=''){
+   stop();clearStory();
+   if(mode==='factory'){
+    const x=({TRIDAYA:-19,INNA:0,KBI:19}[factoryName]??-19);
+    workers.factory.position.set(x-3,0,-6.55); // same start as the chosen factory route
+   }
+   const duration=durations[mode]||8;
+   const ft=focusFor(mode,factoryName);
+   focus.set(ft[0]*.3,0,ft[1]*.3);
+   const p=new Promise(resolve=>{active={mode,factoryName,duration,elapsed:0,resolve};});
+   window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode,elapsed:0,duration,step:currentStep(mode,0),active:true}}));
+   return p;
+  }
+  function stop(){if(active){const a=active;active=null;a.resolve({cancelled:true});}for(const w of Object.values(workers))w.userData.walking=false;}
+  function skip(){if(active){storyFrame(active.mode,active.factoryName,active.duration,active.duration);finish();}}
+  const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();
+  function hit(e){const r=canvas.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(pointer,camera);const hit=ray.intersectObjects(hitTargets,false);return hit.length?hit[0].object.userData:null;}
+  let drag=null;
+  canvas.addEventListener('pointerdown',e=>{drag={id:e.pointerId,x:e.clientX,y:e.clientY,lx:e.clientX,ly:e.clientY,moved:false};canvas.setPointerCapture(e.pointerId)});
+  canvas.addEventListener('pointermove',e=>{if(!drag){canvas.style.cursor=hit(e)?'pointer':'grab';return}if(e.pointerId!==drag.id)return;const dx=e.clientX-drag.lx,dy=e.clientY-drag.ly;drag.lx=e.clientX;drag.ly=e.clientY;
+   if(Math.hypot(drag.x-e.clientX,drag.y-e.clientY)>8)drag.moved=true;
+   if(drag.moved){targetYaw+=dx*.007;targetPitch=Math.min(1.27,Math.max(.46,targetPitch-dy*.007))}
+  });
+  canvas.addEventListener('pointerup',e=>{if(!drag)return;const dragged=drag.moved;drag=null;if(!dragged){let data=hit(e);if(data)window.MERCY_WORLD_UI?.action(data.action,data.factory||'')}});
+  canvas.addEventListener('pointercancel',()=>drag=null);
+  canvas.addEventListener('wheel',e=>{e.preventDefault();zoomTarget=Math.max(.65,Math.min(1.8,zoomTarget+Math.sign(-e.deltaY)*.10))},{passive:false});
+  let stageW=0,stageH=0;
+  function resize(){const r=stage.getBoundingClientRect();if(!r.width||!r.height)return;if(stageW===r.width&&stageH===r.height)return;stageW=r.width;stageH=r.height;
+   renderer.setSize(r.width,r.height,false);
+   const asp=r.width/r.height;
+   const visibleHeight=asp<.6?93:asp<.98?73:asp<1.5?59:47;
+   camera.top=visibleHeight/2;camera.bottom=-visibleHeight/2;camera.left=-visibleHeight*asp/2;camera.right=visibleHeight*asp/2;camera.updateProjectionMatrix();
+  }
+  if(typeof ResizeObserver!=='undefined'){new ResizeObserver(resize).observe(stage)}
+  const anchor={labelTridaya:[-19,4.7,-12.9],labelInna:[0,4.7,-12.9],labelKbi:[19,4.7,-12.9]};
+  function updateLabels(){const r=stage.getBoundingClientRect();if(!r.width)return;
+   for(const[id,p]of Object.entries(anchor)){const e=$(id)?.closest('.floating-label');if(!e)continue;let v=new THREE.Vector3(...p);v.project(camera);const px=(v.x*.5+.5)*r.width,py=(-v.y*.5+.5)*r.height;
+    e.style.left=`${Math.max(10,Math.min(r.width-138,px-54))}px`;e.style.top=`${Math.max(86,Math.min(r.height-70,py-16))}px`;
+    e.style.display=v.z>1?'none':'';
+   }
+  }
+  canvas.hidden=false;canvas.style.display='block';$('worldFallback').hidden=true;$('worldFallback').style.display='none';
+  window.MERCY_SCENE={play,skip,stop,reset:cameraDefault,pause(v){paused=!!v},updateMetrics(m){window.mercySceneMetrics=m}};
+  cameraDefault();resize();stopListeners();
+  function render(now){requestAnimationFrame(render);
+   const dt=Math.min(.05,(now-lastTime)/1000||.016);lastTime=now;
+   if(!paused){nowTime+=dt;
+    if(active){active.elapsed+=dt;storyFrame(active.mode,active.factoryName,active.elapsed,active.duration);
+     const e=active;window.dispatchEvent(new CustomEvent('mercy-story-progress',{detail:{mode:e.mode,elapsed:Math.min(e.elapsed,e.duration),duration:e.duration,step:currentStep(e.mode,e.elapsed),active:true}}));
+     if(e.elapsed>=e.duration)finish();}}
+   const blend=1-Math.exp(-3*dt);yaw=lerp(yaw,targetYaw,blend);pitch=lerp(pitch,targetPitch,blend);zoom=lerp(zoom,zoomTarget,blend);
+   cameraLook.lerp(focus,1-Math.exp(-2.6*dt));
+   const rad=78;
+   camera.position.set(cameraLook.x+Math.cos(yaw)*Math.cos(pitch)*rad,Math.sin(pitch)*rad,cameraLook.z+Math.sin(yaw)*Math.cos(pitch)*rad);
+   camera.lookAt(cameraLook);camera.zoom=zoom;camera.updateProjectionMatrix();
+   for(const[key,person] of Object.entries(workers)){
+    const moving=person.userData.walking&&!paused;
+    const phase=nowTime*8.8+key.length*.25,step=Math.sin(phase);
+    const model=person.children[0];
+    model.position.y=moving?Math.abs(Math.sin(phase))*.055:0;
+    if(!person.userData.limbs){
+      const found={};model.traverse(node=>{if(['Arm_Left','Arm_Right','Leg_Left','Leg_Right'].includes(node.name))found[node.name]=node;});
+      person.userData.limbs=found;
+    }
+    const limbs=person.userData.limbs;
+    for(const name of ['Arm_Left','Arm_Right','Leg_Left','Leg_Right']){
+      if(!limbs[name])continue;
+      const right=name.endsWith('Right');const arm=name.startsWith('Arm');
+      const amount=moving?(arm?.43:.50):.025;
+      limbs[name].rotation.x=amount*(right?step:-step);
+    }
+    // Idle workers operate machines with tiny hand movement, without leaving their assigned bay.
+    if(key.startsWith('static')&&limbs.Arm_Right)limbs.Arm_Right.rotation.x=.10+Math.sin(nowTime*1.9+key.length)*.13;
+   }
+   if(!paused){
+    for(const {box,i} of ambientParcels){
+      // 6.0-unit straight conveyor; separated from worker aisles and road traffic.
+      box.position.z=-16.3+((i*1.70+nowTime*.57)%5.0);
+    }
+    if(active?.mode==='arrived'){
+      truck.children[0].rotation.z=Math.sin(nowTime*18)*.002;
+      forklift.children[0].position.y=Math.abs(Math.sin(nowTime*8))*.016;
+    }
+   }
+   updateLabels();renderer.render(scene,camera);
+  }
+  requestAnimationFrame(render);
+ }catch(e){browserFallback(e)}
+})();
+
+</script>
+</body>
+</html>
