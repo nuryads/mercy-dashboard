@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MERCY · Dashboard PO</title>
+<meta name="theme-color" content="#06141B">
+<meta name="description" content="Dashboard MERCY untuk memantau desain, mengubah PO, serta mengimpor dan mengekspor CSV melalui Firebase." />
+<style>
+:root{--bg:#f7f7fc;--ink:#252541;--muted:#88899e;--purple:#7363d8;--border:#ebecf4;--white:#fff;--green:#50b499;--orange:#f3ae5e;--red:#ef8893;--blue:#6895e7;--pink:#c38fe1;--shadow:0 10px 35px rgba(43,38,94,.035)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}button,select,input{font:inherit}a{color:inherit;text-decoration:none}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #b2a6ff;outline-offset:2px}
+.layout{display:grid;grid-template-columns:238px minmax(0,1fr);max-width:1760px;min-height:100vh;margin:auto}.sidebar{background:#222343;color:#ebebff;padding:33px 23px;display:flex;flex-direction:column;gap:40px;position:sticky;top:0;height:100vh}.brand{display:flex;align-items:center;gap:12px;padding:1px 8px}.brandmark{display:grid;place-items:center;background:linear-gradient(135deg,#8d78f5,#d9a1dc);width:39px;height:39px;border-radius:13px;font-size:20px;color:white;box-shadow:0 7px 20px #a19af84c}.brandname{font-weight:850;letter-spacing:2.5px;font-size:21px}.brand-sub{font-size:10px;letter-spacing:1.4px;color:#a3a4cd;margin-top:2px}.navlabel{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#8488b3;margin:4px 15px 14px}.navlinks{display:grid;gap:8px}.navlinks a{display:flex;align-items:center;gap:13px;color:#afb4d3;font-size:13px;font-weight:600;padding:14px 15px;border-radius:12px;transition:.2s}.navlinks a:hover,.navlinks a.active{background:#38395f;color:white}.navsvg{width:18px;height:18px;display:inline-grid;place-items:center;font-size:17px}.sidebar-bottom{margin-top:auto;background:#313354;padding:19px 16px;border:1px solid #474866;border-radius:17px}.sidebar-bottom .eyebrow{color:#b8b9d9;font-size:11px;letter-spacing:1px;text-transform:uppercase}.sidebar-bottom strong{display:block;margin:8px 0;font-size:15px;line-height:1.35}.sidebar-bottom small{display:block;color:#adadcc;font-size:11px;line-height:1.6}
+.main{padding:32px clamp(18px,3.2vw,53px) 60px;min-width:0}.topbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:27px}.breadcrumb{font-size:12px;color:#9394a9}.breadcrumb b{color:#4a456d;font-weight:700}.tag-date{border:1px solid var(--border);border-radius:100px;padding:9px 13px;background:white;color:#696a83;font-size:12px;white-space:nowrap}.tag-date .dot{display:inline-block;width:7px;height:7px;background:#54c4ad;border-radius:50%;margin-right:8px}
+.hero{background:linear-gradient(112deg,#5a51bd 2%,#8473e0 61%,#a991e5);color:#fff;border-radius:25px;min-height:192px;padding:31px 36px;display:flex;align-items:center;justify-content:space-between;overflow:hidden;position:relative;isolation:isolate;box-shadow:0 15px 36px rgba(111,98,202,.15)}.hero:after{content:"";position:absolute;right:-49px;top:-155px;width:360px;height:360px;border-radius:50%;border:64px solid #ffffff13;z-index:-1}.hero:before{content:"";position:absolute;right:180px;bottom:-125px;width:280px;height:280px;border-radius:50%;border:42px solid #ffffff12;z-index:-1}.hero small{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#e5dcff}.hero h1{font-size:clamp(24px,2.9vw,34px);margin:11px 0 9px;line-height:1.2;letter-spacing:-.8px}.hero p{font-size:13px;color:#eeebff;max-width:530px;line-height:1.7;margin:0}.hero-illustration{width:164px;height:138px;display:grid;place-items:center;position:relative;flex-shrink:0}.hero-card{background:#ffffff32;width:120px;height:126px;border:1px solid #ffffff60;border-radius:18px;transform:rotate(-9deg);display:grid;align-content:center;justify-items:center;gap:8px;box-shadow:0 12px 40px #3c329429;backdrop-filter:blur(8px)}.hero-card span{font-size:43px}.hero-card small{color:white;letter-spacing:1.5px}
+.section-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:27px 0 15px}.section-header h2{margin:0;font-size:16px;letter-spacing:-.25px}.section-header .mini{font-size:12px;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.kpi{padding:20px 21px;background:white;border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);position:relative;overflow:hidden;min-height:130px}.kpi-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.kpi-label{color:#76768e;font-size:11px;font-weight:700;letter-spacing:.5px}.kpi-icon{display:grid;place-items:center;border-radius:11px;width:33px;height:33px;font-size:17px}.kpi .num{margin:10px 0 5px;font-weight:800;font-size:clamp(24px,3vw,31px);line-height:1.2;letter-spacing:-.7px}.kpi .hint{color:#9696ab;font-size:11px;line-height:1.4}.kpi:nth-child(1) .kpi-icon{background:#ece7ff;color:#7159d0}.kpi:nth-child(2) .kpi-icon{background:#fff3de;color:#da983f}.kpi:nth-child(3) .kpi-icon{background:#ffe9ec;color:#d76d7e}.kpi:nth-child(4) .kpi-icon{background:#e4f3f0;color:#41a98f}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:19px}.panel{border:1px solid var(--border);background:var(--white);border-radius:20px;box-shadow:var(--shadow);padding:22px 24px;min-width:0}.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.panel-head h3{font-size:14px;font-weight:750;margin:0}.panel-head .sub{font-size:11px;color:#999aad}.panel-head .pill{padding:6px 10px;background:#f5f2ff;color:#6e5fc1;border-radius:9px;font-weight:700;font-size:11px}.status-main{display:flex;align-items:center;gap:22px}.donut{width:149px;height:149px;flex-shrink:0;position:relative;border-radius:50%;background:conic-gradient(var(--orange) 0 30%,var(--red) 30% 45%,var(--blue) 45% 62%,var(--green) 62% 74%,var(--purple) 74% 100%);display:grid;place-items:center}.donut-center{width:104px;height:104px;background:white;border-radius:50%;display:grid;place-content:center;text-align:center;box-shadow:0 0 0 1px #fff}.donut-center b{font-size:29px;letter-spacing:-1px}.donut-center span{color:#a3a3b5;font-size:10px;font-weight:600}.legend{display:grid;grid-template-columns:1fr 1fr;column-gap:20px;row-gap:13px;flex:1}.leg{display:flex;align-items:center;gap:8px;font-size:11px;color:#77798e;white-space:nowrap}.leg .swatch{height:9px;width:9px;border-radius:3px;flex:none}.leg strong{color:var(--ink);margin-left:auto;font-size:12px}.chart{height:151px;display:flex;align-items:flex-end;justify-content:space-around;gap:14px;border-bottom:1px solid #ebeaf3;padding:0 10px 0}.bar-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;flex:1;min-width:0;height:100%;position:relative}.bar-col .bar-number{font-size:11px;font-weight:800;color:#595a76}.bar-col .bar{width:min(37px,68%);min-height:5px;background:#d9d3f7;border-radius:8px 8px 0 0;transition:height .2s}.bar-col.highlight .bar{background:linear-gradient(0deg,#7565d7,#aa9af8)}.month-labels{display:flex;justify-content:space-around;gap:14px;padding:11px 10px 0;font-size:11px;color:#999aac;text-align:center}.month-labels span{flex:1}.panel-foot{font-size:11px;color:#b0aebd;margin-top:12px}
+.two-wide{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:16px}.tasks{padding-bottom:16px}.task-items{display:grid;gap:10px}.task-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #f0f0f6}.task-row:last-child{border-bottom:0}.task-id{display:flex;align-items:center;gap:11px;min-width:0}.task-avatar{width:34px;height:34px;flex:none;display:grid;place-items:center;border-radius:11px;background:#fff0db;color:#b87825;font-size:17px}.task-row strong{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.task-row span{display:block;font-size:10px;color:#a5a4b3;margin-top:4px}.chip{border-radius:7px;display:inline-flex;align-items:center;justify-content:center;padding:6px 9px;font-size:10px;letter-spacing:.1px;font-weight:800;white-space:nowrap}.chip-wait{background:#fff0d9;color:#aa751f}.chip-revise{background:#ffe6e9;color:#c2616f}.chip-so{background:#eaf0ff;color:#587fc1}.chip-acc{background:#e5f6ee;color:#389c77}.chip-repeat{background:#efebff;color:#7e68bf}.insights{background:linear-gradient(155deg,#fdfcff,#f3eeff);border-color:#eae4f9}.insights .big-idea{display:flex;align-items:center;gap:13px;margin:15px 0}.idea-icon{height:40px;width:40px;background:#e5ddff;color:#735ac6;border-radius:13px;display:grid;place-items:center;font-size:21px}.big-idea strong{font-size:21px}.big-idea span{font-size:11px;color:#88809a;display:block;margin-top:3px}.insight-text{font-size:12px;color:#76718d;line-height:1.9;margin:12px 0}.warn{background:#fff8ea;border:1px solid #f8e9ca;border-radius:13px;padding:12px 14px;font-size:11px;color:#947341;line-height:1.65}.insight-footer{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.soft-tag{border-radius:99px;background:white;border:1px solid #eae6f7;font-size:10px;color:#756f96;padding:7px 10px}
+.list-panel{background:white;border:1px solid var(--border);border-radius:21px;box-shadow:var(--shadow);margin-top:17px;overflow:hidden}.list-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:23px 25px 9px}.list-top h2{margin:0;font-size:16px}.list-top .sub{display:block;color:#a1a0b2;font-size:11px;margin-top:6px}.btn{padding:10px 13px;border:1px solid #e6e6ef;border-radius:11px;background:#fff;color:#62647d;font-size:11px;font-weight:750;display:inline-flex;gap:7px;align-items:center}.btn:hover{background:#f5f4fb}.btn-primary{background:#6d5acf;border-color:#6d5acf;color:white}.btn-primary:hover{background:#5e4fc1}.filterbar{display:grid;grid-template-columns:minmax(170px,2fr) repeat(3,minmax(110px,1fr)) auto;gap:10px;padding:15px 25px 20px}.filterbar input,.filterbar select{width:100%;min-width:0;background:#fafafe;color:#5f617b;border:1px solid #edecf5;border-radius:11px;padding:11px 12px;font-size:12px;outline:none}.filterbar input::placeholder{color:#aaaabc}.filterbar input:focus,.filterbar select:focus{border-color:#a092eb;box-shadow:0 0 0 3px #eee9ff}.filterbar .btn{justify-content:center}.table-wrap{width:100%;overflow-x:auto}table{border-collapse:collapse;min-width:850px;width:100%;text-align:left}thead{background:#f7f7fc}th{font-size:10px;color:#9a9bad;letter-spacing:.85px;font-weight:800;padding:15px 25px;white-space:nowrap}td{padding:13px 25px;border-top:1px solid #f3f2f7;color:#67697f;font-size:12px;white-space:nowrap}tbody tr:hover{background:#fbfaff}.design-name{font-weight:760;color:#393b58;font-size:12px}.code{font-size:10px;color:#85859b;font-variant-numeric:tabular-nums}.qty{font-variant-numeric:tabular-nums;font-weight:700;color:#555775}.count-row{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#9999ac;padding:15px 25px;border-top:1px solid #f1eff7}.empty{text-align:center!important;padding:55px 12px;color:#8f90a7}.data-note{color:#a1a0b0;font-size:11px;line-height:1.7;padding:17px 7px}.footer{display:flex;justify-content:space-between;gap:14px;color:#a7a8b6;font-size:10px;margin-top:24px}.footer b{color:#8277c5}
+@media(max-width:1150px){.layout{grid-template-columns:80px minmax(0,1fr)}.sidebar{padding:26px 13px;align-items:center}.brand{padding:0}.brandname,.brand-sub,.navlabel,.navtext,.sidebar-bottom{display:none}.navlinks a{justify-content:center;padding:13px 15px}.navlinks{gap:12px}.main{padding:25px}.kpis{gap:11px}.kpi{padding:16px}.status-main{gap:12px}.donut{width:128px;height:128px}.donut-center{width:89px;height:89px}.legend{gap:9px}.panel{padding:18px}}
+@media(max-width:800px){.panels,.two-wide{grid-template-columns:1fr}.hero-illustration{display:none}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.filterbar{grid-template-columns:1fr 1fr}.filterbar input{grid-column:span 2}.filterbar .btn{grid-column:span 2}.main{padding:20px 18px}.chart{height:145px}}
+@media(max-width:510px){.layout{display:block}.sidebar{position:relative;height:auto;display:flex;flex-direction:row;justify-content:space-between;padding:12px 16px}.brandname,.brand-sub{display:block}.brandname{font-size:18px}.brand-sub{font-size:8px}.navgroup,.sidebar-bottom{display:none}.main{padding:16px 13px 30px}.tag-date{font-size:10px}.hero{padding:26px 22px;min-height:174px;border-radius:18px}.hero h1{font-size:25px}.hero p{font-size:12px}.kpi{border-radius:16px;min-height:119px}.kpi .num{font-size:27px}.panel{padding:18px;border-radius:16px}.status-main{flex-direction:column}.donut{width:132px;height:132px}.donut-center{width:92px;height:92px}.legend{width:100%}.filterbar{padding:12px 14px 18px;gap:8px}.list-top{padding:20px 14px 10px}.list-panel{border-radius:16px}.footer{flex-direction:column}}
+
+/* Online database controls */
+.source-strip{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:16px 20px;margin-top:18px;background:#fff;border:1px solid var(--border);border-radius:17px;box-shadow:var(--shadow)}
+.source-left{display:flex;align-items:center;gap:12px;min-width:0}
+.source-dot{width:12px;height:12px;border-radius:50%;flex:none;background:#edb75e;box-shadow:0 0 0 4px #fbf1df}
+.source-strip.live .source-dot{background:#49b89e;box-shadow:0 0 0 4px #e0f5ed}
+.source-strip.error .source-dot{background:#df8c55;box-shadow:0 0 0 4px #fdf0e3}
+.source-left strong{display:block;font-size:12px;color:#43415d}
+.source-left small{display:block;font-size:11px;color:#9292a5;line-height:1.55;margin-top:3px;max-width:620px}
+.source-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.source-actions [hidden]{display:none!important}
+#saveBtn:disabled,#importBtn:disabled,#loginBtn:disabled{cursor:wait;opacity:.55}
+.panel-foot#trendFoot{line-height:1.5}
+.warn{font-size:11px}
+@media(max-width:510px){.source-strip{padding:15px}.source-actions{width:100%}.source-actions .btn{flex:1;justify-content:center}}
+
+/* Tampilan editor PO */
+.admin-label{display:inline-flex;align-items:center;max-width:230px;font-size:11px;color:#676489;border:1px solid #ece7f9;background:#f8f6fe;border-radius:100px;padding:9px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actionbtn{font-size:11px;border-radius:8px;border:1px solid #e6e3f3;background:white;color:#655ab2;padding:7px 10px;margin-right:5px}.actionbtn:hover{background:#f4f0ff}.actionbtn.delete{color:#c96c73;border-color:#f2e0e1}.actionbtn.delete:hover{background:#fff0f2}
+.modal-backdrop{position:fixed;inset:0;background:rgba(22,19,48,.60);z-index:30;display:grid;place-items:center;padding:16px;backdrop-filter:blur(5px)}.modal-backdrop[hidden],.toast[hidden]{display:none!important}.edit-modal{background:white;border-radius:25px;width:min(580px,100%);max-height:min(92vh,850px);overflow-y:auto;box-shadow:0 36px 90px rgba(25,18,66,.25);padding:28px 30px 26px}.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:22px}.modal-kicker{color:#8976c8;font-size:10px;letter-spacing:2px;font-weight:850}.modal-head h2{margin:8px 0;font-size:24px}.modal-head p{font-size:12px;color:#8b8da2;line-height:1.5;margin:0}.modal-close{width:35px;height:35px;background:#f6f4fb;border:0;color:#77718f;border-radius:12px;font-size:22px;flex:none}.fields-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field{display:flex;flex-direction:column;gap:7px;min-width:0}.field.span2{grid-column:span 2}.field label{font-size:11px;font-weight:750;color:#64627f}.field label b{color:#d77d92}.field input,.field select{height:43px;min-width:0;background:#fbfaff;border:1px solid #e9e6f1;border-radius:11px;padding:9px 12px;font-size:12px;color:#39354c}.field input:focus,.field select:focus{outline:none;border-color:#9381e1;box-shadow:0 0 0 3px #eee9ff}.modal-help{color:#88869c;font-size:11px;line-height:1.6;margin:18px 0 5px}.modal-footer{display:flex;justify-content:flex-end;gap:10px;border-top:1px solid #f0edf7;margin-top:18px;padding-top:20px}.modal-footer .btn{font-size:12px;padding:12px 17px}.toast{position:fixed;z-index:60;right:22px;bottom:24px;max-width:min(430px,calc(100vw - 35px));box-shadow:0 12px 40px rgba(25,18,66,.17);border-radius:14px;padding:14px 18px;background:#242345;color:white;font-size:13px;line-height:1.6}.toast.error{background:#ab4654}.modal-open{overflow:hidden}tbody td:last-child{min-width:94px}.source-actions{gap:8px}
+@media(max-width:510px){.fields-grid{gap:12px}.edit-modal{padding:24px 17px;border-radius:18px}.modal-head h2{font-size:21px}.field.span2{grid-column:span 2}.source-actions .admin-label{width:100%;max-width:none}.modal-footer .btn{flex:1;justify-content:center}}
+
+/* CSV import — admin only */
+.import-modal{width:min(740px,100%)}
+.csv-filebox{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:17px;border:1.5px dashed #bfb5f0;background:#faf8ff;border-radius:15px;margin:14px 0}
+.csv-filebox input{font-size:12px;color:#4b456f;width:100%;max-width:440px;cursor:pointer}
+.csv-filebox input::file-selector-button{background:#715ed3;color:white;border:0;padding:10px 12px;border-radius:9px;font-weight:700;margin-right:10px;cursor:pointer}
+.csv-example{font-size:11px;color:#77728f;line-height:1.6}
+.csv-error{color:#ad4655;background:#fff0f1;border:1px solid #fad7db;border-radius:12px;padding:11px 13px;font-size:12px;line-height:1.5;margin-top:12px}
+.import-preview{margin-top:18px;background:#faf9ff;border:1px solid #eee8fc;border-radius:15px;padding:16px}
+.import-counts{font-size:12px;line-height:1.7;color:#6f6b87;margin:0 0 12px}
+.import-counts strong{font-size:17px;color:#5146a8}
+.import-table-wrap{max-height:186px;overflow:auto;background:white;border:1px solid #e8e5f2;border-radius:10px}
+.import-table{font-size:11px;width:100%;border-collapse:collapse;min-width:570px}
+.import-table th{background:#f4f1fd;color:#736b98;font-weight:750;text-align:left;white-space:nowrap;padding:9px}
+.import-table td{padding:9px;border-top:1px solid #f4f2fa;white-space:nowrap;color:#69647a}
+.import-options{margin-top:18px;display:grid;gap:10px}
+.import-options label{display:flex;align-items:flex-start;gap:11px;padding:13px 15px;border:1px solid #eae6f4;border-radius:13px;cursor:pointer;background:white}
+.import-options label:has(input:checked){border-color:#ae9ce9;background:#f9f6ff}
+.import-options input{accent-color:#7464d9;margin-top:3px;flex-shrink:0}
+.import-options strong{display:block;font-size:12px;margin-bottom:4px}
+.import-options small{display:block;color:#928ca2;font-size:11px;line-height:1.5}
+.import-danger{border:1px solid #f1d0d6;background:#fff3f4;border-radius:12px;padding:13px;margin-top:12px}
+.import-danger p{font-size:11px;color:#a24c5c;margin:0 0 9px;line-height:1.6}
+.import-danger input{width:180px;max-width:100%;border:1px solid #df9ca8;border-radius:9px;height:38px;padding:8px 10px;font-size:12px}
+.import-progress{font-size:12px;color:#695cbe;padding-top:12px;min-height:22px}
+#importConfirmBtn:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:510px){.import-table-wrap{max-height:170px}.csv-filebox{padding:13px}.import-modal{width:100%}}
+</style>
+<style>
+/* MERCY NEXUS — MIDNIGHT CYAN / EMERALD | 2026 */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{--bg:#07111d;--ink:#e9f4ff;--muted:#8199ab;--purple:#33dae0;--border:rgba(135,192,225,.14);--white:#0d2030;--green:#47e0ab;--orange:#edb76a;--red:#ff6976;--blue:#43c8f2;--pink:#4ccdc3;--shadow:0 14px 38px rgba(1,8,20,.18);--panel:#0a1b2a;--cyan:#3cdef0;--cyanSoft:rgba(54,218,243,.12)}
+html{background:#06101c;scroll-behavior:smooth}body{color:var(--ink);font-family:'DM Sans',Inter,system-ui,-apple-system,sans-serif;background:radial-gradient(ellipse 50% 26% at 80% 1%,rgba(18,112,142,.16),transparent 75%),linear-gradient(180deg,#06101c 0%,#071521 60%,#06111d 100%);font-size:13px;min-height:100vh}body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(149,203,235,.017) 1px,transparent 1px),linear-gradient(90deg,rgba(149,203,235,.017) 1px,transparent 1px);background-size:44px 44px;z-index:0}button,select,input{font:inherit}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}::selection{color:#04131d;background:#61e6e8}::-webkit-scrollbar{width:10px;height:8px}::-webkit-scrollbar-track{background:#0a1926}::-webkit-scrollbar-thumb{background:#234658;border-radius:50px}::-webkit-scrollbar-thumb:hover{background:#37748d}
+.layout{grid-template-columns:242px minmax(0,1fr);max-width:1900px;position:relative;z-index:1}.sidebar{padding:36px 23px 26px;background:linear-gradient(180deg,#081a29 0%,#071420 100%);border-right:1px solid rgba(99,184,214,.13);box-shadow:8px 0 30px #00000016;gap:62px}.brand{gap:13px;padding:3px 5px}.brandmark{background:linear-gradient(130deg,#15475f,#176b75 65%,#16c6aa);width:43px;height:43px;color:#d9fffa;box-shadow:0 0 0 1px rgba(97,230,234,.38),0 0 34px rgba(38,222,229,.16);font-size:27px;transform:rotate(-9deg)}.brandname{font-family:'Space Grotesk',sans-serif;font-size:23px;letter-spacing:2px;color:#f7fbff}.brand-dot{color:var(--cyan)}.brand-sub{color:#6fa5b2;font-size:8px;letter-spacing:1.45px;margin-top:5px;font-weight:800}.navlabel{font-size:10px;color:#5b8394;letter-spacing:2.4px;margin:3px 14px 16px}.navlinks{gap:9px}.navlinks a{color:#8ba3b2;border:1px solid transparent;border-radius:12px;font-size:12px;letter-spacing:.1px;font-weight:650;padding:14px 14px}.navlinks a:hover,.navlinks a.active{background:linear-gradient(90deg,rgba(38,199,219,.14),rgba(36,209,203,.04));border-color:rgba(69,207,219,.19);color:#c5faff;box-shadow:inset 3px 0 0 #39d6dc}.navlinks a.active .navsvg{color:var(--cyan)}.navsvg{color:#5d9bad;font-size:18px}.sidebar-bottom{position:relative;overflow:hidden;background:linear-gradient(148deg,rgba(17,62,78,.96),rgba(7,32,46,.96));border:1px solid rgba(61,220,208,.22);border-radius:19px;padding:24px 18px 52px;box-shadow:inset 0 0 26px rgba(41,196,196,.06)}.side-live{font-size:9px;font-weight:850;letter-spacing:1.5px;color:#65ebbf;display:flex;align-items:center;gap:7px}.live-pulse{height:7px;width:7px;border-radius:50%;background:#45dfad;box-shadow:0 0 0 4px rgba(53,216,166,.12),0 0 16px #42c69d}.sidebar-bottom strong{color:#efffff;font-family:'Space Grotesk',Arial,sans-serif;font-size:17px;max-width:170px;margin:19px 0 9px;line-height:1.3}.sidebar-bottom small{color:#83a4b3;font-size:11px}.side-art{position:absolute;right:-15px;bottom:-48px;font-size:140px;color:rgba(52,223,224,.10);line-height:1}
+.main{padding:34px clamp(23px,3.6vw,60px) 60px}.topbar{margin-bottom:25px}.breadcrumb{font-size:10px;letter-spacing:1.5px;color:#647e93;font-weight:800}.crumb-mark{color:var(--cyan);font-size:17px;letter-spacing:0;margin-right:10px;font-family:'Space Grotesk'}.breadcrumb .crumb-slash{color:#3d697b;margin:0 11px}.breadcrumb b{color:#c2dae5;letter-spacing:1.35px}.tag-date{color:#abcad7;border-color:rgba(81,170,192,.23);background:rgba(12,33,48,.83);font-size:11px;padding:10px 15px;box-shadow:inset 0 1px 0 #ffffff05}.tag-date .dot{background:var(--green);box-shadow:0 0 13px var(--green)}
+.hero{background:linear-gradient(115deg,#0b3041 0%,#0d2535 50%,#0a2b37 100%);border:1px solid rgba(71,219,227,.30);border-radius:25px;min-height:257px;padding:37px 42px;isolation:isolate;box-shadow:0 20px 70px rgba(0,0,0,.21),0 0 50px rgba(0,227,225,.07),inset 0 1px 0 rgba(209,255,250,.08)}.hero:before{content:"";position:absolute;inset:0;left:0;right:0;top:0;bottom:0;width:auto;height:auto;border:0;border-radius:inherit;background:linear-gradient(90deg,transparent 40%,rgba(37,214,225,.06) 60%,transparent 100%),repeating-linear-gradient(90deg,transparent 0 32px,rgba(133,236,248,.026) 33px 34px);z-index:-2;pointer-events:none}.hero:after{content:"";position:absolute;right:-100px;top:-130px;width:500px;height:500px;border:1px solid rgba(60,223,225,.22);background:radial-gradient(circle,rgba(10,203,201,.22),rgba(16,142,179,.06) 41%,transparent 68%);border-radius:50%;filter:blur(.3px);z-index:-1;pointer-events:none}.hero-copy{position:relative;z-index:2;max-width:700px}.hero small{display:flex;align-items:center;gap:10px;color:#76e6dd;letter-spacing:2.1px;font-weight:800;font-size:10px}.pulse-pin{width:7px;height:7px;border-radius:50%;background:#61e6b1;box-shadow:0 0 0 5px rgba(58,218,168,.11),0 0 15px #42daa5;animation:pinPulse 3s infinite}.hero h1{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-1.7px;line-height:1.06;font-size:clamp(32px,3.7vw,51px);margin:16px 0 14px;color:#f2fcff}.hero h1 em{font-style:normal;background:linear-gradient(90deg,#50eee8 0%,#8bf7d8 75%);background-clip:text;-webkit-background-clip:text;color:transparent}.hero p{color:#9cc7d0;font-size:13px;max-width:560px;line-height:1.7}.hero-tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px}.hero-tags span{font-size:9px;letter-spacing:1.1px;color:#93c9d1;border:1px solid rgba(135,230,238,.20);padding:7px 10px;background:rgba(3,24,32,.36);border-radius:7px;font-weight:800}.hero-illustration{width:280px;height:205px;margin-right:6px;overflow:visible;flex:0 0 280px}.orbital{position:relative;width:215px;height:215px;display:grid;place-items:center;filter:drop-shadow(0 0 20px rgba(44,223,231,.2));animation:orbFloat 6s ease-in-out infinite}.orbital-ring{position:absolute;inset:17px;border:1px solid rgba(98,240,241,.25);border-radius:50%;box-shadow:0 0 27px rgba(21,204,206,.11)}.ring-one{inset:-1px;border-style:dashed;animation:orbit 33s linear infinite;opacity:.67}.ring-two{inset:29px;border-width:12px;border-color:rgba(16,157,170,.11);box-shadow:inset 0 0 20px rgba(60,230,234,.17),0 0 30px rgba(60,230,234,.09)}.ring-three{inset:53px;border-color:rgba(104,252,230,.43);box-shadow:0 0 18px rgba(42,219,218,.18);transform:rotate(36deg);border-style:dashed}.orbit-core{width:88px;height:88px;display:grid;place-items:center;border-radius:25px;transform:rotate(-10deg);border:1px solid rgba(110,255,233,.6);background:linear-gradient(135deg,#153f4e,#0b3643);box-shadow:0 0 0 10px rgba(32,192,191,.06),0 0 38px rgba(44,225,221,.18)}.orbit-core strong{font-family:'Space Grotesk',Arial,sans-serif;font-size:39px;color:#d7ffff;line-height:1}.orbit-core span{position:absolute;top:4px;right:8px;font-size:16px;color:#67ebbb}.orbit-particle{position:absolute;width:10px;height:10px;background:#6ceccc;border-radius:50%;box-shadow:0 0 19px #3ff3c4}.particle-a{top:30px;right:41px}.particle-b{bottom:36px;left:24px;background:#d6b56b;box-shadow:0 0 18px #d6b56b}.orbit-label{position:absolute;right:-36px;bottom:12px;font-size:9px;letter-spacing:1.8px;font-weight:800;color:#85c6ca;background:#0b2836;border:1px solid rgba(87,210,205,.18);border-radius:30px;padding:9px 12px}
+.source-strip{margin-top:20px;background:linear-gradient(95deg,rgba(12,35,47,.88),rgba(11,29,43,.91));border-color:rgba(76,199,208,.18);border-radius:15px;padding:16px 18px;box-shadow:inset 0 1px 0 rgba(236,255,255,.03)}.source-dot{background:var(--orange);box-shadow:0 0 0 5px rgba(231,181,108,.1)}.source-strip.live .source-dot{background:var(--green);box-shadow:0 0 0 5px rgba(74,231,177,.11),0 0 18px rgba(74,231,177,.36)}.source-strip.error .source-dot{background:var(--red);box-shadow:0 0 0 5px rgba(255,105,118,.10)}.source-left strong{color:#c5f0ef;font-size:12px;letter-spacing:.1px}.source-left small{color:#819fb0;font-size:11px}.source-actions{gap:8px}.admin-label{color:#b4eddf;background:rgba(16,87,76,.28);border-color:rgba(72,214,181,.24);font-size:10px}.btn{background:rgba(19,45,60,.75);color:#b5d5e0;border:1px solid rgba(115,195,218,.19);border-radius:10px;min-height:36px;padding:10px 14px;font-size:11px;font-weight:800;letter-spacing:.15px;transition:background .2s,border-color .2s,transform .2s,box-shadow .2s}.btn:hover{background:rgba(29,70,84,.83);color:#eaffff;border-color:rgba(94,222,229,.5);transform:translateY(-1px);box-shadow:0 5px 22px rgba(25,228,232,.08)}.btn:active{transform:translateY(0)}.btn-primary{color:#06171b;background:linear-gradient(112deg,#57dfea,#3de3c8);border-color:rgba(103,244,225,.53);box-shadow:0 5px 24px rgba(23,220,207,.19)}.btn-primary:hover{background:linear-gradient(112deg,#7cf1f2,#60efcf);color:#032123;box-shadow:0 6px 27px rgba(17,221,216,.24)}
+.age-alert{display:flex;align-items:center;gap:15px;padding:17px 19px;margin-top:17px;min-height:80px;border-radius:15px;background:linear-gradient(99deg,rgba(106,28,40,.40),rgba(72,22,38,.28) 60%,rgba(79,25,32,.22));border:1px solid rgba(255,105,118,.34);box-shadow:inset 3px 0 0 rgba(255,116,127,.9),0 9px 32px rgba(89,23,32,.11);animation:alertEnter .3s ease both}.age-alert[hidden]{display:none!important}.age-alert-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:rgba(255,100,112,.16);border:1px solid rgba(255,129,129,.25);color:#ff9b9e;flex:none;font-size:21px;font-weight:900;box-shadow:0 0 21px rgba(255,105,118,.13)}.age-alert-copy{display:grid;gap:4px;min-width:0;flex:1}.age-alert-copy strong{color:#ffc1bb;font-size:13px}.age-alert-copy span{color:#c8999b;font-size:11px;line-height:1.5}.btn-alert{color:#ffd0c9;border:1px solid rgba(255,126,133,.38);background:rgba(194,61,78,.18);flex:none}.btn-alert:hover{background:rgba(194,61,78,.36);color:#fff}
+.section-header{margin:29px 0 16px}.section-header h2{font-family:'Space Grotesk',sans-serif;font-size:17px;letter-spacing:-.25px;display:flex;align-items:center;gap:11px}.section-line{width:3px;height:19px;background:linear-gradient(var(--cyan),var(--green));border-radius:4px;box-shadow:0 0 13px rgba(55,233,224,.35)}.section-header .mini{color:#6a8b9f;font-size:10px;letter-spacing:.8px;font-weight:800}.mini-dot{color:#5feac9;margin-left:8px}
+.kpis{grid-template-columns:repeat(5,minmax(0,1fr));gap:13px}.kpi{min-height:151px;padding:20px 20px 16px;background:linear-gradient(148deg,rgba(13,34,49,.95),rgba(10,28,43,.92));border:1px solid rgba(109,190,208,.15);border-radius:18px;box-shadow:0 8px 27px #0000001d,inset 0 1px 0 rgba(252,255,255,.026);transition:transform .25s,border-color .25s,box-shadow .25s;isolation:isolate}.kpi:hover{transform:translateY(-4px);border-color:rgba(63,227,230,.35);box-shadow:0 16px 35px #00000027,0 0 23px rgba(40,222,219,.08)}.kpi:before{content:"";position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,var(--card-accent, #41d6e6),transparent 68%);opacity:.72}.kpi:after{content:"";position:absolute;width:130px;height:130px;right:-60px;bottom:-95px;border-radius:50%;background:var(--card-accent,#34c2d9);filter:blur(60px);opacity:.16;pointer-events:none;z-index:-1}.kpi:nth-child(1){--card-accent:#42d9e8}.kpi:nth-child(2){--card-accent:#ebb462}.kpi:nth-child(3){--card-accent:#80b9f1}.kpi:nth-child(4){--card-accent:#4ce2ac}.kpi:nth-child(5){--card-accent:#ff6c76;border-color:rgba(249,98,113,.26);background:linear-gradient(145deg,rgba(48,22,36,.82),rgba(30,21,34,.76))}.kpi-label{color:#93aebf;font-size:10px;letter-spacing:.9px;line-height:1.5}.kpi-icon{background:rgba(53,197,217,.10)!important;color:var(--card-accent)!important;border:1px solid rgba(164,247,255,.10);border-radius:10px;font-size:17px;width:32px;height:32px;box-shadow:0 0 16px color-mix(in srgb,var(--card-accent) 12%,transparent)}.kpi .num{font-family:'Space Grotesk',sans-serif;color:#f3fdff;font-size:clamp(24px,2.65vw,34px);margin:15px 0 6px;line-height:1.05;letter-spacing:-.9px}.kpi:nth-child(5) .num{color:#ff989e}.kpi .hint{color:#7594a8;font-size:10px;line-height:1.6}
+.panels{gap:16px;margin-top:20px}.panel{background:linear-gradient(160deg,rgba(13,34,49,.94),rgba(9,26,40,.94));border:1px solid rgba(104,182,206,.17);border-radius:19px;padding:24px 25px;box-shadow:0 8px 30px #0000001b,inset 0 1px 0 rgba(255,255,255,.026)}.panel-head{margin-bottom:22px}.panel-head h3{font-family:'Space Grotesk',Arial,sans-serif;font-size:14px;font-weight:700;color:#dff3f9}.header-accent{color:#49e2d5;font-size:17px;margin-right:7px}.panel-head .sub{color:#7593a7}.panel-head .pill{color:#69d3d2;background:rgba(21,120,136,.18);border:1px solid rgba(54,224,233,.16);border-radius:8px;font-size:9px}.status-main{gap:22px}.donut{height:157px;width:157px;box-shadow:0 0 0 5px rgba(82,222,236,.03),0 0 22px rgba(0,206,219,.14)}.donut-center{width:110px;height:110px;background:radial-gradient(circle,#143249 0%,#0a1b2a 78%);border:1px solid rgba(115,199,223,.18);box-shadow:0 0 18px #00000038;color:#e2faff}.donut-center b{font-family:'Space Grotesk',Arial,sans-serif;font-size:33px}.donut-center span{color:#7199a7;font-size:9px;letter-spacing:1.1px}.legend{row-gap:15px;column-gap:16px}.leg{color:#8fabbc;font-size:11px;gap:8px}.leg strong{color:#e4f5f8;font-family:'Space Grotesk',Arial,sans-serif;font-size:13px}.leg .swatch{border-radius:100px;box-shadow:0 0 12px currentColor}.panel-foot{color:#6e8b9e;font-size:10px;margin-top:18px}.chart{border-bottom:1px solid rgba(113,189,205,.22);height:155px;position:relative}.chart:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(to top,transparent 0 36px,rgba(94,166,192,.07) 37px 38px);pointer-events:none}.bar-col .bar-number{color:#a9dfdb;font-family:'Space Grotesk',Arial,sans-serif;font-size:11px}.bar-col .bar{background:linear-gradient(0deg,#137e91,#37dce3);box-shadow:0 -4px 17px rgba(48,216,224,.12);border-radius:8px 8px 0 0;position:relative;animation:barRise .5s ease both}.bar-col.highlight .bar{background:linear-gradient(0deg,#11998e,#53e8c0);box-shadow:0 0 16px rgba(49,222,185,.23)}.month-labels{color:#809eae;font-size:10px}
+.two-wide{grid-template-columns:1.14fr .86fr;gap:16px}.task-row{border-color:rgba(118,190,217,.10);padding:13px 0}.task-row strong{color:#d3eaf1;font-size:12px}.task-row span{color:#7296ab;font-size:10px}.task-avatar{background:rgba(39,179,190,.11);color:#64e5d6;border:1px solid rgba(78,218,217,.15);border-radius:10px}.task-row.is-aged .task-avatar{background:rgba(255,105,118,.12);color:#ff838d;border-color:rgba(255,105,118,.28)}.task-row.is-aged .task-id strong{color:#ffc9cc}.chip{border:1px solid transparent;border-radius:7px;font-size:9px;letter-spacing:.35px;font-weight:900;padding:7px 10px}.chip-wait{background:rgba(230,170,82,.13);border-color:rgba(235,179,84,.20);color:#f2c57f}.chip-revise{background:rgba(255,112,125,.10);border-color:rgba(255,112,125,.16);color:#ff9297}.chip-so{background:rgba(64,180,222,.12);border-color:rgba(75,188,237,.19);color:#7dbdf5}.chip-acc{background:rgba(55,220,163,.11);border-color:rgba(65,211,161,.22);color:#72efbd}.chip-repeat{background:rgba(127,182,230,.10);border-color:rgba(112,169,215,.22);color:#a7cffa}.insights{background:linear-gradient(145deg,rgba(12,49,55,.7),rgba(9,27,39,.9));border-color:rgba(69,219,203,.19)}.idea-icon{background:rgba(57,207,200,.14);color:#5fe4c6;border:1px solid rgba(68,232,217,.17)}.big-idea strong{font-family:'Space Grotesk',Arial,sans-serif;font-size:27px;color:#e9fcf6}.big-idea span{color:#87a8ad}.insight-text{color:#9fb8c0;font-size:12px}.warn{background:rgba(212,165,84,.08);border:1px solid rgba(213,176,112,.21);color:#d3b78d;border-radius:10px;font-size:11px}.soft-tag{background:rgba(22,81,81,.29);color:#9ddbd3;border-color:rgba(66,203,193,.15)}
+.list-panel{background:linear-gradient(175deg,rgba(12,33,47,.98),rgba(9,27,41,.98));border:1px solid rgba(103,191,213,.19);border-radius:20px;margin-top:21px;box-shadow:0 14px 45px #00000028}.list-top{padding:24px 25px 18px;border-bottom:1px solid rgba(110,182,209,.11)}.eyebrow-top{font-size:9px;letter-spacing:2px;font-weight:900;color:#4cbcb8}.list-top h2{font-family:'Space Grotesk',Arial,sans-serif;color:#eaf9fc;margin:7px 0 0;font-size:22px}.database-star{color:#3fdcd9;font-size:18px;vertical-align:3px}.list-top .sub{color:#7898a9;font-size:11px;margin-top:7px}.filterbar{grid-template-columns:minmax(165px,2fr) repeat(4,minmax(115px,1fr)) auto;padding:18px 25px 12px;gap:9px}.filterbar input,.filterbar select{color:#b8d6e3;background:#071827;border:1px solid rgba(118,189,219,.21);font-size:11px;border-radius:9px;padding:11px 12px;color-scheme:dark}.filterbar input::placeholder{color:#648396}.filterbar input:focus,.filterbar select:focus{border-color:rgba(57,217,220,.59);box-shadow:0 0 0 3px rgba(33,216,226,.09);outline:none}.age-legend{display:flex;gap:15px;align-items:center;flex-wrap:wrap;padding:0 25px 19px;color:#91acb9;font-size:10px;line-height:1.6}.age-legend>span{display:inline-flex;align-items:center;gap:6px}.signal{height:7px;width:7px;border-radius:50%;display:inline-block;flex:none}.signal-red{background:var(--red);box-shadow:0 0 12px var(--red)}.signal-amber{background:var(--orange);box-shadow:0 0 10px var(--orange)}.signal-green{background:var(--green);box-shadow:0 0 11px var(--green)}.age-legend-note{color:#658393!important;margin-left:auto}.table-wrap{background:#081927}table{min-width:1260px}thead{background:#0b2533}th{color:#759caa;border-bottom:1px solid rgba(116,185,203,.12);font-size:9px;letter-spacing:1.2px;padding:15px 19px}td{color:#93b3c0;border-top:1px solid rgba(98,164,190,.095);padding:14px 19px;font-size:11px}tbody tr{transition:background .16s}tbody tr:hover{background:rgba(25,91,111,.20)}.design-name{color:#d5eef4;font-weight:800;font-size:12px}.code{color:#7eabba;font-size:10px}.qty{color:#d4ecf2;font-family:'Space Grotesk',Arial,sans-serif;font-weight:700;font-size:12px}.po-date{display:grid;gap:5px;min-width:94px}.po-date-main{color:#bed3db;font-variant-numeric:tabular-nums}.age-flag{display:inline-flex;align-items:center;gap:5px;width:max-content;max-width:115px;white-space:nowrap;border-radius:5px;padding:4px 6px;font-size:9px;font-weight:900;letter-spacing:.3px}.age-flag.flag-aged{background:rgba(248,98,109,.18);color:#ff989c;border:1px solid rgba(255,95,113,.36)}.age-flag.flag-watch{background:rgba(244,175,88,.11);color:#ecc077;border:1px solid rgba(237,179,91,.25)}.arrival-ok{color:#6be4b1;font-weight:800}.arrival-note{font-size:9px;color:#849eac;display:block;margin-top:5px}.empty{color:#84a1b3}.row-aged{background:linear-gradient(90deg,rgba(127,29,44,.30),rgba(66,28,40,.12) 46%,rgba(17,36,49,.05));box-shadow:inset 3px 0 0 #fb6575}.row-aged:hover{background:linear-gradient(90deg,rgba(131,34,49,.44),rgba(67,37,45,.21) 60%)}.row-aged .design-name{color:#ffced0}.row-aged .po-date-main{color:#ffb6b8}.row-watch{background:linear-gradient(90deg,rgba(115,78,32,.16),rgba(16,35,48,.03) 60%);box-shadow:inset 3px 0 0 #dba662}.row-watch:hover{background:rgba(115,78,32,.20)}.actionbtn{color:#77e1e3;background:rgba(40,165,179,.09);border-color:rgba(55,214,224,.2);padding:8px 10px}.actionbtn:hover{background:rgba(43,206,215,.2);color:#b5ffff}.actionbtn.delete{color:#ff959e;border-color:rgba(255,99,116,.26);background:rgba(183,54,68,.08)}.actionbtn.delete:hover{background:rgba(255,77,102,.18)}.count-row{color:#789aad;background:rgba(11,39,50,.55);border-top:1px solid rgba(108,184,209,.11)}.data-note{font-size:10px;color:#6e92a4;line-height:1.7}.footer{color:#5d8194;letter-spacing:1.15px;font-size:9px}.footer b{color:#38e5c5}
+.modal-backdrop{background:rgba(0,10,19,.78);backdrop-filter:blur(11px)}.edit-modal{color:#dfedf5;background:linear-gradient(150deg,#0e2937,#0b1b2d);border:1px solid rgba(93,220,222,.27);box-shadow:0 38px 100px rgba(0,0,0,.5),0 0 75px rgba(30,217,212,.11);border-radius:21px;max-height:92vh}.modal-head h2{font-family:'Space Grotesk',Arial,sans-serif;color:#ecfcff;font-size:24px}.modal-head p{color:#8eacb9}.modal-kicker{color:#64ded6;font-size:9px;font-weight:900;letter-spacing:1.8px}.modal-close{background:rgba(26,77,88,.6);color:#9bd9df;border:1px solid rgba(115,222,218,.18)}.modal-close:hover{background:rgba(43,138,143,.4)}.field label{color:#a7c2cd;font-size:11px}.field label b{color:#61e5cb}.field input,.field select{color:#edfaff;background:#081b29;border:1px solid rgba(120,189,211,.27);color-scheme:dark;border-radius:9px;font-size:13px}.field input::placeholder{color:#527e8c}.field input:focus,.field select:focus{outline:none;border-color:#3ee5d8;box-shadow:0 0 0 3px rgba(39,223,211,.11)}.field-optional{font-weight:500;color:#719ca9}.field-help{font-size:10px;line-height:1.4;color:#7298a4;margin-top:3px}#fieldArrived::-webkit-calendar-picker-indicator{cursor:pointer;filter:invert(.72) sepia(.55) saturate(3) hue-rotate(126deg);padding:6px}.modal-help{background:rgba(39,177,181,.08);border-color:rgba(75,221,217,.16);color:#92c4c9}.modal-footer{border-color:rgba(121,202,222,.15)}.csv-filebox{background:rgba(20,74,83,.20);border-color:rgba(54,219,211,.34)}.csv-filebox input{color:#c4e1e7}.csv-filebox input::file-selector-button{background:#32cbbf;color:#041a1c}.csv-example{color:#90aeb8}.csv-error,.import-danger{background:rgba(130,42,51,.25);color:#ffb5b5;border-color:rgba(255,106,118,.30)}.import-preview{background:rgba(11,35,49,.65);border-color:rgba(81,196,204,.22)}.import-counts{color:#a5c2c9}.import-counts strong{color:#65e6cd}.import-table-wrap{background:#0b2030;border-color:rgba(81,184,202,.16)}.import-table th{background:#0e2d3c;color:#85bdc6}.import-table td{color:#acc8d4;border-color:rgba(121,198,224,.11)}.import-options label{background:rgba(10,34,48,.9);border-color:rgba(99,194,206,.17)}.import-options label:has(input:checked){background:rgba(21,95,101,.25);border-color:rgba(72,221,214,.44)}.import-options small{color:#789ba8}.import-options input{accent-color:#35d8c8}.import-danger p{color:#ffd4d4}.import-danger input{background:#221e2d;color:#fff;border-color:rgba(255,116,127,.5)}.import-progress{color:#72dfcc}.toast{border-color:rgba(75,225,204,.37);background:#113c42;color:#e8fffd;box-shadow:0 17px 50px rgba(0,0,0,.42)}.toast.error{background:#57232e;color:#ffdddd;border-color:rgba(255,118,126,.39)}
+@keyframes orbFloat{0%,100%{transform:translateY(-3px)}50%{transform:translateY(6px)}}@keyframes orbit{to{transform:rotate(360deg)}}@keyframes pinPulse{0%,100%{box-shadow:0 0 0 4px rgba(58,218,168,.11),0 0 12px rgba(66,218,165,.6)}50%{box-shadow:0 0 0 8px rgba(58,218,168,.06),0 0 20px rgba(66,218,165,.8)}}@keyframes barRise{from{transform:scaleY(.35);transform-origin:bottom;opacity:.4}to{transform:scaleY(1);opacity:1}}@keyframes alertEnter{from{transform:translateY(8px);opacity:.3}to{transform:translateY(0);opacity:1}}
+@media(max-width:1350px){.main{padding:28px 23px 50px}.kpis{gap:10px}.kpi{padding:16px 13px;min-height:142px}.kpi-label{font-size:9px}.kpi .num{font-size:clamp(22px,2.4vw,28px)}.filterbar{grid-template-columns:minmax(175px,1.7fr) repeat(2,minmax(105px,1fr))}.filterbar input{grid-column:span 2}.filterbar #ageFilter{grid-column:span 1}.filterbar .btn{grid-column:auto}}
+@media(max-width:1150px){.layout{grid-template-columns:76px minmax(0,1fr)}.sidebar{align-items:center;padding:28px 13px}.brandname,.brand-sub,.navlabel,.navtext,.sidebar-bottom{display:none}.brand{padding:0}.brandmark{width:41px;height:41px}.navlinks a{justify-content:center;padding:13px 15px}.hero-illustration{width:200px;flex-basis:200px}.orbital{transform:scale(.83);transform-origin:center}.kpis{grid-template-columns:repeat(3,1fr)}.kpi:nth-child(4),.kpi:nth-child(5){grid-column:auto}}
+@media(max-width:800px){.hero{padding:27px 26px;min-height:232px}.hero-illustration{display:none}.hero:after{right:-250px}.hero h1{font-size:clamp(31px,5.4vw,43px)}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi:nth-child(5){grid-column:1 / -1}.panels,.two-wide{grid-template-columns:1fr}.filterbar{grid-template-columns:repeat(2,minmax(0,1fr))}.filterbar input{grid-column:span 2}.filterbar .btn{grid-column:span 2}.age-legend-note{margin-left:0}.tag-date{font-size:10px}}
+@media(max-width:510px){.layout{display:block}.sidebar{position:relative;height:auto;width:100%;padding:14px 18px;display:flex;flex-direction:row;justify-content:space-between;align-items:center;box-shadow:0 6px 21px rgba(0,0,0,.25)}.brandname,.brand-sub{display:block}.brandname{font-size:20px}.brand-sub{font-size:7px}.navgroup,.sidebar-bottom{display:none}.main{padding:18px 14px 34px}.topbar{gap:10px}.breadcrumb{font-size:9px}.breadcrumb b{display:none}.tag-date{padding:8px 9px;font-size:9px}.hero{border-radius:17px;min-height:245px;padding:25px 22px}.hero h1{font-size:34px;margin:19px 0 10px}.hero p{font-size:12px}.hero-tags{gap:6px;margin-top:17px}.hero-tags span{font-size:8px;padding:6px 7px}.source-strip{padding:15px 13px}.source-actions{width:100%}.source-actions .btn{flex:1;justify-content:center}.source-left small{font-size:10px}.age-alert{flex-wrap:wrap;padding:14px}.age-alert-copy{flex:1 1 calc(100% - 60px)}.age-alert .btn-alert{width:100%;justify-content:center}.kpis{gap:10px}.kpi{border-radius:13px;min-height:136px;padding:15px 14px}.kpi .num{font-size:27px}.kpi .hint{font-size:9px}.kpi-label{font-size:9px}.panel{padding:18px 16px;border-radius:15px}.status-main{flex-direction:column}.donut{width:155px;height:155px}.donut-center{width:110px;height:110px}.legend{width:100%}.list-panel{border-radius:15px}.list-top{padding:21px 15px 14px}.list-top h2{font-size:21px}.filterbar{padding:14px 13px 12px;gap:9px}.age-legend{padding:2px 13px 16px;gap:8px 13px}.count-row{gap:14px;flex-wrap:wrap;padding:14px}.footer{gap:8px}.edit-modal{padding:23px 17px}.modal-head h2{font-size:21px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+</style>
+<style>
+\n/* MERCY SLATE & PEARL: enam warna dari referensi pengguna */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root {
+  --bg:#e8ecec;--ink:#11212D;--muted:#4A5C6A;--purple:#4A5C6A;
+  --border:#d3dbdd;--white:#f8faf9;--green:#486f68;--orange:#bf8a4d;
+  --red:#c9525c;--blue:#4A5C6A;--pink:#9BA8AB;
+  --shadow:0 14px 38px rgba(17,33,45,.075);
+  --panel:#f6f8f7;--cyan:#9BA8AB;--cyanSoft:rgba(155,168,171,.20);
+  --navy:#06141B;--navy2:#11212D;--slate:#253745;--steel:#4A5C6A;
+  --silver:#9BA8AB;--pearl:#CCD0CF;--paper:#F5F7F6;
+}
+html {background:#e5eaea}
+body {color:var(--ink);background:radial-gradient(ellipse 850px 460px at 83% -10%,rgba(155,168,171,.34),transparent 76%),
+    radial-gradient(ellipse 700px 540px at 8% 65%,rgba(204,208,207,.68),transparent 78%),
+    linear-gradient(135deg,#eff2f1 0%,#e5eaea 58%,#e9edeb 100%);
+  font-family:'DM Sans','Manrope',system-ui,-apple-system,sans-serif;font-size:13px}
+body:before {background-image:linear-gradient(rgba(37,55,69,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(37,55,69,.028) 1px,transparent 1px);background-size:55px 55px;opacity:.48}
+::selection {background:#4A5C6A;color:#fff}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible {outline:3px solid #9BA8AB;outline-offset:2px}
+::-webkit-scrollbar-track{background:#e6ebeb}::-webkit-scrollbar-thumb{background:#9BA8AB}::-webkit-scrollbar-thumb:hover{background:#4A5C6A}
+.layout{max-width:1980px;grid-template-columns:244px minmax(0,1fr)}
+/* Rangka kiri: warna gelap digunakan hanya di area yang memang perlu kontras */
+.sidebar {background:linear-gradient(167deg,#06141B 0%,#11212D 51%,#253745 100%);border-right:1px solid #4A5C6A;
+  box-shadow:11px 0 38px rgba(6,20,27,.09);gap:64px;color:#f2f5f4}
+.brandmark {background:linear-gradient(145deg,#CCD0CF 0%,#9BA8AB 60%,#4A5C6A 100%);color:#06141B;
+  box-shadow:0 0 0 1px rgba(204,208,207,.7),0 0 27px rgba(204,208,207,.25)}
+.brandname{color:#f5f7f7}.brand-dot{color:#CCD0CF}.brand-sub{color:#a8b7bb}
+.navlabel{color:#9BA8AB}.navsvg{color:#b7c3c5}.navlinks a{color:#b8c4c7;border-color:transparent}
+.navlinks a:hover,.navlinks a.active {background:linear-gradient(110deg,rgba(204,208,207,.17),rgba(155,168,171,.075));
+  border-color:rgba(204,208,207,.21);color:#fff;box-shadow:inset 3px 0 0 #CCD0CF,0 10px 24px rgba(6,20,27,.08)}
+.navlinks a.active .navsvg{color:#fff}
+.sidebar-bottom{background:linear-gradient(145deg,rgba(74,92,106,.48),rgba(17,33,45,.64));border-color:rgba(204,208,207,.23);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.085),0 15px 35px rgba(0,0,0,.08)}
+.side-live{color:#d5dfdf}.live-pulse{background:#CCD0CF;box-shadow:0 0 0 4px rgba(204,208,207,.13),0 0 14px rgba(204,208,207,.5)}
+.sidebar-bottom strong{color:#f8faf9}.sidebar-bottom small{color:#b8c2c3}.side-art{color:rgba(204,208,207,.17)}
+/* Area utama: terang, tidak gelap bertemu gelap */
+.main{padding-top:31px}.breadcrumb{color:#4A5C6A}.crumb-mark{color:#253745}.breadcrumb .crumb-slash{color:#9BA8AB}.breadcrumb b{color:#11212D}
+.tag-date{background:rgba(255,255,255,.79);border:1px solid #d2d9da;color:#314452;box-shadow:0 4px 16px rgba(37,55,69,.04)}
+.tag-date .dot{background:#4A5C6A;box-shadow:0 0 0 4px rgba(74,92,106,.09)}
+/* Banner dark mengkilap, bukan seluruh halaman dark */
+.hero{background:linear-gradient(115deg,#06141B 0%,#11212D 47%,#253745 78%,#4A5C6A 115%);
+  border:1px solid rgba(204,208,207,.36);min-height:255px;
+  box-shadow:0 30px 60px rgba(6,20,27,.17),0 0 0 1px rgba(255,255,255,.17),inset 0 1px 0 rgba(204,208,207,.16)}
+.hero:before{background:linear-gradient(112deg,transparent 22%,rgba(204,208,207,.065) 56%,transparent 80%),
+  repeating-linear-gradient(90deg,transparent 0 32px,rgba(204,208,207,.035) 33px 34px)}
+.hero:after{border:1px solid rgba(204,208,207,.24);background:radial-gradient(circle,rgba(204,208,207,.22),rgba(155,168,171,.11) 42%,transparent 69%)}
+.hero small{color:#d2dede}.pulse-pin{background:#CCD0CF;box-shadow:0 0 0 5px rgba(204,208,207,.16),0 0 13px #CCD0CF}
+.hero h1{font-family:'Manrope',sans-serif;color:#f9fbfa;font-weight:800;font-size:clamp(32px,3.5vw,48px)}
+.hero h1 em{background:linear-gradient(95deg,#fff 0%,#CCD0CF 55%,#9BA8AB 100%);background-clip:text;-webkit-background-clip:text;color:transparent}
+.hero p{color:#d0d9d9;max-width:610px;font-size:13px}.hero-tags span{color:#e1e7e7;border-color:rgba(204,208,207,.25);background:rgba(6,20,27,.22)}
+.orbital{filter:drop-shadow(0 0 23px rgba(204,208,207,.26))}
+.orbital-ring{border-color:rgba(204,208,207,.35);box-shadow:0 0 22px rgba(204,208,207,.14)}
+.ring-two{border-color:rgba(204,208,207,.14);box-shadow:inset 0 0 28px rgba(204,208,207,.21),0 0 31px rgba(204,208,207,.1)}
+.ring-three{border-color:rgba(204,208,207,.6);box-shadow:0 0 20px rgba(204,208,207,.19)}
+.orbit-core{background:linear-gradient(145deg,#CCD0CF,#9BA8AB 60%,#4A5C6A);border-color:#e2e6e5;
+  box-shadow:0 0 0 11px rgba(204,208,207,.09),0 0 40px rgba(204,208,207,.3)}
+.orbit-core strong{color:#06141B}.orbit-core span{color:#253745}
+.orbit-particle{background:#CCD0CF;box-shadow:0 0 18px #CCD0CF}.particle-b{background:#9BA8AB;box-shadow:0 0 18px #9BA8AB}
+.orbit-label{color:#f4f5f5;background:#253745;border-color:rgba(204,208,207,.31)}
+/* Kartu status sambungan dan tombol utama */
+.source-strip{background:rgba(250,251,250,.88);border:1px solid rgba(155,168,171,.4);box-shadow:0 10px 30px rgba(37,55,69,.056);backdrop-filter:blur(12px)}
+.source-left strong{color:#253745}.source-left small{color:#5b707c}.source-dot{background:#9BA8AB;box-shadow:0 0 0 4px rgba(155,168,171,.15)}
+.source-strip.live .source-dot{background:#446e66;box-shadow:0 0 0 4px rgba(68,110,102,.15),0 0 12px rgba(68,110,102,.22)}
+.source-strip.error .source-dot{background:#ba4e5b;box-shadow:0 0 0 4px rgba(186,78,91,.12)}
+.admin-label{background:#e9eeee;color:#253745;border:1px solid #cbd5d6}
+.btn{background:#f7f9f8;color:#253745;border:1px solid #cdd6d7;box-shadow:0 3px 13px rgba(37,55,69,.04)}
+.btn:hover{background:#e8eded;color:#06141B;border-color:#9BA8AB;box-shadow:0 5px 17px rgba(37,55,69,.13);transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(116deg,#253745,#4A5C6A);border-color:#4A5C6A;color:white;box-shadow:0 8px 20px rgba(37,55,69,.19)}
+.btn-primary:hover{background:linear-gradient(110deg,#06141B,#253745);border-color:#253745;color:#fff;box-shadow:0 10px 27px rgba(37,55,69,.27)}
+/* Peringatan tetap merah / oranye untuk keamanan operasional */
+.age-alert{background:linear-gradient(105deg,#fff5f3,#f8edeb 66%,#f5f3f1);border:1px solid #e9bbb9;
+  box-shadow:inset 4px 0 0 #c9525c,0 8px 25px rgba(120,54,64,.07)}
+.age-alert-icon{background:#fae2e2;color:#a63845;border-color:#efc4c4;box-shadow:none}
+.age-alert-copy strong{color:#8b2f3b}.age-alert-copy span{color:#9a535a}.age-alert .btn-alert{background:#a94451;color:#fff;border-color:#9f3645}
+.age-alert .btn-alert:hover{background:#913442;color:#fff}
+.section-header h2{color:#11212D;font-family:'Manrope',sans-serif;font-size:16px;font-weight:800}.section-line{background:#4A5C6A!important;box-shadow:0 0 0 4px rgba(74,92,106,.09)}
+.section-header .mini{color:#607481}.mini-dot{color:#4A5C6A}
+/* KPI terang dengan aksen garis dan efek bercahaya abu-silver */
+.kpis{gap:14px}.kpi{background:linear-gradient(145deg,rgba(255,255,255,.97),rgba(244,247,246,.96));border:1px solid #d3dadb;
+  border-radius:18px;box-shadow:0 9px 29px rgba(17,33,45,.065),inset 0 1px 0 #fff;min-height:151px;
+  overflow:hidden;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.kpi:before{background:linear-gradient(90deg,transparent,rgba(155,168,171,.44),transparent)!important;height:2px;opacity:.65}
+.kpi:after{background:radial-gradient(circle at top right,rgba(155,168,171,.25),transparent 70%);opacity:1}
+.kpi:hover{transform:translateY(-4px);border-color:#9BA8AB;box-shadow:0 18px 33px rgba(17,33,45,.12),0 0 23px rgba(155,168,171,.12)}
+.kpi:nth-child(5){background:linear-gradient(145deg,#fff8f7,#f6f6f4);border-color:#e8c8c7}
+.kpi-label{color:#4A5C6A;letter-spacing:.6px}.kpi-icon{background:#e7eceb!important;color:#253745!important;border:1px solid #dce3e2;box-shadow:none!important}
+.kpi .num{font-family:'Manrope',sans-serif;color:#11212D;font-size:clamp(25px,2.8vw,34px)}
+.kpi:nth-child(5) .num{color:#a94451}.kpi .hint{color:#72818a}
+/* Semua grafik dan panel terang */
+.panel{background:linear-gradient(155deg,rgba(255,255,255,.95),rgba(247,249,248,.94));border:1px solid #d4dcdd;
+  box-shadow:0 9px 28px rgba(17,33,45,.07);border-radius:19px}
+.panel-head h3{color:#11212D;font-family:'Manrope',sans-serif}.header-accent{color:#4A5C6A}.panel-head .sub{color:#687a84}
+.panel-head .pill{background:#e8edec;color:#314957;border:1px solid #d8e0df}
+.donut{box-shadow:0 0 0 5px rgba(155,168,171,.07),0 9px 27px rgba(37,55,69,.10)}
+.donut-center{background:linear-gradient(135deg,#ffffff,#f3f6f5);color:#11212D;border:1px solid #e2e7e6;box-shadow:0 2px 14px rgba(37,55,69,.07)}
+.donut-center b{font-family:'Manrope',sans-serif}.donut-center span{color:#627681}.leg{color:#4A5C6A}.leg strong{color:#11212D}.leg .swatch{box-shadow:none}
+.panel-foot{color:#6c7d86}.chart{border-bottom:1px solid #c8d3d5}
+.chart:before{background:repeating-linear-gradient(to top,transparent 0 36px,rgba(74,92,106,.09) 37px 38px)}
+.bar-col .bar-number{color:#253745}.bar-col .bar{background:linear-gradient(to top,#253745,#9BA8AB);box-shadow:0 -4px 15px rgba(74,92,106,.11)}
+.bar-col.highlight .bar{background:linear-gradient(to top,#06141B,#4A5C6A);box-shadow:0 -4px 17px rgba(74,92,106,.2)}
+.month-labels{color:#72848e}
+.task-row{border-color:#e3e8e7}.task-row strong{color:#11212D}.task-row span{color:#677a85}
+.task-avatar{background:#e6eceb;color:#253745;border-color:#d4dfde}.task-row.is-aged .task-avatar{background:#fce6e4;color:#b44755;border-color:#ecc0be}
+.task-row.is-aged .task-id strong{color:#9a3945}
+.chip{border-radius:7px}.chip-wait{background:#e6ebea;border-color:#d6dfde;color:#4A5C6A}
+.chip-revise{background:#e2e8e9;border-color:#cdd8dc;color:#253745}.chip-so{background:#edf0f0;border-color:#d5dcdd;color:#4A5C6A}
+.chip-acc{background:#e7ebea;border-color:#d2dddd;color:#355e57}.chip-repeat{background:#dde5e7;border-color:#c8d3d8;color:#253745}
+.insights{background:linear-gradient(144deg,#eff3f2,#f9fbfa);border-color:#cbd7d7}
+.idea-icon{background:#dee6e5;color:#253745;border-color:#cedad8}.big-idea strong{font-family:'Manrope',sans-serif;color:#11212D}.big-idea span{color:#4A5C6A}
+.insight-text{color:#4A5C6A}.warn{background:#e9efed;border:1px solid #d0ddda;color:#4A5C6A}
+.soft-tag{background:#fff;color:#4A5C6A;border:1px solid #d3dcdd}
+/* Tabel dan filter putih-silver, supaya PO panjang nyaman dibaca */
+.list-panel{background:#f8faf9;border:1px solid #d2dbdc;box-shadow:0 16px 42px rgba(17,33,45,.09)}
+.list-top{border-color:#e2e8e8}.eyebrow-top{color:#566d79}.list-top h2{color:#11212D;font-family:'Manrope',sans-serif}
+.database-star{color:#9BA8AB}.list-top .sub{color:#73828b}
+.filterbar input,.filterbar select{color:#253745;color-scheme:light;background:#fff;border:1px solid #cdd8da}
+.filterbar input::placeholder{color:#87969d}.filterbar input:focus,.filterbar select:focus{border-color:#4A5C6A;box-shadow:0 0 0 3px rgba(155,168,171,.25)}
+.age-legend{color:#536c76}.age-legend-note{color:#6d7d86!important}
+.signal-red{background:#c9525c;box-shadow:0 0 6px rgba(201,82,92,.28)}
+.signal-amber{background:#bf8a4d;box-shadow:0 0 6px rgba(191,138,77,.28)}
+.signal-green{background:#5c8179;box-shadow:0 0 6px rgba(92,129,121,.3)}
+.table-wrap{background:#fff;scrollbar-color:#9BA8AB #ecf1f1}
+.table-wrap table{min-width:1280px}thead{background:#e9eeed}
+.table-wrap th{background:#e9eeed;color:#536b77;border-bottom:1px solid #d2dddd;border-top:1px solid #e0e6e6}
+.table-wrap td{color:#364c59;border-color:#e7eded;background-color:transparent}
+.table-wrap tbody tr:nth-child(even):not(.row-aged):not(.row-watch){background:#f9fbfa}
+.table-wrap tbody tr:hover{background:#ecf1f1}
+.design-name{color:#11212D}.code{color:#516976}.qty{color:#253745;font-family:'Manrope',sans-serif}
+.po-date-main{color:#253745}.arrival-ok{color:#326f60}.arrival-note{color:#657b85}.empty{color:#697c86}
+.row-aged{background:linear-gradient(90deg,#fff0ef 0%,#fff8f7 48%,#fff 100%);box-shadow:inset 4px 0 0 #c9525c}
+.row-aged:hover{background:linear-gradient(90deg,#ffe7e4,#fff4f3 80%)}.row-aged .design-name{color:#953342}.row-aged .po-date-main{color:#9d3f4a}
+.row-watch{background:linear-gradient(90deg,#fff7ec,#fff 90%);box-shadow:inset 4px 0 0 #bf8a4d}
+.row-watch:hover{background:#fff0df}
+.age-flag.flag-aged{background:#fae0de;color:#a43f4b;border:1px solid #e7b1af}.age-flag.flag-watch{background:#faedd9;color:#90622e;border-color:#efd6b4}
+.actionbtn{background:#e6eceb;color:#253745;border-color:#c7d5d7}.actionbtn:hover{background:#d6e0e0;color:#06141B;border-color:#9BA8AB}
+.actionbtn.delete{background:#fff0ef;color:#a53a49;border-color:#efd1cf}.actionbtn.delete:hover{background:#f9dddd;color:#8f2537}
+.count-row{background:#f4f7f6;color:#5b707c;border-color:#dce4e4}.data-note{color:#637784}.footer{color:#71818a}.footer b{color:#4A5C6A}
+/* Form edit dan impor: tetap terang, kalender terbaca */
+.modal-backdrop{background:rgba(6,20,27,.67);backdrop-filter:blur(12px)}
+.edit-modal{color:#11212D;background:linear-gradient(145deg,#fcfdfc,#edf1f0);border:1px solid #d7dfdf;
+  box-shadow:0 38px 95px rgba(6,20,27,.36),0 0 40px rgba(204,208,207,.25)}
+.modal-head h2{font-family:'Manrope',sans-serif;color:#11212D}.modal-head p{color:#637782}.modal-kicker{color:#4A5C6A}
+.modal-close{background:#e7edeb;color:#253745;border-color:#d3dedc}.modal-close:hover{background:#d8e2e0}
+.field label{color:#253745}.field label b{color:#a44855}.field input,.field select{color:#11212D;color-scheme:light;background:#fff;border:1px solid #cbd7d9}
+.field input::placeholder{color:#8b9aa1}.field input:focus,.field select:focus{border-color:#4A5C6A;box-shadow:0 0 0 3px rgba(155,168,171,.22)}
+.field-optional{color:#6e818b}.field-help{color:#627581}
+#fieldArrived::-webkit-calendar-picker-indicator{filter:none;opacity:.75;cursor:pointer;padding:7px}
+.modal-help{background:#e8eeec;border:1px solid #d1dfdc;color:#4A5C6A}.modal-footer{border-color:#d7e0df}
+.csv-filebox{background:#f0f4f2;border:2px dashed #9BA8AB}.csv-filebox input{color:#253745}.csv-filebox input::file-selector-button{background:#253745;color:#fff;border-radius:8px}
+.csv-example{color:#607680}.csv-error,.import-danger{background:#fceae9;color:#913b47;border-color:#e9b9ba}
+.import-preview{background:#f7faf9;border:1px solid #d3dddd}.import-counts{color:#4A5C6A}.import-counts strong{color:#11212D}
+.import-table-wrap{background:#fff;border-color:#d3dddd}.import-table th{background:#e7eeee;color:#4A5C6A}.import-table td{color:#253745;border-color:#e2e9e8}
+.import-options label{background:#f7f9f8;border-color:#d1dcdb}.import-options label:has(input:checked){background:#e9eeed;border-color:#4A5C6A}
+.import-options small{color:#637782}.import-options input{accent-color:#253745}.import-danger p{color:#8a3a46}.import-danger input{background:#fff;color:#11212D;border-color:#dba4a5}
+.import-progress{color:#4A5C6A}.toast{background:#253745;color:#fff;border-color:#9BA8AB;box-shadow:0 15px 45px rgba(6,20,27,.24)}
+.toast.error{background:#7f3440;border-color:#c87e85;color:#fff}
+@keyframes pinPulse {0%,100%{box-shadow:0 0 0 5px rgba(204,208,207,.16),0 0 13px #CCD0CF}50%{box-shadow:0 0 0 8px rgba(204,208,207,.08),0 0 22px #CCD0CF}}
+@media(max-width:510px){
+ .sidebar{background:linear-gradient(120deg,#06141B,#253745);box-shadow:0 5px 16px rgba(6,20,27,.17)}
+ .main{padding-top:18px}.hero{border-radius:17px}.hero h1{font-size:32px}
+ .kpi{border-radius:14px}.panel{border-radius:15px}
+ .source-actions .btn{flex:1}
+ .table-wrap{background:#fff}
+}
+
+</style>
+<style>
+
+/* MERCY MULTI-PABRIK / VERSI PRODUKSI — Navy & Silver */
+.factory-bar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:17px 0 9px;background:rgba(255,255,255,.91);border:1px solid #d2dadd;box-shadow:0 12px 35px rgba(17,33,45,.07);border-radius:19px;padding:19px 22px;flex-wrap:wrap}
+.factory-bar-left{display:grid;gap:9px}.factory-kicker{font-size:10px;color:#5e7482;letter-spacing:1.6px;font-weight:800}.factory-tabs{display:flex;gap:8px;flex-wrap:wrap}.factory-tab{border-radius:11px;border:1px solid #d7e0e2;background:linear-gradient(150deg,#f8faf9,#eff3f3);color:#4A5C6A;padding:10px 14px;font-size:12px;font-weight:800;display:flex;gap:9px;align-items:center;transition:.2s}
+.factory-tab:hover{transform:translateY(-2px);box-shadow:0 5px 13px #11212d1c}.factory-tab.active{background:#11212D;color:#fff;border-color:#253745;box-shadow:0 7px 19px #11212d36}.factory-count{opacity:.76;font-size:10px}.factory-bar-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.factory-scope-hint{font-size:11px;color:#607280;font-weight:600}.btn-dark{background:#11212D!important;border-color:#11212D!important;color:white!important;box-shadow:0 8px 22px #11212d24!important}.btn-dark:hover{background:#253745!important;color:white!important}
+.kpis{grid-template-columns:repeat(5,minmax(0,1fr))}.kpi{min-height:137px}.kpi:nth-child(3){background:linear-gradient(155deg,#fff9f8,#fffbfa);border-color:#edcccb}.kpi:nth-child(3) .num{color:#b3434d}.kpi:nth-child(5){background:linear-gradient(145deg,#f9fbfb,#f2f6f5);border-color:#d4dede}.kpi:nth-child(5) .num{color:#11212D}
+.filterbar{display:flex;flex-wrap:wrap;align-items:stretch;gap:9px}.filterbar>input#q{min-width:220px;flex:2 1 235px}.filterbar>select{flex:1 1 142px;max-width:240px}.status-multiselect{position:relative;flex:1 1 185px;min-width:175px;max-width:260px;z-index:8}.status-toggle{width:100%;height:100%;min-height:42px;border:1px solid #cfdada;background:#f8faf9;color:#253745;border-radius:10px;padding:11px 12px;font-size:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;font-weight:750}.status-toggle .chevron{color:#6f858e}.status-toggle:hover,.status-toggle[aria-expanded="true"]{border-color:#9BA8AB;background:white}.status-toggle #statusLabel{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;display:inline-block;min-width:0}.status-options{position:absolute;top:calc(100% + 8px);left:0;background:#fff;border:1px solid #ccd9db;box-shadow:0 19px 50px rgba(6,20,27,.18);border-radius:16px;padding:14px;width:max(270px,100%);max-width:min(360px,calc(100vw - 30px));z-index:50}.status-options[hidden]{display:none!important}.status-options-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:10px;border-bottom:1px solid #e2e9e9}.status-options-head strong{font-size:12px}.status-options-head button{font-size:11px;border:0;background:#e8edee;color:#253745;border-radius:8px;padding:7px 10px}.status-checks{display:grid;gap:4px;padding:9px 0}.status-checks label{display:flex;gap:10px;align-items:center;padding:8px 9px;border-radius:8px;color:#253745;font-weight:700;font-size:12px;cursor:pointer}.status-checks label:hover{background:#f0f4f4}.status-checks input{accent-color:#253745;width:16px;height:16px}.status-options small{color:#81939c;line-height:1.5;font-size:10px}.filter-hint{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:3px 24px 10px;color:#81929b;font-size:11px}.filter-hint span:first-child{color:#344c5a;font-weight:700}
+.task-row .task-id{flex:1}.task-row .task-id>div:last-child{min-width:0}.task-row .task-id strong{font-size:13px}.priority-label{font-size:10px;display:block;color:#7f8f97}.age-flag{display:inline-flex}.age-flag.flag-aged{background:#ffeaeb;color:#ab3948}.age-flag.flag-watch{background:#fff4e7;color:#997039}.priority-red{color:#ae3f4d!important}.priority-amber{color:#946b31!important}.priority-days{font-weight:850;font-size:12px;white-space:nowrap}.table-wrap{overflow-x:auto}.table-wrap table{min-width:1560px}.table-wrap th:nth-child(2){min-width:90px}.table-wrap th:nth-child(3){min-width:205px}.table-wrap th:nth-child(9){min-width:120px}.table-wrap th:nth-child(11){min-width:96px}.factory-badge{font-weight:800;display:inline-flex;align-items:center;border-radius:8px;background:#edf2f2;border:1px solid #dbe5e4;color:#253745;font-size:10px;letter-spacing:.2px;padding:7px 9px}.factory-badge.inna{background:#e7edef;color:#3c5b69}.factory-badge.kbi{background:#f3eee5;color:#806643}.age-cell{white-space:nowrap}.age-cell.old{color:#b43b4b;font-weight:850}.age-cell.watch{color:#ac7736;font-weight:750}.age-cell.arrived{color:#3f756c;font-weight:700}
+.csv-default-factory{display:grid;gap:8px;background:#f2f6f5;border:1px solid #dbe4e4;padding:12px;border-radius:12px;margin:10px 0 12px}.csv-default-factory label{font-weight:800;color:#253745;font-size:12px}.csv-default-factory select{width:min(350px,100%);border-radius:10px;padding:10px;border:1px solid #bcc9cc;background:white}.csv-default-factory small{font-size:10px;color:#6f838c;line-height:1.5}
+.report-modal{max-width:675px!important}.report-settings{margin:10px 0 15px}.report-pending-switch{display:flex;gap:12px;align-items:center;padding:15px;border:1px solid #d6e0e0;border-radius:12px;background:#f1f5f4;cursor:pointer}.report-pending-switch input{accent-color:#11212D;width:19px;height:19px;flex:none}.report-pending-switch strong{font-size:13px;display:block;color:#253745}.report-pending-switch small{font-size:11px;color:#718690;display:block;margin-top:4px}.report-filter-recap{font-size:11px;color:#4a6070;padding:12px 2px;line-height:1.6}.report-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.report-stats>div{border:1px solid #d9e2e2;border-radius:12px;background:#fbfcfc;padding:14px}.report-stats small{color:#798d97;font-size:9px;font-weight:800;letter-spacing:.6px;display:block;line-height:1.4;min-height:26px}.report-stats strong{font-size:24px;color:#11212D}.report-preview-caption{font-size:11px;color:#667a85;margin:17px 0 9px}.report-mini-table{border:1px solid #dbe4e5;border-radius:11px;overflow:auto;max-height:250px}.report-mini-table table{width:100%;border-collapse:collapse}.report-mini-table th{background:#f0f4f4;text-align:left;font-size:10px;color:#4A5C6A;padding:10px}.report-mini-table td{font-size:11px;padding:10px;border-bottom:1px solid #e6eded}.report-mini-table tr:last-child td{border-bottom:0}.report-tip{font-size:11px;color:#778b94;line-height:1.6;margin:13px 0}.report-modal .modal-footer{padding-top:13px}
+#printRoot{display:none}
+@media(max-width:1220px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.factory-bar{align-items:flex-start}.factory-bar-actions{justify-content:space-between;width:100%}}
+@media(max-width:760px){.factory-bar{margin-top:12px;padding:16px}.factory-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.factory-tab{justify-content:space-between}.factory-bar-left{width:100%}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.status-multiselect{max-width:100%;flex:1 1 100%}.status-options{width:100%}.filterbar>select{max-width:none}.filter-hint{padding:3px 14px 12px}.report-stats strong{font-size:19px}.report-stats>div{padding:10px}.report-modal{max-height:92dvh;overflow-y:auto}.factory-bar-actions{align-items:stretch}.factory-bar-actions .btn{flex:1}}
+@media(max-width:420px){.kpis{gap:9px}.kpi{padding:14px 12px}.kpi .num{font-size:26px}.report-stats small{font-size:8px}.report-stats strong{font-size:17px}}
+/* A4 report only; no action buttons, no signature, no dark page background. */
+@page{size:A4 portrait;margin:0}
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  html,body{background:white!important;margin:0!important;padding:0!important;color:#11212D!important;font-family:Arial,sans-serif!important}
+  html:before,html:after,body:before,body:after{content:none!important;display:none!important}
+  body>*:not(#printRoot){display:none!important}
+  #printRoot{display:block!important;position:static!important;width:100%!important;background:white!important;color:#11212D!important;box-shadow:none!important;margin:0!important;padding:13mm 12mm 14mm!important;box-sizing:border-box!important;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  .print-header{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:2px solid #11212D;padding:0 0 11px;margin:0 0 14px;gap:16px}
+  .print-logo{font-size:28px;font-weight:900;letter-spacing:1.8px;color:#11212D}
+  .print-logo-sub{font-size:8px;font-weight:700;letter-spacing:1.2px;color:#617580}
+  .print-date{font-size:9px;text-align:right;line-height:1.7;color:#5b6d75}
+  .print-title-bar{background:#11212D!important;color:white!important;padding:12px 14px;margin-bottom:12px}
+  .print-title-bar h1{font-size:15px;letter-spacing:.5px;color:white!important;margin:0 0 5px}
+  .print-title-bar p{font-size:9px;color:#e3eaea!important;margin:0;line-height:1.6}
+  .print-overview{display:flex;justify-content:space-between;align-items:center;font-size:9px;border:1px solid #e0e5e4;background:#f7f9f8;padding:9px 10px;margin-bottom:11px;gap:15px}
+  .print-overview strong{font-weight:800}
+  .print-table{border-collapse:collapse;width:100%!important;min-width:0!important;max-width:100%!important;table-layout:fixed;font-size:9px}
+  .print-table thead{display:table-header-group}
+  .print-table thead th{background:#e4e9e9!important;color:#11212D!important;border-top:1px solid #aab7ba;border-bottom:1px solid #aab7ba;font-size:8.2px;font-weight:800;letter-spacing:.25px;text-transform:uppercase;text-align:left;padding:8px 5px}
+  .print-table tbody td{padding:5px 5px;border-bottom:1px solid #dbe3e4;vertical-align:top;line-height:1.4;word-break:break-word;color:#253745!important}
+  .print-table tbody tr{break-inside:avoid;page-break-inside:avoid}
+  .print-name{font-weight:800;color:#11212D}.print-sub{color:#697e85;font-size:7.5px;margin-top:2px}
+  .print-age-old{color:#ad3442!important;font-weight:900}.print-age-watch{color:#86662e!important;font-weight:850}.print-age-normal{color:#253745}
+  .print-foot{margin-top:15px;padding-top:10px;border-top:1px solid #CCD0CF;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:8px;color:#637681;letter-spacing:.2px;line-height:1.5;break-inside:avoid}
+  .print-foot strong{font-weight:850;color:#253745;letter-spacing:.8px}
+  .print-foot span:last-child{text-transform:uppercase;font-size:7.4px;letter-spacing:1px}
+}
+
+.arrival-cancelled{color:#9c5d43;font-weight:850;background:#fff4ed;border-radius:6px;padding:4px 6px;display:inline-block}
+.age-cell.cancelled{color:#95694f;font-weight:850}
+
+/* Pilihan baru di palet navy-silver. CANCEL merah karena status, bukan otomatis terlambat. */
+.chip-order{background:#dfe9ed!important;border-color:#cbdbe0!important;color:#32515f!important}
+.chip-cancel{background:#fae9ec!important;border-color:#f0c9d0!important;color:#ae4455!important}
+.cancel-status-note{margin:10px 0 0;padding:11px 13px;background:#fff1f2;color:#8e3446;border:1px solid #f3cfd6;border-radius:11px;font-size:12px;line-height:1.55}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar" aria-label="Navigasi">
+ <a class="brand" href="#overview"><span class="brandmark">✳</span><div><div class="brandname">MERCY<span class="brand-dot">.</span></div><div class="brand-sub">MONITORING TIGA PABRIK</div></div></a>
+ <div class="navgroup"><div class="navlabel">MENU UTAMA</div><nav class="navlinks"><a href="#overview" class="active"><span class="navsvg">▦</span><span class="navtext">Ringkasan</span></a><a href="#followups"><span class="navsvg">◷</span><span class="navtext">Prioritas harian</span></a><a href="#database"><span class="navsvg">▤</span><span class="navtext">Daftar PO</span></a><a href="#database" id="navPrintBtn"><span class="navsvg">▣</span><span class="navtext">Cetak laporan</span></a></nav></div>
+ <div class="sidebar-bottom"><div class="side-live"><span class="live-pulse"></span> SISTEM TERSAMBUNG</div><strong>Tiga pabrik. Satu dashboard.</strong><small>Tridaya, Inna, KBI — pantau PO yang perlu dikejar setiap hari.</small><span class="side-art" aria-hidden="true">◈</span></div>
+</aside>
+<main class="main" id="overview">
+ <div class="topbar"><div class="breadcrumb"><span class="crumb-mark">M /</span> RUANG KERJA <span class="crumb-slash">/</span> <b>MONITORING PABRIK</b></div><div class="tag-date" id="lastDate"><span class="dot"></span>Menyiapkan data…</div></div>
+ <section class="hero">
+  <div class="hero-copy"><small><span class="pulse-pin"></span> MERCY / MONITORING PRODUKSI / 2026</small><h1>Tiga pabrik.<br><em>Satu pusat kendali.</em></h1><p>Kelola PO Tridaya, Inna, dan KBI di satu tempat. Prioritaskan pesanan yang belum datang, pilih beberapa status sekaligus, lalu cetak daftar untuk ditindaklanjuti.</p>
+    <div class="hero-tags"><span>◆ TRIDAYA</span><span>◆ INNA</span><span>◆ KBI</span></div>
+  </div>
+  <div class="hero-illustration" aria-hidden="true"><div class="orbital"><div class="orbital-ring ring-one"></div><div class="orbital-ring ring-two"></div><div class="orbital-ring ring-three"></div><div class="orbit-core"><span>✳</span><strong>M</strong></div><span class="orbit-particle particle-a"></span><span class="orbit-particle particle-b"></span><span class="orbit-label">3 PABRIK · 1 DASHBOARD</span></div></div>
+</section>
+ <section class="source-strip" id="sourceStrip" aria-live="polite">
+  <div class="source-left"><span class="source-dot" aria-hidden="true"></span><div><strong id="sourceLabel">Mode pratinjau</strong><small id="sourceDetail">Sedang membuka dashboard dan menyiapkan koneksi…</small></div></div>
+  <div class="source-actions">
+   <span class="admin-label" id="adminLabel" hidden></span>
+   <button class="btn" id="importBtn" type="button" hidden>⇧ Impor 61 data awal</button>
+   <button class="btn btn-primary" id="addBtn" type="button" hidden>＋ Tambah PO</button>
+   <button class="btn" id="loginBtn" type="button">Masuk Admin</button>
+   <button class="btn" id="logoutBtn" type="button" hidden>Keluar</button>
+  </div>
+ </section>
+ 
+<section class="factory-bar" aria-label="Pilih pabrik">
+  <div class="factory-bar-left"><div class="factory-kicker">TAMPILKAN DATA PABRIK</div><div class="factory-tabs" id="factoryTabs">
+  <button type="button" class="factory-tab active" data-factory="SEMUA" aria-pressed="true">Semua <span class="factory-count">0</span></button>
+  <button type="button" class="factory-tab" data-factory="TRIDAYA" aria-pressed="false">Tridaya <span class="factory-count">0</span></button>
+  <button type="button" class="factory-tab" data-factory="INNA" aria-pressed="false">Inna <span class="factory-count">0</span></button>
+  <button type="button" class="factory-tab" data-factory="KBI" aria-pressed="false">KBI <span class="factory-count">0</span></button>
+  </div></div>
+  <div class="factory-bar-actions"><span class="factory-scope-hint" id="factoryScopeHint">Menampilkan semua pabrik</span><button class="btn btn-dark" type="button" id="factoryPrintBtn">▣ Cetak laporan</button></div>
+</section>
+ <section id="ageAlert" class="age-alert" aria-live="polite" hidden>
+  <div class="age-alert-icon">!</div>
+  <div class="age-alert-copy"><strong id="ageAlertTitle">PO butuh perhatian</strong><span id="ageAlertDetail">PO lama belum tercatat tanggal Barang Datang</span></div>
+  <button type="button" class="btn btn-alert" id="viewAgedBtn">Lihat PO lama <span aria-hidden="true">↗</span></button>
+ </section>
+ <div class="section-header"><h2><span class="section-line"></span> Ringkasan pesanan</h2><div class="mini">DATA TERKINI <span class="mini-dot">●</span></div></div>
+ <section class="kpis" id="kpis" aria-label="Ringkasan data"></section>
+ <div class="panels">
+  <section class="panel"><div class="panel-head"><h3><span class="header-accent">◈</span> Sebaran status PO</h3><span class="sub">Pabrik terpilih</span></div><div class="status-main"><div class="donut" id="donut"><div class="donut-center"><b id="donutTotal">0</b><span>DESAIN</span></div></div><div class="legend" id="legend"></div></div><div class="panel-foot">Status yang perlu ditindaklanjuti terlihat lebih jelas.</div></section>
+  <section class="panel"><div class="panel-head"><h3><span class="header-accent">◈</span> Aktivitas pesanan</h3><span class="pill" id="monthRange">Periode desain</span></div><div class="chart" id="monthChart" aria-label="Grafik jumlah desain per bulan"></div><div class="month-labels" id="monthLabels"></div><div class="panel-foot"><span id="trendFoot">Aktivitas dihitung dari tanggal setiap baris.</span></div></section>
+ </div>
+ <div class="two-wide" id="followups">
+  <section class="panel tasks"><div class="panel-head"><h3><span class="header-accent">◈</span> Prioritas Follow Up</h3><button class="btn" id="seeAllWaiting" type="button">Lihat yang belum datang ↗</button></div><div class="task-items" id="taskItems"></div></section>
+  <section class="panel insights"><div class="panel-head"><h3><span class="header-accent">◈</span> Ringkasan produksi</h3><span class="pill">RINGKASAN</span></div><div class="big-idea"><div class="idea-icon">◈</div><div><strong id="qtyTotal">0</strong><span>Total unit pada semua baris QTY terisi</span></div></div><p class="insight-text" id="insights"></p><div class="warn" id="qtyNote">ℹ️ QTY kosong tidak masuk total unit. Masuk sebagai admin untuk mengisi atau mengubah QTY.</div><div class="insight-footer" id="colorTags"></div></section>
+ </div>
+ <section class="list-panel" id="database">
+  <div class="list-top"><div><span class="eyebrow-top">DATA PO / TRIDAYA · INNA · KBI</span><h2>Daftar PO <span class="database-star">✳</span></h2><span class="sub">Filter beberapa status sekaligus dan cetak laporan dari hasil filter yang tampil.</span></div><div class="source-actions"><button class="btn btn-primary" id="addBtnSecondary" type="button" hidden>＋ Tambah PO</button><button class="btn btn-primary" id="csvImportBtn" type="button" hidden>↑ Impor CSV</button><button class="btn" id="exportBtn" type="button">↓ Ekspor CSV</button><button class="btn btn-dark" id="reportBtn" type="button">▣ Cetak Follow Up</button></div></div>
+  <div class="filterbar">
+<input aria-label="Cari PO" id="q" placeholder="⌕ Cari desain, kode, nomor PO..." type="search"/>
+<div class="status-multiselect" id="statusMenu">
+  <button type="button" id="statusToggle" class="status-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="statusOptions"><span id="statusLabel">Semua status</span><span class="chevron">⌄</span></button>
+  <div id="statusOptions" class="status-options" hidden><div class="status-options-head"><strong>Pilih status</strong><button type="button" id="statusClearBtn">Semua status</button></div><div id="statusChecks" class="status-checks"></div><small>Centang lebih dari satu, misalnya SO + REV SO.</small></div>
+</div>
+<select aria-label="Filter bulan" id="month"><option value="">Semua bulan</option></select>
+<select aria-label="Filter pelanggan" id="customer"><option value="">Semua pelanggan</option></select>
+<select aria-label="Filter kedatangan" id="arrivalFilter"><option value="">Semua kedatangan</option><option value="pending">Belum datang</option><option value="arrived">Sudah datang</option></select>
+<select aria-label="Filter usia PO" id="ageFilter"><option value="">Semua usia PO</option><option value="aged">Merah · ≥30 hari</option><option value="watch">Kuning · 14–29 hari</option><option value="new">Baru · 0–13 hari</option></select>
+<button class="btn" id="clearBtn" type="button">↺ Atur ulang filter</button>
+</div>
+<div class="filter-hint"><span id="activeFiltersText">Semua status ditampilkan</span><span>Usia PO dihitung dari tanggal pada kolom TGL.</span></div>
+<div class="age-legend"><span><i class="signal signal-red"></i> 30+ hari, belum datang — Perlu Follow Up</span><span><i class="signal signal-amber"></i> 14–29 hari — Pantau</span><span><i class="signal signal-green"></i> Tanggal Barang Datang terisi — Sudah Datang</span><span class="age-legend-note">Tidak memakai tanggal target; usia dihitung otomatis.</span></div>
+  <div class="table-wrap"><table><thead><tr><th>TANGGAL</th><th>PABRIK</th><th>DESAIN</th><th>WARNA</th><th>QTY</th><th>PELANGGAN</th><th>BARANG DATANG</th><th>KODE</th><th>NO. PO</th><th>STATUS</th><th>USIA PO</th><th>HARGA</th><th>JUMLAH</th><th>TURUN</th><th id="actionsHead" hidden>AKSI</th></tr></thead><tbody id="tbody"></tbody></table></div><div class="count-row"><span id="showCount">Menampilkan 0 data</span><span>↕ Urutan: tanggal PO terbaru</span></div>
+ </section>
+ <div class="data-note" id="dataNote">◈ Tanggal Barang Datang kosong = belum sampai. Data bertanda CANCEL/BATAL = dibatalkan, tidak dihitung sebagai belum datang. PO belum datang dengan usia 30+ hari diberi tanda merah untuk follow up, bukan bukti lewat tenggat. PO lama tanpa kolom pabrik akan ditampilkan sebagai Tridaya. Semua perubahan admin disimpan di Firebase, bukan langsung ke file Excel.</div>
+ <div class="footer"><span>© 2026 MERCY / MONITORING PO PABRIK</span><span>SETIAP PO LEBIH TERPANTAU <b>✳</b></span></div>
+</main>
+</div>
+
+<div id="poBackdrop" class="modal-backdrop" hidden>
+ <section class="edit-modal" role="dialog" aria-modal="true" aria-labelledby="poTitle">
+  <div class="modal-head"><div><span class="modal-kicker">MERCY · KELOLA PO</span><h2 id="poTitle">Tambah PO baru</h2><p>Isi detail desain, lalu simpan ke penyimpanan daring.</p></div><button class="modal-close" id="closeModalBtn" type="button" aria-label="Tutup">×</button></div>
+  <form id="poForm">
+    <div class="fields-grid">
+<div class="field"><label for="fieldFactory">Pabrik <b>*</b></label><select id="fieldFactory" required><option value="TRIDAYA">Tridaya</option><option value="INNA">Inna</option><option value="KBI">KBI</option></select></div>
+<div class="field"><label for="fieldNomorPo">Nomor PO <span class="field-optional">(opsional)</span></label><input id="fieldNomorPo" maxlength="110" placeholder="Jika ada nomor PO khusus"/></div>
+
+      <div class="field"><label for="fieldDate">Tanggal <b>*</b></label><input type="date" id="fieldDate" required></div>
+      <div class="field"><label for="fieldCustomer">Pelanggan <b>*</b></label><input id="fieldCustomer" maxlength="100" placeholder="Contoh: MERCY" required></div>
+      <div class="field span2"><label for="fieldDesign">Nama desain / PO <b>*</b></label><input id="fieldDesign" maxlength="180" placeholder="Contoh: TAMAN MAWAR" required></div>
+      <div class="field"><label for="fieldColor">Warna</label><input id="fieldColor" maxlength="100" placeholder="MERAH / KREM / ..."></div>
+      <div class="field"><label for="fieldQty">Jumlah (pcs)</label><input id="fieldQty" type="number" min="0" max="999999999" step="1" inputmode="numeric" placeholder="Boleh dikosongkan"></div>
+      <div class="field"><label for="fieldCode">Kode desain / produk</label><input id="fieldCode" maxlength="150" placeholder="DGT#..."></div>
+      <div class="field span2"><label for="fieldArrived">Tanggal Barang Datang <span class="field-optional">(pilih lewat kalender)</span></label><input id="fieldArrived" type="date" aria-describedby="arrivalHelp"><small class="field-help" id="arrivalHelp">Pilih tanggal melalui kalender. Biarkan kosong jika barang belum datang.</small></div>
+      <input type="hidden" id="fieldArrivalNote" value="">
+      <div class="field"><label for="fieldPrice">Harga (Rp / unit)</label><input id="fieldPrice" type="number" min="0" max="999999999" step="1" placeholder="15000"></div>
+      <div class="field"><label for="fieldJumlah">Jumlah (sesuai kolom Excel)</label><input id="fieldJumlah" type="number" min="0" max="999999999" step="1" placeholder="Sesuai kolom JUMLAH"></div>
+      <div class="field span2"><label for="fieldTurun">Turun (catatan dari Excel)</label><input id="fieldTurun" maxlength="200" placeholder="Opsional"></div>
+      <div class="field"><label for="fieldStatus">Status <b>*</b></label><select id="fieldStatus"><option value="">TANPA STATUS</option><option>TUNGGU ACC</option><option>REV SO</option><option>SO</option><option>ACC</option><option>ORDER PO</option><option>REPEAT</option><option>CANCEL</option></select></div>
+    </div>
+    <div id="cancelStatusNote" class="cancel-status-note" hidden>PO berstatus CANCEL tetap tersimpan sebagai riwayat, tetapi tidak masuk daftar follow up. Tanggal Barang Datang tidak diperlukan.</div>
+    <div class="modal-help">Perubahan tersinkron di semua perangkat setelah berhasil disimpan.</div>
+    <div class="modal-footer"><button class="btn" id="cancelModalBtn" type="button">Batal</button><button class="btn btn-primary" id="saveBtn" type="submit">Simpan PO</button></div>
+  </form>
+ </section>
+</div>
+<div id="csvBackdrop" class="modal-backdrop" hidden>
+ <section class="edit-modal import-modal" role="dialog" aria-modal="true" aria-labelledby="csvTitle">
+  <div class="modal-head"><div><span class="modal-kicker">MERCY · KELOLA DATA</span><h2 id="csvTitle">Impor PO dari CSV</h2><p>Pilih CSV dari Excel, periksa pratinjau, lalu simpan ke Firebase. Hanya admin yang boleh mengimpor.</p></div><button class="modal-close" id="closeCsvBtn" type="button" aria-label="Tutup">×</button></div>
+  <div class="csv-default-factory"><label for="csvDefaultFactory">Pabrik untuk CSV tanpa kolom PABRIK</label><select id="csvDefaultFactory"><option value="TRIDAYA">Tridaya</option><option value="INNA">Inna</option><option value="KBI">KBI</option></select><small>Jika CSV sudah punya kolom PABRIK, nilai di CSV yang digunakan. Data lama biasanya Tridaya.</small></div>
+<div class="csv-filebox"><input id="csvFile" type="file" accept=".csv,text/csv" aria-label="Pilih berkas CSV"/><span class="csv-example">Kolom: TGL, DESIGN (DESAIN), WARNA, QTY, CUSTOMER (PELANGGAN), BARANG DATANG, KODE, KET, HARGA, JUMLAH, TURUN, CATATAN DATANG, PABRIK, NOMOR PO.<br>Berkas CSV dari Excel dapat menggunakan pemisah koma atau titik koma.</span></div>
+  <div id="csvError" class="csv-error" hidden></div>
+  <div id="csvPreview" class="import-preview" hidden>
+   <p id="csvSummary" class="import-counts"></p>
+   <div class="import-table-wrap"><table class="import-table"><thead><tr><th>Tanggal</th><th>Pabrik</th><th>Desain</th><th>QTY</th><th>Status</th><th>Harga</th></tr></thead><tbody id="csvPreviewBody"></tbody></table></div>
+   <div class="import-options">
+    <label><input type="radio" name="csvMode" value="merge" checked><span><strong>Gabungkan dengan PO lama</strong><small>Menambahkan baris yang belum ada. Tidak menghapus PO saat ini. Berkas yang sama tidak akan digandakan saat diimpor ulang.</small></span></label>
+    <label><input type="radio" name="csvMode" value="replace"><span><strong>Ganti seluruh data dengan CSV</strong><small>Seluruh PO di Firebase saat ini akan diganti oleh isi CSV. Sistem mengunduh salinan cadangan CSV sebelum mulai.</small></span></label>
+   </div>
+   <div id="replaceWarning" class="import-danger" hidden><p><b>Perhatian:</b> data lama di Firebase akan dihapus dan diganti dengan isi CSV, termasuk perubahan yang pernah kamu edit dari website. Salinan cadangan otomatis akan diunduh terlebih dahulu. Untuk melanjutkan, ketik <b>GANTI</b>:</p><input id="replaceKeyword" placeholder="Ketik GANTI" autocomplete="off"></div>
+  </div>
+  <p class="import-progress" id="csvProgress" role="status" aria-live="polite"></p>
+  <div class="modal-footer"><button class="btn" id="cancelCsvBtn" type="button">Batal</button><button class="btn btn-primary" id="importConfirmBtn" type="button" disabled>Impor ke Firebase</button></div>
+ </section>
+</div>
+
+<div class="modal-backdrop" id="reportBackdrop" hidden>
+  <section role="dialog" aria-modal="true" aria-labelledby="reportTitle" class="edit-modal report-modal">
+    <div class="modal-head"><div><span class="modal-kicker">MERCY · LAPORAN FOLLOW UP</span><h2 id="reportTitle">Daftar Follow Up PO</h2><p>Laporan ukuran A4 mengikuti filter daftar PO. Tidak mengubah data.</p></div><button type="button" class="modal-close" id="closeReportBtn" aria-label="Tutup">×</button></div>
+    <div class="report-settings"><label class="report-pending-switch"><input type="checkbox" id="printOnlyPending" checked> <span><strong>Hanya barang yang belum datang</strong><small>Direkomendasikan untuk daftar PO yang ingin dikejar.</small></span></label>
+      <div class="report-filter-recap" id="reportFilterRecap">Filter dari tabel saat ini.</div>
+    </div>
+    <div class="report-stats"><div><small>JUMLAH PO</small><strong id="reportTotal">0</strong></div><div><small>TOTAL QTY TERISI</small><strong id="reportQty">0</strong></div><div><small>PERLU FOLLOW UP ≥30 HARI</small><strong id="reportOld">0</strong></div></div>
+    <p class="report-preview-caption">Pratinjau beberapa baris teratas (diurutkan dari PO paling lama):</p>
+    <div class="report-mini-table"><table><thead><tr><th>Desain</th><th>Status</th><th>Usia PO</th></tr></thead><tbody id="reportPreviewBody"></tbody></table></div>
+    <p class="report-tip">Nama PDF otomatis mengikuti tanggal cetak (contoh: LAPORAN PO PER TANGGAL 22 OKTOBER 2026). Jika browser masih mencetak alamat web, nonaktifkan “Header dan footer” di pengaturan cetak.</p>
+    <div class="modal-footer"><button type="button" class="btn" id="cancelReportBtn">Batal</button><button type="button" class="btn btn-primary" id="printNowBtn">▣ Cetak / Simpan PDF</button></div>
+  </section>
+</div>
+<div id="printRoot" aria-label="Laporan MERCY siap cetak"></div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+window.MERCY_INITIAL_DATA = [{"id":1,"tgl":"2026-06-12","design":"ELEGANT GINKGO MCY","warna":"NAVY/ABU","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":2,"tgl":"2026-06-12","design":"BUNGA SPRING MCY","warna":"PEACH","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":3,"tgl":"2026-06-15","design":"BUNGA BUTTERFLY","warna":"KREM","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":4,"tgl":"2026-06-15","design":"BUNGA LILAC MCY","warna":"TOSCA","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":5,"tgl":"2026-07-06","design":"LUXURY BOTANICAL MCY","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":6,"tgl":"2026-07-21","design":"AURORA FLORA","warna":"UNGU","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":7,"tgl":"2026-07-20","design":"PEARL ANEMON","warna":"UNGU","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":8,"tgl":"2026-07-20","design":"ASSORTED DAHLIA","warna":"KREM","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":9,"tgl":"2026-08-06","design":"RED VELVET","warna":"MERAH","qty":3000,"customer":"HENGKY","kode":"DGT#YHD-26-2056","status":"REPEAT"},{"id":10,"tgl":"2026-08-22","design":"ELEGANT WHITE","warna":"KREM","qty":1000,"customer":"HENGKY","kode":"DGT#YHD-26-2116","status":"REPEAT"},{"id":11,"tgl":"2026-08-22","design":"PASTEL LEAF","warna":"KREM","qty":1000,"customer":"HENGKY","kode":"DGT#YHD-26-2166","status":"REPEAT"},{"id":12,"tgl":"2026-08-22","design":"CHAMPAGNE FLORA","warna":"UNGU","qty":2000,"customer":"HENGKY","kode":"DGT#YHD-26-2091-YD","status":"REPEAT"},{"id":13,"tgl":"2026-08-22","design":"BLUE PEARL","warna":"BIRU","qty":2000,"customer":"HENGKY","kode":"DGT#YHD-26-2118","status":"REPEAT"},{"id":14,"tgl":"2026-08-22","design":"HIBISCUS PEARL","warna":"PINK","qty":1000,"customer":"HENGKY","kode":"DGT#YHD-26-2410","status":"ACC"},{"id":15,"tgl":"2026-08-22","design":"GOLDEN PETAL","warna":"KREM","qty":1000,"customer":"HENGKY","kode":"DGT#YHD-26-2357","status":"REPEAT"},{"id":16,"tgl":"2026-09-03","design":"AUTUMN","warna":"KREM","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":17,"tgl":"2026-09-03","design":"TEAPALS","warna":"TOSCA","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":18,"tgl":"2026-09-03","design":"ELIE","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":19,"tgl":"2026-09-03","design":"HALO PANDA","warna":"KREM","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":20,"tgl":"2026-09-03","design":"HONEYBE","warna":"KUNING","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":21,"tgl":"2026-09-03","design":"MARSHY","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":22,"tgl":"2026-09-03","design":"LOVE TEDDY","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":23,"tgl":"2026-09-03","design":"SNOWY","warna":"BIRU","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":24,"tgl":"2026-09-07","design":"RIBBON","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":25,"tgl":"2026-09-07","design":"DREAM SHINCHAN","warna":"PINK","qty":3000,"customer":"MERCY","kode":"DGT#YHD-26-3053","status":"ACC"},{"id":26,"tgl":"2026-09-14","design":"SAKURA FLUFF","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":27,"tgl":"2026-09-14","design":"BUNNY FLOWER","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":28,"tgl":"2026-09-16","design":"BOWTIQUE","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":29,"tgl":"2026-09-18","design":"VELOURA","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":30,"tgl":"2026-09-18","design":"PASTELIA","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":31,"tgl":"2026-09-18","design":"HELIANDRA","warna":"KUNING","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":32,"tgl":"2026-09-18","design":"PINK ROSA","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":33,"tgl":"2026-09-18","design":"CORAL SAKURA","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"REV SO"},{"id":34,"tgl":"2026-09-18","design":"ELEGANT BLUE","warna":"BIRU","qty":1500,"customer":"MERCY","kode":"DGT#MERCY-26-3765","status":"ACC"},{"id":35,"tgl":"2026-09-18","design":"ROSE BUTTERFLY","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":36,"tgl":"2026-09-18","design":"RAINBOW ROSE","warna":"KREM","qty":1500,"customer":"MERCY","kode":"DGT#MERCY-26-3764","status":"ACC"},{"id":37,"tgl":"2026-09-18","design":"ASSORTED PINK","warna":"PINK","qty":500,"customer":"MERCY","kode":"DGT#MERCY-26-3777","status":"ACC"},{"id":38,"tgl":"2026-09-18","design":"KRISAN DAISY","warna":"PINK","qty":1000,"customer":"MERCY","kode":"DGT#MERCY-26-3778","status":"ACC"},{"id":39,"tgl":"2026-09-21","design":"ORANGE STAR","warna":"ORANGE","qty":1500,"customer":"MERCY","kode":"DGT#MERCY-26-3781","status":"ACC"},{"id":40,"tgl":"2026-09-21","design":"RIBBON V2","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":41,"tgl":"2026-09-21","design":"TIMBERA","warna":"KREM","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":42,"tgl":"2026-09-21","design":"GINGELLE","warna":"ABU,PINK","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":43,"tgl":"2026-09-21","design":"SAVARA","warna":"HITAM","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":44,"tgl":"2026-09-21","design":"PARDELLE","warna":"PINK,BIRU","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":45,"tgl":"2026-09-21","design":"GARIS","warna":"PINK,UNGU","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":46,"tgl":"2026-09-21","design":"GARDEN","warna":"PUTIH","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":47,"tgl":"2026-09-22","design":"PAWSTRY CAT","warna":"KREM","qty":5000,"customer":"MERCY","kode":"DGT#YHD-26-3100","status":"REPEAT"},{"id":48,"tgl":"2026-09-25","design":"SWANFLOW","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":49,"tgl":"2026-09-25","design":"DIGGERTON","warna":"ABU","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":50,"tgl":"2026-10-01","design":"OTTERCOVE","warna":"BIRU","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":51,"tgl":"2026-10-01","design":"ELOWYN","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"TUNGGU ACC"},{"id":52,"tgl":"2026-10-10","design":"CRIMSONELLE","warna":"MERAH","qty":1000,"customer":"MERCY","kode":"DGT#MERCY-26-3538","status":"REPEAT"},{"id":53,"tgl":"2026-10-20","design":"PANDA STARS","warna":"PINK","qty":null,"customer":"MERCY","kode":"","status":"SO"},{"id":54,"tgl":"2026-10-21","design":"CAMELIA TRD","warna":"UNGU","qty":1000,"customer":"MERCY","kode":"DGT#26_0827","status":"REPEAT"},{"id":55,"tgl":"2026-10-21","design":"ORCHID VEIL","warna":"PINK","qty":500,"customer":"MERCY","kode":"DGT#FH-26-3813","status":"REPEAT"},{"id":56,"tgl":"2026-10-21","design":"SUMMER SUNFLOWER","warna":"KUNING","qty":3000,"customer":"MERCY","kode":"YHD-26-2791-YD","status":"REPEAT"},{"id":57,"tgl":"2026-10-21","design":"CORALISSE","warna":"PEACH","qty":3000,"customer":"MERCY","kode":"DGT#MERCY-26-3403","status":"REPEAT"},{"id":58,"tgl":"2026-10-21","design":"KRISAN BLOOM","warna":"PINK","qty":3000,"customer":"MERCY","kode":"DGT#YHD-26-2041","status":"REPEAT"},{"id":59,"tgl":"2026-10-21","design":"CALENDULA","warna":"PINK","qty":3000,"customer":"MERCY","kode":"DGT#MERCY-26-3539","status":"REPEAT"},{"id":60,"tgl":"2026-10-21","design":"PEARLORA","warna":"PINK","qty":6000,"customer":"MERCY","kode":"DGT#MERCY-26-3392","status":"REPEAT"},{"id":61,"tgl":"2026-10-21","design":"ORANGE STAR","warna":"ORANGE","qty":3000,"customer":"MERCY","kode":"DGT#MERCY-26-3781","status":"REPEAT"}];
+window.MERCY_CONFIG = {
+  "firebase": {
+    "apiKey": "AIzaSyCnp4ELvTgLSugITbrZoasnK8Az7oM1emg",
+    "authDomain": "mercy-dashboard-d9c35.firebaseapp.com",
+    "projectId": "mercy-dashboard-d9c35",
+    "storageBucket": "mercy-dashboard-d9c35.firebasestorage.app",
+    "messagingSenderId": "93407858743",
+    "appId": "1:93407858743:web:5d852eeecb30c8035f2fb2",
+    "measurementId": "G-LZDF4HZCJ7"
+  },
+  "adminEmail": "nuryads701@gmail.com"
+};
+</script>
+<script>
+/* MERCY Design Dashboard — GitHub Pages + Firebase real-time PO editor. */
+(() => {
+  'use strict';
+
+  const CONFIG = window.MERCY_CONFIG || {};
+  const el = (id) => document.getElementById(id);
+  const fmt = (v) => new Intl.NumberFormat('id-ID').format(v);
+  const PALETTE = {
+    'TUNGGU ACC': '#9BA8AB', 'REV SO': '#607583', 'SO': '#253745',
+    'ACC': '#CCD0CF', 'ORDER PO': '#82979F', 'REPEAT': '#4A5C6A', 'CANCEL': '#B84C5C'
+  };
+  const CHIPS = {
+    'TUNGGU ACC': 'chip-wait', 'REV SO': 'chip-revise', 'SO': 'chip-so',
+    'ACC': 'chip-acc', 'ORDER PO': 'chip-order', 'REPEAT': 'chip-repeat', 'CANCEL': 'chip-cancel'
+  };
+  const BASE_STATUSES = ['TUNGGU ACC', 'REV SO', 'SO', 'ACC', 'ORDER PO', 'REPEAT', 'CANCEL'];
+  const FACTORIES = ['TRIDAYA','INNA','KBI'];
+  let FACTORY_SCOPE = 'SEMUA';
+  let SELECTED_STATUSES = new Set();
+  const factoryName = r => FACTORIES.includes(String(r.pabrik || '').trim().toUpperCase()) ? String(r.pabrik).trim().toUpperCase() : 'TRIDAYA';
+  const scopedRows = () => FACTORY_SCOPE === 'SEMUA' ? DATA : DATA.filter(r => factoryName(r) === FACTORY_SCOPE);
+  // Status CANCEL selalu berarti dibatalkan. File Excel lama bisa menulis
+  // CANCEL di kolom BARANG DATANG; tetap dikenali agar data lama aman.
+  const cancelPattern = /\b(CANCEL|CANCELLED|BATAL|DIBATALKAN)\b/i;
+  const cancelled = r => cancelPattern.test(String(r.status || '')) ||
+    (!arrivalDate(r.barangDatang) && cancelPattern.test(
+      String(r.barangDatang || '') + ' ' + String(r.barangDatangCatatan || '')
+    ));
+  const arrived = r => !cancelled(r) && Boolean(arrivalDate(r.barangDatang));
+  const pendingArrival = r => !arrived(r) && !cancelled(r);
+  const MONTHS_ID = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  let DATA = Array.isArray(window.MERCY_INITIAL_DATA) ? window.MERCY_INITIAL_DATA.slice() : [];
+  const INITIAL_DATA = DATA.map(r => ({...r}));
+  const ADMIN_EMAIL = String(CONFIG.adminEmail || '').trim().toLowerCase();
+  let CLOUD = null;
+  let ADMIN = false;
+  let REMOTE_READY = false;
+  let CURRENT_ID = null;
+  let SAVING = false;
+  let TOAST_TIMEOUT = null;
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  function parseDate(input) {
+    if (input === null || input === undefined || input === '') return '';
+    const text = String(input).trim();
+    let m = text.match(/^Date\((\d{4}),\s*(\d{1,2}),\s*(\d{1,2})\)/i);
+    if (m) return `${m[1]}-${String(Number(m[2]) + 1).padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+    m = text.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+    if (m) return `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+    m = text.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+    if (m) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+    m = text.match(/^(\d{1,2})\s+([a-z]+)\s+(\d{2,4})$/i);
+    if (m) {
+      const names = {
+        jan: 1, januari: 1, feb: 2, februari: 2, mar: 3, maret: 3,
+        apr: 4, april: 4, mei: 5, may: 5, jun: 6, juni: 6,
+        jul: 7, juli: 7, agu: 8, ags: 8, agustus: 8,
+        sep: 9, september: 9, okt: 10, oktober: 10,
+        nov: 11, november: 11, des: 12, desember: 12
+      };
+      const month = names[m[2].toLowerCase()];
+      const year = m[3].length === 2 ? 2000 + Number(m[3]) : Number(m[3]);
+      if (month) return `${year}-${String(month).padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+    }
+    if (typeof input === 'number' || /^\d{5}(\.\d+)?$/.test(text)) {
+      const dayNumber = Number(input);
+      if (dayNumber > 35000 && dayNumber < 90000) {
+        const date = new Date(Date.UTC(1899, 11, 30) + Math.round(dayNumber) * 86400000);
+        return date.toISOString().slice(0, 10);
+      }
+    }
+    return '';
+  }
+
+  function dateFmt(v) {
+    if (!v || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return '—';
+    return new Date(`${v}T12:00:00`).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  // Tanggal kedatangan dari input kalender (ISO) maupun teks Excel lama (mis. "✅ 23 JUNI 26").
+  function arrivalDate(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+    const cleaned = raw.replace(/^[^\d]*/, '').replace(/(\d)([A-Za-z])/g, '$1 $2').replace(/([A-Za-z])(\d)/g, '$1 $2').replace(/\./g, '/').replace(/\s+/g, ' ').trim();
+    let candidate = parseDate(cleaned);
+    if (!candidate) {
+      const m = cleaned.match(/^(\d{1,2})\s+([a-zA-Z]+)\s+(\d{2,4})(?:\b|$)/);
+      if (m) candidate = parseDate(m[0]);
+    }
+    if (!candidate) return '';
+    const test = new Date(candidate + 'T12:00:00');
+    return !Number.isNaN(test.getTime()) && test.toISOString().slice(0,10) === candidate ? candidate : '';
+  }
+
+  const jakartaToday = () => new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Jakarta' });
+  function poAgeDays(row) {
+    // PO dengan bukti tanggal datang atau dibatalkan tidak ditandai tua.
+    if (arrived(row) || cancelled(row)) return null;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(row.tgl || ''))) return null;
+    const today = jakartaToday();
+    const d = (Date.parse(`${today}T00:00:00Z`) - Date.parse(`${row.tgl}T00:00:00Z`)) / 86400000;
+    return Number.isFinite(d) && d >= 0 ? Math.round(d) : null;
+  }
+  function ageKind(row) {
+    if (cancelled(row)) return 'cancelled';
+    const days = poAgeDays(row);
+    return days !== null && days >= 30 ? 'aged' : days !== null && days >= 14 ? 'watch' : arrivalDate(row.barangDatang) ? 'arrived' : 'new';
+  }
+  function renderAgeAlert() {
+    const old = scopedRows().filter(r => ageKind(r) === 'aged');
+    const watch = scopedRows().filter(r => ageKind(r) === 'watch');
+    const alert = el('ageAlert');
+    alert.hidden = old.length === 0;
+    el('ageAlertTitle').textContent = `${fmt(old.length)} PO sudah berusia ≥30 hari`;
+    el('ageAlertDetail').textContent = `Belum ada tanggal Barang Datang. ${fmt(watch.length)} PO lain berusia 14–29 hari. Ini prioritas follow up, bukan penanda lewat tenggat.`;
+  }
+
+  function parseQty(input) {
+    if (input === null || input === undefined || String(input).trim() === '') return null;
+    if (typeof input === 'number') return Number.isFinite(input) ? input : null;
+    let s = String(input).trim().replace(/\s/g, '');
+    if (/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(s)) s = s.replace(/\./g, '').replace(',', '.');
+    else if (/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(s)) s = s.replace(/,/g, '');
+    else if (/^\d+,\d+$/.test(s)) s = s.replace(',', '.');
+    const result = Number(s);
+    return Number.isFinite(result) && result >= 0 ? result : null;
+  }
+
+  function normalizeHeader(input) {
+    return String(input ?? '').toUpperCase().replace(/\u00A0/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+
+  function rowsToRecords(headers, rawRows) {
+    const col = new Map(headers.map((h, i) => [normalizeHeader(h), i]));
+    if (!col.has('DESIGN') && !col.has('DESAIN')) {
+      throw new Error('Header DESIGN tidak ada. Pastikan CSV memiliki kolom TGL, DESIGN, QTY, CUSTOMER atau PELANGGAN, KODE, KET.');
+    }
+    const get = (r, names) => {
+      for (const name of names) if (col.has(name)) return r[col.get(name)] ?? '';
+      return '';
+    };
+    const result = [];
+    let invalid = [];
+    rawRows.forEach((r, idx) => {
+      const design = String(get(r, ['DESIGN', 'DESAIN', 'NAMA DESIGN']) ?? '').trim();
+      if (!design || /^TOTAL\b/i.test(design)) return;
+      const rawDate = get(r, ['TGL', 'TANGGAL', 'DATE']);
+      const tgl = parseDate(rawDate);
+      const rawQty = get(r, ['QTY', 'QUANTITY']);
+      const rawHarga = get(r, ['HARGA', 'PRICE']);
+      const rawJumlah = get(r, ['JUMLAH', 'SISA', 'BALANCE']);
+      const qty = parseQty(rawQty), harga = parseQty(rawHarga), jumlah = parseQty(rawJumlah);
+      const rawFactory = String(get(r, ['PABRIK','FACTORY','NAMA PABRIK']) || '').trim().toUpperCase().replace(/\s+/g,' ');
+      const defaultFactory = el('csvDefaultFactory')?.value || 'TRIDAYA';
+      const pabrik = !rawFactory ? defaultFactory : rawFactory === 'TRI DAYA' ? 'TRIDAYA' : rawFactory;
+      const badNum = [[rawQty,qty,'QTY'],[rawHarga,harga,'HARGA'],[rawJumlah,jumlah,'JUMLAH']]
+        .find(([original, parsed]) => String(original ?? '').trim() &&
+          (parsed === null || !Number.isSafeInteger(parsed) || parsed < 0 || parsed > 999999999));
+      if (!tgl || !/^\d{4}-\d{2}-\d{2}$/.test(tgl) ||
+          (!Number.isFinite(Date.parse(tgl + 'T12:00:00')) || new Date(tgl + 'T12:00:00').toISOString().slice(0,10) !== tgl) || badNum || !FACTORIES.includes(pabrik)) {
+        invalid.push(`baris ${idx + 2}: ${!tgl ? 'tanggal tidak valid' : badNum ? `${badNum[2]} tidak valid` : !FACTORIES.includes(pabrik) ? 'nama pabrik tidak dikenal' : 'tanggal tidak valid'}`);
+        return;
+      }
+      result.push({
+        tgl, design, pabrik, nomorPo:String(get(r, ['NOMOR PO', 'NO PO', 'NO. PO', 'NOMOR PESANAN', 'NOMOR_PO']) || '').trim(),
+        warna:String(get(r, ['WARNA', 'COLOR']) || '').trim(),
+        qty, customer:String(get(r, ['CUSTOMER', 'PELANGGAN']) || 'MERCY').trim(),
+        barangDatang:String(get(r, ['BARANG DATANG', 'BARANG_DATANG', 'KEDATANGAN']) || '').trim(),
+        barangDatangCatatan:String(get(r, ['CATATAN DATANG', 'CATATAN BARANG DATANG', 'BARANG_DATANG_CATATAN']) || '').trim(),
+        kode:String(get(r, ['KODE', 'CODE', 'KODE PO']) || '').trim(),
+        status:String(get(r, ['KET', 'STATUS', 'KETERANGAN']) || '').trim().toUpperCase(),
+        harga, jumlah, turun:String(get(r, ['TURUN']) || '').trim()
+      });
+    });
+    if (invalid.length) throw new Error(`CSV memiliki ${invalid.length} baris salah (${invalid.slice(0,3).join('; ')}). Perbaiki di Excel, simpan CSV, lalu impor ulang.`);
+    if (!result.length) throw new Error('Tidak ada baris desain yang terbaca dari CSV.');
+    if (result.length > 2000) throw new Error('Maksimal 2.000 baris per proses impor. Bagi menjadi beberapa berkas CSV.');
+    return result;
+  }
+
+  function parseCSV(text) {
+    const s = String(text).replace(/^\uFEFF/, '');
+    const guess = s.split(/\r?\n/).slice(0, 6).join('\n');
+    const delimiter = (guess.match(/;/g) || []).length > (guess.match(/,/g) || []).length ? ';' : ',';
+    const result = [];
+    let line = [], value = '', quoted = false;
+    for (let i = 0; i < s.length; i++) {
+      const c = s[i];
+      if (c === '"') {
+        if (quoted && s[i+1] === '"') { value += '"'; i++; }
+        else quoted = !quoted;
+      } else if (c === delimiter && !quoted) {
+        line.push(value); value = '';
+      } else if ((c === '\n' || c === '\r') && !quoted) {
+        if (c === '\r' && s[i+1] === '\n') i++;
+        line.push(value); value = '';
+        if (line.some(x => x.trim())) result.push(line);
+        line = [];
+      } else value += c;
+    }
+    if (quoted) throw new Error('Tanda petik CSV tidak berpasangan. Simpan ulang sebagai CSV UTF-8.');
+    line.push(value);
+    if (line.some(x => x.trim())) result.push(line);
+    // File ekspor asli kadang memiliki judul MERCY di baris pertama.
+    const headerIdx = result.findIndex(r => r.some(v => ['DESIGN','DESAIN'].includes(normalizeHeader(v))));
+    if (headerIdx < 0) throw new Error('Tidak menemukan baris header DESIGN.');
+    return rowsToRecords(result[headerIdx], result.slice(headerIdx+1));
+  }
+
+  function rowIdentity(row) {
+    // Identitas inti PO untuk menghindari import CSV yang sama dua kali. Status/QTY adalah bagian dari identitas.
+    return JSON.stringify([
+      row.tgl || '', String(row.design || '').trim().toUpperCase(), String(row.warna || '').trim().toUpperCase(),
+      row.qty === null || row.qty === '' || row.qty === undefined ? '' : Number(row.qty),
+      String(row.customer || '').trim().toUpperCase(), String(row.kode || '').trim().toUpperCase(),
+      String(row.status || '').trim().toUpperCase(), factoryName(row), String(row.nomorPo || '').trim().toUpperCase()
+    ]);
+  }
+
+  function sourceState(mode, label, detail) {
+    el('sourceStrip').className = 'source-strip' + (mode === 'live' ? ' live' : mode === 'error' ? ' error' : '');
+    el('sourceLabel').textContent = label;
+    el('sourceDetail').textContent = detail;
+  }
+
+  function allStatuses() {
+    const extra = [...new Set(DATA.map(r => r.status || 'TANPA STATUS'))].filter(s => !BASE_STATUSES.includes(s));
+    return [...BASE_STATUSES, ...extra];
+  }
+  function statusCount(status) { return DATA.filter(r => (r.status || 'TANPA STATUS') === status).length; }
+  function qtyTotal() { return DATA.reduce((acc, r) => acc + (r.qty ?? 0), 0); }
+
+  function renderFactoryTabs() {
+    el('factoryTabs').querySelectorAll('[data-factory]').forEach(button => {
+      const f = button.dataset.factory;
+      button.classList.toggle('active', f === FACTORY_SCOPE);
+      button.setAttribute('aria-pressed', String(f === FACTORY_SCOPE));
+      button.querySelector('.factory-count').textContent = fmt(f === 'SEMUA' ? DATA.length : DATA.filter(r => factoryName(r) === f).length);
+    });
+    el('factoryScopeHint').textContent = FACTORY_SCOPE === 'SEMUA' ? 'Menampilkan semua pabrik' : `Menampilkan pabrik ${FACTORY_SCOPE}`;
+  }
+
+  function renderKpis() {
+    const group = scopedRows();
+    const pending = group.filter(pendingArrival);
+    const kpis = [
+      ['Total PO', fmt(group.length), 'Jumlah baris di pabrik terpilih', '▦'],
+      ['Barang belum datang', fmt(pending.length), 'Belum ada tanggal datang, tidak termasuk dibatalkan', '◷'],
+      ['Perlu follow up', fmt(pending.filter(r => (poAgeDays(r) ?? -1) >= 30).length), 'Usia PO 30 hari atau lebih', '⚑'],
+      ['Sudah datang', fmt(group.filter(arrived).length), 'Tanggal Barang Datang terisi', '✓'],
+      ['Total QTY', fmt(group.reduce((n,r)=>n+(r.qty??0),0)), `${fmt(group.filter(r=>r.qty!==null).length)} baris memiliki QTY`, '◈']
+    ];
+    el('kpis').innerHTML = kpis.map(k => `<article class="kpi"><div class="kpi-top"><span class="kpi-label">${k[0].toUpperCase()}</span><span class="kpi-icon">${k[3]}</span></div><div class="num">${k[1]}</div><div class="hint">${escapeHtml(k[2])}</div></article>`).join('');
+  }
+
+  function renderStatus() {
+    const statuses = allStatuses();
+    const group = scopedRows();
+    let offset = 0;
+    const slices = statuses.map(status => {
+      const next = offset + (group.length ? group.filter(r=>(r.status||'TANPA STATUS')===status).length / group.length * 100 : 0);
+      const slice = `${PALETTE[status] || '#DDE5E5'} ${offset}% ${next}%`;
+      offset = next; return slice;
+    });
+    el('donut').style.background = group.length ? `conic-gradient(${slices.join(',')})` : '#E3E9E8';
+    el('donutTotal').textContent = fmt(group.length);
+    el('legend').innerHTML = statuses.map(status => `<div class="leg"><span class="swatch" style="background:${PALETTE[status] || '#DDE5E5'}"></span><span>${escapeHtml(status)}</span><strong>${fmt(group.filter(r=>(r.status||'TANPA STATUS')===status).length)}</strong></div>`).join('');
+  }
+
+  function renderMonthly() {
+    const counts = new Map();
+    scopedRows().forEach(r => { if (/^\d{4}-\d{2}-\d{2}$/.test(r.tgl)) counts.set(r.tgl.slice(0, 7), (counts.get(r.tgl.slice(0, 7)) || 0) + 1); });
+    const allMonths = [...counts.keys()].sort();
+    const visible = allMonths.slice(-8);
+    const maxCount = Math.max(1, ...visible.map(m => counts.get(m)));
+    const label = (ym) => `${MONTHS_ID[Number(ym.slice(5, 7)) - 1]} ${ym.slice(0, 4)}`;
+    el('monthChart').innerHTML = visible.map((ym, i) => `<div class="bar-col ${i === visible.length - 1 ? 'highlight' : ''}" title="${label(ym)}: ${counts.get(ym)} desain / PO"><div class="bar-number">${fmt(counts.get(ym))}</div><div class="bar" style="height:${Math.max(6, (counts.get(ym) / maxCount) * 120)}px"></div></div>`).join('');
+    el('monthLabels').innerHTML = visible.map(ym => `<span>${MONTHS_ID[Number(ym.slice(5, 7)) - 1]}</span>`).join('');
+    el('monthRange').textContent = visible.length ? (visible.length === 1 ? label(visible[0]) : `${label(visible[0])} – ${label(visible[visible.length - 1])}`) : 'Belum ada tanggal';
+    el('trendFoot').textContent = 'Grafik dihitung ulang saat baris baru ditambahkan.';
+  }
+
+  function renderFollowUp() {
+    const pending = scopedRows().filter(r => pendingArrival(r) && poAgeDays(r) !== null)
+      .sort((a,b) => poAgeDays(b)-poAgeDays(a) || a.tgl.localeCompare(b.tgl));
+    el('taskItems').innerHTML = pending.length ? pending.slice(0,6).map(r => {
+      const days=poAgeDays(r), kind=ageKind(r);
+      const label=days>=30?'PERLU FOLLOW UP':days>=14?'PANTAU':'BELUM DATANG';
+      const tone=days>=30?'chip-revise':days>=14?'chip-wait':'chip-so';
+      return `<div class="task-row ${kind==='aged'?'is-aged':''}"><div class="task-id"><div class="task-avatar">${days>=30?'!':'◷'}</div><div><strong>${escapeHtml(r.design)}</strong><span>${escapeHtml(factoryName(r))} · ${dateFmt(r.tgl)} · ${escapeHtml(r.status||'TANPA STATUS')}</span></div></div><div style="text-align:right;display:grid;gap:5px;justify-items:end"><span class="priority-days ${days>=30?'priority-red':days>=14?'priority-amber':''}">${fmt(days)} hari</span><span class="chip ${tone}">${label}</span></div></div>`;
+    }).join('') : '<div class="empty">Tidak ada PO belum datang dengan tanggal yang valid di pabrik ini.</div>';
+  }
+
+  function renderInsights() {
+    const group=scopedRows();
+    el('qtyTotal').textContent = fmt(group.reduce((n,r)=>n+(r.qty??0),0));
+    const missing=group.filter(r=>r.qty===null).length;
+    const pending=group.filter(pendingArrival).length;
+    const done=group.filter(arrived).length;
+    const batal=group.filter(cancelled).length;
+    el('insights').textContent = `${fmt(pending)} PO belum datang dan ${fmt(done)} PO sudah tercatat datang. ${fmt(batal)} PO dibatalkan (tidak masuk follow up). ${fmt(missing)} baris belum memiliki QTY. Gunakan daftar Prioritas Follow Up untuk mengejar PO terlama.`;
+    el('qtyNote').textContent = `ℹ️ Barang Datang terisi tanggal = sudah diterima. Barang Datang kosong = belum diterima, kecuali status CANCEL yang tidak masuk follow up.`;
+    const colorCount = {};
+    group.forEach(r => (r.warna || '').split(/[,/]/).forEach(t => { const color=t.trim(); if(color) colorCount[color]=(colorCount[color]||0)+1; }));
+    el('colorTags').innerHTML = Object.entries(colorCount).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([c,n])=>`<span class="soft-tag">${escapeHtml(c)} · ${fmt(n)} desain</span>`).join('');
+  }
+
+  function setOptions(select, items, emptyLabel) {
+    const previous = select.value;
+    select.innerHTML = `<option value="">${emptyLabel}</option>` + items.map(({ value, label }) => `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`).join('');
+    if (items.some(i => i.value === previous)) select.value = previous;
+  }
+  function renderStatusControls() {
+    const possible = allStatuses();
+    SELECTED_STATUSES = new Set([...SELECTED_STATUSES].filter(s=>possible.includes(s)));
+    el('statusChecks').innerHTML = possible.map(s=>`<label><input type="checkbox" value="${escapeHtml(s)}" ${SELECTED_STATUSES.has(s)?'checked':''}><span>${escapeHtml(s)}</span></label>`).join('');
+    const names=[...SELECTED_STATUSES];
+    el('statusLabel').textContent=names.length ? names.join(', ') : 'Semua status';
+    el('statusToggle').title=names.length ? names.join(', ') : 'Semua status';
+    el('activeFiltersText').textContent=names.length ? `Status dipilih: ${names.join(' + ')}` : 'Semua status ditampilkan';
+  }
+  function renderFilters() {
+    renderStatusControls();
+    const months=[...new Set(DATA.map(r=>r.tgl.slice(0,7)).filter(v=>/^\d{4}-\d{2}$/.test(v)))].sort().reverse();
+    setOptions(el('month'),months.map(m=>({value:m,label:`${MONTHS_ID[Number(m.slice(5,7))-1]} ${m.slice(0,4)}`})), 'Semua bulan');
+    const customers=[...new Set(DATA.map(r=>r.customer).filter(Boolean))].sort();
+    setOptions(el('customer'),customers.map(c=>({value:c,label:c})),'Semua pelanggan');
+  }
+
+  function filtered() {
+    const q=el('q').value.trim().toLocaleLowerCase('id-ID');
+    const month=el('month').value,customer=el('customer').value,age=el('ageFilter').value,arrival=el('arrivalFilter').value;
+    return [...scopedRows()].sort((a,b)=>b.tgl.localeCompare(a.tgl)||String(b.id).localeCompare(String(a.id),undefined,{numeric:true}))
+      .filter(r => (!q || [r.design,r.warna,r.kode,r.nomorPo,r.pabrik,r.customer,r.status,r.tgl].some(v=>String(v||'').toLocaleLowerCase('id-ID').includes(q)))
+        && (!SELECTED_STATUSES.size || SELECTED_STATUSES.has(r.status||'TANPA STATUS'))
+        && (!month || r.tgl.startsWith(month)) && (!customer || r.customer===customer)
+        && (!age || ageKind(r)===age) && (!arrival || (arrival==='arrived' ? arrived(r) : pendingArrival(r))));
+  }
+
+  function renderTable() {
+    const entries=filtered();
+    el('actionsHead').hidden=!ADMIN;
+    el('tbody').innerHTML=entries.length ? entries.map(r=>{
+      const kind=ageKind(r),days=poAgeDays(r),arrival=arrivalDate(r.barangDatang);
+      const arrivalHtml=cancelled(r) ? '<span class="arrival-cancelled">Dibatalkan</span>' : arrival ? `<span class="arrival-ok">✓ ${dateFmt(arrival)}</span>` : '<span style="color:#8a999f">Belum datang</span>';
+      const arriveNote=r.barangDatangCatatan?`<span class="arrival-note">${escapeHtml(r.barangDatangCatatan)}</span>`:'';
+      const flag=kind==='aged'?`<span class="age-flag flag-aged">● FOLLOW UP</span>`:kind==='watch'?`<span class="age-flag flag-watch">● PANTAU</span>`:'';
+      const label=cancelled(r)?'<span class="age-cell cancelled">Dibatalkan</span>':arrival?'<span class="age-cell arrived">Sudah datang</span>':days===null?'<span class="age-cell">—</span>':`<span class="age-cell ${kind==='aged'?'old':kind==='watch'?'watch':''}">${fmt(days)} hari</span>`;
+      const f=factoryName(r), fClass=f.toLowerCase();
+      return `<tr class="${kind==='aged'?'row-aged':kind==='watch'?'row-watch':''}">
+        <td><div class="po-date"><span class="po-date-main">${dateFmt(r.tgl)}</span>${flag}</div></td>
+        <td><span class="factory-badge ${fClass}">${escapeHtml(f)}</span></td>
+        <td><span class="design-name">${escapeHtml(r.design)}</span></td>
+        <td>${escapeHtml(r.warna)}</td><td class="qty">${r.qty===null?'—':fmt(r.qty)}</td>
+        <td>${escapeHtml(r.customer)}</td><td>${arrivalHtml}${arriveNote}</td>
+        <td><span class="code">${escapeHtml(r.kode||'—')}</span></td><td>${escapeHtml(r.nomorPo||'—')}</td>
+        <td><span class="chip ${CHIPS[r.status]||'chip-so'}">${escapeHtml(r.status||'TANPA STATUS')}</span></td>
+        <td>${label}</td><td class="qty">${r.harga===null?'—':'Rp '+fmt(r.harga)}</td>
+        <td class="qty">${r.jumlah===null?'—':fmt(r.jumlah)}</td><td>${escapeHtml(r.turun||'—')}</td>
+        ${ADMIN ? `<td><button class="actionbtn" type="button" data-op="edit" data-id="${escapeHtml(r.id)}">Edit</button><button class="actionbtn delete" type="button" data-op="delete" data-id="${escapeHtml(r.id)}">Hapus</button></td>` : ''}
+      </tr>`;
+    }).join(''):`<tr><td colspan="${ADMIN?15:14}" class="empty">Tidak ada PO yang cocok dengan filter pabrik, status, dan pencarian.</td></tr>`;
+    el('showCount').textContent=`Menampilkan ${fmt(entries.length)} dari ${fmt(scopedRows().length)} PO`;
+  }
+
+  function renderAll() {
+    renderFactoryTabs(); renderKpis(); renderStatus(); renderMonthly(); renderFollowUp(); renderInsights(); renderFilters(); renderTable(); renderAgeAlert();
+    const validDates = DATA.map(r => r.tgl).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)).sort();
+    el('lastDate').innerHTML = '<span class="dot"></span>' + (validDates.length ? `Data s.d. ${dateFmt(validDates[validDates.length - 1])}` : 'Belum ada tanggal');
+    el('addBtn').hidden = el('addBtnSecondary').hidden = !(ADMIN && REMOTE_READY);
+    el('importBtn').hidden = !(ADMIN && REMOTE_READY && DATA.length === 0);
+    el('csvImportBtn').hidden = !(ADMIN && REMOTE_READY);
+    el('loginBtn').hidden = !!el('adminLabel').textContent;
+    el('logoutBtn').hidden = !el('adminLabel').textContent;
+    el('adminLabel').hidden = !el('adminLabel').textContent;
+  }
+
+  function showToast(message, error = false) {
+    const t = el('toast'); t.textContent = String(message); t.className = 'toast' + (error ? ' error' : ''); t.hidden = false;
+    clearTimeout(TOAST_TIMEOUT); TOAST_TIMEOUT = setTimeout(() => { t.hidden = true; }, 4800);
+  }
+
+  function csvDownload(records = filtered(), prefix = 'MERCY_Export_PO') {
+    const rows = [['TGL','DESIGN','WARNA','QTY','CUSTOMER','BARANG DATANG','KODE','KET','HARGA','JUMLAH','TURUN','CATATAN DATANG','PABRIK','NOMOR PO'],
+      ...records.map(r => [r.tgl,r.design,r.warna,r.qty ?? '',r.customer,r.barangDatang || '',r.kode,r.status,r.harga ?? '',r.jumlah ?? '',r.turun || '',r.barangDatangCatatan || '',factoryName(r),r.nomorPo||''])];
+    const safeCell = value => {
+      let s = String(value ?? '');
+      if (/^\s*[=+@\-]/.test(s)) s = "'" + s;
+      return `"${s.replace(/"/g, '""')}"`;
+    };
+    const csv = '\uFEFF' + rows.map(row => row.map(safeCell).join(',')).join('\r\n');
+    const url = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+    const a = document.createElement('a'); a.href = url; a.download = `${prefix}_${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1500);
+  }
+
+  function isConfigured() {
+    const cfg = CONFIG.firebase || {};
+    return ['apiKey','authDomain','projectId','appId'].every(k => typeof cfg[k] === 'string' && cfg[k].trim().length > 8 && !cfg[k].includes('ISI_'))
+      && ADMIN_EMAIL.includes('@') && !ADMIN_EMAIL.includes('email_admin');
+  }
+
+  function refreshBanner(meta = {}) {
+    if (!isConfigured()) {
+      sourceState('pending', 'Mode contoh · belum tersambung', 'Data contoh dapat dilihat. Hubungkan Firebase agar Tambah/Edit/Hapus dan impor CSV tersimpan online.');
+    } else if (meta.cache) {
+      sourceState('error', 'Data sementara (belum tersambung)', 'Menampilkan data sementara. Masuk dan ubah data setelah tersambung ke server.');
+    } else if (!REMOTE_READY) {
+      sourceState('pending', 'Menghubungkan Firebase…', 'Menyiapkan data terbaru. Data dari Firebase akan menggantikan tampilan contoh setelah tersambung.');
+    } else if (DATA.length === 0) {
+      sourceState('live', 'Firebase terhubung · database kosong', ADMIN ? 'Klik “Impor 61 data awal” untuk memindahkan semua data awal ke database.' : 'Masuk menggunakan email admin untuk mengimpor data awal.');
+    } else {
+      sourceState('live', 'Tersambung · sinkron otomatis ✓', `${fmt(DATA.length)} PO / desain tersimpan di Firebase. Perubahan dari perangkat lain tampil otomatis.`);
+    }
+  }
+
+  function openModal(id = null) {
+    if (!ADMIN || !REMOTE_READY || !CLOUD) { showToast('Masuk sebagai admin dan pastikan penyimpanan sudah tersambung sebelum mengubah data.', true); return; }
+    const existing = id === null ? null : DATA.find(r => String(r.id) === String(id));
+    if (id !== null && !existing) { showToast('Data telah berubah. Silakan coba lagi.', true); return; }
+    CURRENT_ID = existing ? String(existing.id) : null;
+    el('poForm').reset();
+    el('poTitle').textContent = existing ? 'Edit PO / desain' : 'Tambah PO baru';
+    el('fieldDate').value = existing?.tgl || new Date().toLocaleDateString('sv-SE', {timeZone:'Asia/Jakarta'});
+    el('fieldCustomer').value = existing?.customer ?? 'MERCY';
+    el('fieldFactory').value = existing ? factoryName(existing) : (FACTORY_SCOPE==='SEMUA'?'TRIDAYA':FACTORY_SCOPE);
+    el('fieldNomorPo').value = existing?.nomorPo || '';
+    el('fieldDesign').value = existing?.design ?? '';
+    el('fieldColor').value = existing?.warna ?? '';
+    el('fieldQty').value = existing?.qty ?? '';
+    el('fieldCode').value = existing?.kode ?? '';
+    const originalArrival = String(existing?.barangDatang || '');
+    const parsedArrival = arrivalDate(originalArrival);
+    el('fieldArrived').value = parsedArrival;
+    el('fieldArrivalNote').value = existing?.barangDatangCatatan || (originalArrival && !parsedArrival ? originalArrival : '');
+    el('fieldPrice').value = existing?.harga ?? '';
+    el('fieldJumlah').value = existing?.jumlah ?? '';
+    el('fieldTurun').value = existing?.turun ?? '';
+    const statusSel=el('fieldStatus');
+    [...statusSel.options].filter(o=>o.dataset.extra==='1').forEach(o=>o.remove());
+    if (existing?.status && ![...statusSel.options].some(o=>o.value===existing.status)) { const opt=new Option(existing.status,existing.status); opt.dataset.extra='1'; statusSel.add(opt); }
+    statusSel.value = existing ? (cancelled(existing) ? 'CANCEL' : (existing.status || '')) : 'TUNGGU ACC';
+    syncCancelStatus();
+    el('saveBtn').textContent = existing ? 'Simpan Perubahan' : 'Simpan PO Baru';
+    el('poBackdrop').hidden = false;
+    document.body.classList.add('modal-open');
+    el('fieldDesign').focus();
+  }
+
+  function syncCancelStatus() {
+    const isCancel = el('fieldStatus').value === 'CANCEL';
+    el('fieldArrived').disabled = isCancel;
+    if (isCancel) el('fieldArrived').value = '';
+    el('arrivalHelp').textContent = isCancel
+      ? 'Status CANCEL: tanggal kedatangan tidak diperlukan.'
+      : 'Pilih tanggal melalui kalender. Biarkan kosong jika barang belum datang.';
+    el('cancelStatusNote').hidden = !isCancel;
+  }
+
+  function closeModal() {
+    if (SAVING) return;
+    el('poBackdrop').hidden = true;
+    document.body.classList.remove('modal-open');
+    CURRENT_ID = null;
+  }
+
+  async function saveForm(event) {
+    event.preventDefault();
+    if (SAVING || !ADMIN || !CLOUD || !REMOTE_READY) return;
+    const qtyText = el('fieldQty').value.trim();
+    const qty = qtyText === '' ? null : Number(qtyText);
+    const record = {
+      tgl: el('fieldDate').value.trim(), design: el('fieldDesign').value.trim(),
+      pabrik: el('fieldFactory').value, nomorPo: el('fieldNomorPo').value.trim(),
+      warna: el('fieldColor').value.trim().toUpperCase(), qty,
+      customer: el('fieldCustomer').value.trim().toUpperCase(),
+      kode: el('fieldCode').value.trim(), status: el('fieldStatus').value.trim(),
+      barangDatang: el('fieldArrived').value.trim(),
+      barangDatangCatatan: el('fieldArrivalNote').value.trim(),
+      harga: el('fieldPrice').value.trim() ? Number(el('fieldPrice').value) : null,
+      jumlah: el('fieldJumlah').value.trim() ? Number(el('fieldJumlah').value) : null,
+      turun: el('fieldTurun').value.trim()
+    };
+    // Status CANCEL disimpan di KET/STATUS, bukan di tanggal Barang Datang.
+    // Penanda CANCEL dari berkas Excel lama dinormalkan saat record diedit.
+    const exactLegacyCancel = /^(CANCEL|CANCELLED|BATAL|DIBATALKAN)$/i;
+    if (exactLegacyCancel.test(record.barangDatangCatatan.trim())) record.barangDatangCatatan = '';
+    if (record.status === 'CANCEL') record.barangDatang = '';
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(record.tgl) || !record.design || !record.customer || (!record.status && CURRENT_ID === null)) {
+      showToast('Tanggal, nama desain, customer, dan status wajib diisi.', true); return;
+    }
+    if (!FACTORIES.includes(record.pabrik)) { showToast('Pabrik harus Tridaya, Inna, atau KBI.',true); return; }
+    if (qty !== null && (!Number.isSafeInteger(qty) || qty < 0 || qty > 999999999)) {
+      showToast('QTY harus angka bulat 0–999.999.999, atau kosong.', true); return;
+    }
+    if ([record.harga, record.jumlah].some(v => v !== null && (!Number.isSafeInteger(v) || v < 0 || v > 999999999))) {
+      showToast('HARGA dan JUMLAH harus angka bulat 0–999.999.999 atau kosong.', true); return;
+    }
+    SAVING = true; el('saveBtn').disabled = true; el('saveBtn').textContent = 'Menyimpan…';
+    try {
+      await CLOUD.save(CURRENT_ID, record);
+      const isEdit = CURRENT_ID !== null;
+      SAVING = false; closeModal();
+      showToast(isEdit ? 'Perubahan PO sudah tersimpan ✓' : 'PO baru berhasil ditambahkan ✓');
+    } catch (err) {
+      showToast('Gagal menyimpan: ' + String(err.message || err), true);
+    } finally {
+      SAVING = false; el('saveBtn').disabled = false; el('saveBtn').textContent = CURRENT_ID ? 'Simpan Perubahan' : 'Simpan PO Baru';
+    }
+  }
+
+  async function removeRow(id) {
+    if (!ADMIN || !REMOTE_READY || !CLOUD) return;
+    const item = DATA.find(r => String(r.id) === String(id));
+    if (!item) return;
+    if (!confirm(`Hapus PO “${item.design}” dari database?\n\nIni akan hilang untuk semua pengguna dan tidak bisa dibatalkan.`)) return;
+    try { await CLOUD.remove(String(id)); showToast('PO berhasil dihapus ✓'); }
+    catch (err) { showToast('Gagal menghapus: ' + String(err.message || err), true); }
+  }
+
+  async function importInitial() {
+    if (!CLOUD || !ADMIN || !REMOTE_READY || DATA.length !== 0) return;
+    if (!confirm(`Impor ${INITIAL_DATA.length} data desain lama ke Firebase sekarang?\n\nHanya bisa dilakukan saat database masih kosong.`)) return;
+    el('importBtn').disabled = true;
+    try { await CLOUD.importInitial(INITIAL_DATA); showToast(`${INITIAL_DATA.length} data lama berhasil diimpor ✓`); }
+    catch (err) { showToast('Impor gagal: ' + String(err.message || err), true); }
+    finally { el('importBtn').disabled = false; }
+  }
+
+  async function login() {
+    if (!CLOUD) { showToast('Belum bisa masuk. Periksa sambungan Firebase dan aturan Firestore.', true); return; }
+    el('loginBtn').disabled = true;
+    try { await CLOUD.login(); }
+    catch (err) {
+      const code = String(err.code || err.message || err);
+      showToast('Gagal masuk: ' + code + (code.includes('unauthorized-domain') ? '. Tambahkan nuryads.github.io di Authorized domains Firebase.' : ''), true);
+    }
+    finally { el('loginBtn').disabled = false; }
+  }
+
+  function authChanged(user) {
+    const email = String(user?.email || '').toLowerCase();
+    ADMIN = Boolean(email && email === ADMIN_EMAIL);
+    el('adminLabel').textContent = email ? (ADMIN ? '✓ Admin: ' : 'Bukan admin: ') + email : '';
+    if (!ADMIN && !el('poBackdrop').hidden) closeModal();
+    if (!ADMIN && !el('csvBackdrop').hidden) closeCsvModal();
+    renderAll();
+    refreshBanner();
+    if (email && !ADMIN) showToast('Akun ini hanya bisa melihat data. Masuk menggunakan email admin yang sudah didaftarkan.', true);
+  }
+
+  function cloudDataChanged(rows, info = {}) {
+    DATA = rows.map(r => ({
+      id: String(r.id), tgl: String(r.tgl || ''), design: String(r.design || ''),
+      pabrik: factoryName(r), nomorPo: String(r.nomorPo || ''),
+      warna: String(r.warna || ''),
+      qty: r.qty === null || r.qty === undefined || r.qty === '' ? null : parseQty(r.qty),
+      customer: String(r.customer || ''), kode: String(r.kode || ''), status: String(r.status || ''),
+      barangDatang: String(r.barangDatang || ''),
+      barangDatangCatatan: String(r.barangDatangCatatan || ''),
+      harga: r.harga === null || r.harga === undefined || r.harga === '' ? null : parseQty(r.harga),
+      jumlah: r.jumlah === null || r.jumlah === undefined || r.jumlah === '' ? null : parseQty(r.jumlah),
+      turun: String(r.turun || '')
+    }));
+    REMOTE_READY = !info.cache;
+    renderAll();
+    refreshBanner({cache:info.cache});
+  }
+
+  function cloudFailed(error) {
+    REMOTE_READY = false;
+    const msg = String(error?.code || error?.message || error || 'Tidak diketahui');
+    const tip = /permission-denied/i.test(msg) ? 'Buka Firebase Console → Firestore Database → Rules, lalu Publish aturan yang diberikan.'
+      : /unauthorized-domain/i.test(msg) ? 'Buka Authentication → Settings → Authorized domains, tambahkan nuryads.github.io.'
+      : 'Periksa Firestore Database, Authentication, dan koneksi internet.';
+    sourceState('error', 'Gagal tersambung ke Firebase', msg + ' · ' + tip + ' Tabel masih menampilkan data contoh jika belum tersinkron.');
+    showToast('Firebase: ' + msg, true);
+    renderAll();
+  }
+
+
+  // Modul Firebase dimuat saat browser sudah siap. Semua logika situs ada dalam index.html.
+  async function startFirebase(config, callbacks) {
+    const root = 'https://www.gstatic.com/firebasejs/13.0.0/';
+    const [fbApp, fbAuth, fbDb] = await Promise.all([
+      import(root + 'firebase-app.js'),
+      import(root + 'firebase-auth.js'),
+      import(root + 'firebase-firestore.js')
+    ]);
+    const app = fbApp.initializeApp(config.firebase);
+    const auth = fbAuth.getAuth(app);
+    const db = fbDb.getFirestore(app);
+    const orders = fbDb.collection(db, 'mercy_orders');
+    fbAuth.onAuthStateChanged(auth,
+      user => callbacks.onAuth(user ? {email:user.email} : null),
+      callbacks.onError);
+    fbDb.onSnapshot(orders, {includeMetadataChanges:true},
+      snapshot => callbacks.onRows(
+        snapshot.docs.map(item => ({id:item.id,...item.data()})),
+        {cache:snapshot.metadata.fromCache, pending:snapshot.metadata.hasPendingWrites}
+      ),
+      callbacks.onError);
+    return {
+      login: () => fbAuth.signInWithPopup(auth, new fbAuth.GoogleAuthProvider()),
+      logout: () => fbAuth.signOut(auth),
+      save: (id, fields) => id
+        ? fbDb.updateDoc(fbDb.doc(db, 'mercy_orders', id), {...fields, updatedAt:fbDb.serverTimestamp()})
+        : fbDb.addDoc(orders, {...fields, createdAt:fbDb.serverTimestamp(), updatedAt:fbDb.serverTimestamp()}),
+      remove: (id) => fbDb.deleteDoc(fbDb.doc(db, 'mercy_orders', id)),
+      bulkImport: async (records, mode) => {
+        if (!Array.isArray(records) || !records.length || !['merge', 'replace'].includes(mode))
+          throw new Error('Berkas atau pilihan impor tidak valid.');
+        const live = await fbDb.getDocsFromServer(orders);
+        const now = fbDb.serverTimestamp;
+        if (mode === 'replace') {
+          // Ganti semua dalam SATU batch atomik agar tidak tersisa database setengah jadi.
+          if (live.size + records.length > 450) throw new Error('Ganti semua sekaligus dibatasi 450 operasi. Dataset terlalu besar; hubungi pengelola untuk migrasi aman.');
+          const batch = fbDb.writeBatch(db);
+          live.docs.forEach(item => batch.delete(item.ref));
+          records.forEach(record => batch.set(fbDb.doc(orders), {...record, importedFrom:'CSV', createdAt:now(), updatedAt:now()}));
+          await batch.commit();
+          return {added:records.length, deleted:live.size, skipped:0};
+        }
+        const existingCounts = new Map();
+        live.docs.forEach(item => {
+          const id = rowIdentity(item.data());
+          existingCounts.set(id, (existingCounts.get(id) || 0) + 1);
+        });
+        const seenCounts = new Map();
+        const additions = records.filter(record => {
+          const id = rowIdentity(record);
+          const seen = (seenCounts.get(id) || 0) + 1;
+          seenCounts.set(id, seen);
+          return seen > (existingCounts.get(id) || 0);
+        });
+        for (let at = 0; at < additions.length; at += 400) {
+          const batch = fbDb.writeBatch(db);
+          additions.slice(at, at + 400).forEach(record =>
+            batch.set(fbDb.doc(orders), {...record, importedFrom:'CSV', createdAt:now(), updatedAt:now()}));
+          await batch.commit();
+        }
+        return {added:additions.length, deleted:0, skipped:records.length-additions.length};
+      },
+      importInitial: async (data) => {
+        const live = await fbDb.getDocsFromServer(orders);
+        if (!live.empty) throw new Error('Database tidak kosong. Impor dibatalkan agar PO yang sudah ada tetap aman.');
+        const batch = fbDb.writeBatch(db);
+        data.forEach((item, i) => {
+          const {tgl, design, warna, qty, customer, kode, status} = item;
+          batch.set(fbDb.doc(db, 'mercy_orders', `awal-${String(i+1).padStart(4,'0')}`), {
+            tgl,design,warna,qty,customer,kode,status,pabrik:factoryName(item),nomorPo:item.nomorPo||"",
+            createdAt: fbDb.serverTimestamp(), updatedAt: fbDb.serverTimestamp()
+          });
+        });
+        await batch.commit();
+      }
+    };
+  }
+
+  // Impor CSV — baca dan preview lokal dahulu, lalu simpan ke Firestore jika admin mengonfirmasi.
+  let CSV_RECORDS = null;
+  let IMPORT_BUSY = false;
+
+  function csvMode() { return document.querySelector('input[name="csvMode"]:checked')?.value || 'merge'; }
+  function csvValidation() {
+    const replace = csvMode() === 'replace';
+    el('replaceWarning').hidden = !replace;
+    el('importConfirmBtn').disabled = IMPORT_BUSY || !ADMIN || !REMOTE_READY || !CSV_RECORDS?.length || (replace && el('replaceKeyword').value.trim() !== 'GANTI');
+    el('importConfirmBtn').textContent = IMPORT_BUSY ? 'Sedang mengimpor…' : replace ? `Ganti seluruh data (${CSV_RECORDS?.length || 0} PO)` : `Gabungkan (${CSV_RECORDS?.length || 0} PO)`;
+  }
+
+  function openCsvModal() {
+    if (!ADMIN || !REMOTE_READY || !CLOUD) { showToast('Masuk sebagai admin dan sambungkan Firebase dahulu.', true); return; }
+    CSV_RECORDS = null;
+    el('csvFile').value = '';
+    el('csvError').hidden = true;
+    el('csvPreview').hidden = true;
+    el('csvProgress').textContent = '';
+    el('replaceKeyword').value = '';
+    el('csvDefaultFactory').value = FACTORY_SCOPE === 'SEMUA' ? 'TRIDAYA' : FACTORY_SCOPE;
+    document.querySelector('input[name="csvMode"][value="merge"]').checked = true;
+    csvValidation();
+    el('csvBackdrop').hidden = false;
+    document.body.classList.add('modal-open');
+    el('csvFile').focus();
+  }
+
+  function closeCsvModal() {
+    if (IMPORT_BUSY) return;
+    el('csvBackdrop').hidden = true;
+    document.body.classList.remove('modal-open');
+    CSV_RECORDS = null;
+  }
+
+  async function handleCsvFile() {
+    CSV_RECORDS = null;
+    el('csvError').hidden = true;
+    el('csvPreview').hidden = true;
+    el('csvProgress').textContent = '';
+    const file = el('csvFile').files?.[0];
+    if (!file) { csvValidation(); return; }
+    try {
+      if (!/\.csv$/i.test(file.name)) throw new Error('Pilih berkas .csv. Berkas Excel .xlsx harus disimpan sebagai CSV UTF-8 terlebih dahulu.');
+      if (file.size > 4_000_000) throw new Error('Ukuran berkas maksimal 4 MB untuk setiap impor.');
+      const text = await file.text();
+      const records = parseCSV(text);
+      CSV_RECORDS = records;
+      const totalQty = records.reduce((sum, r) => sum + (r.qty ?? 0), 0);
+      el('csvSummary').innerHTML = `<strong>${fmt(records.length)} PO</strong> terbaca dari ${escapeHtml(file.name)} · Total QTY <strong>${fmt(totalQty)} pcs</strong><br>Data tersimpan sekarang ${fmt(DATA.length)} PO. Pratinjau 5 baris pertama di bawah ini. Tanggal serta QTY sudah dicek.`;
+      el('csvPreviewBody').innerHTML = records.slice(0,5).map(r => `<tr><td>${escapeHtml(r.tgl)}</td><td>${escapeHtml(factoryName(r))}</td><td>${escapeHtml(r.design)}</td><td>${r.qty === null ? '—' : fmt(r.qty)}</td><td>${escapeHtml(r.status || '—')}</td><td>${r.harga === null ? '—' : 'Rp ' + fmt(r.harga)}</td></tr>`).join('');
+      el('csvPreview').hidden = false;
+    } catch (error) {
+      el('csvError').textContent = String(error.message || error);
+      el('csvError').hidden = false;
+    }
+    csvValidation();
+  }
+
+  async function confirmCsvImport() {
+    if (IMPORT_BUSY || !CLOUD || !ADMIN || !REMOTE_READY || !CSV_RECORDS?.length) return;
+    const mode = csvMode();
+    if (mode === 'replace' && el('replaceKeyword').value.trim() !== 'GANTI') return;
+    const records = CSV_RECORDS.map(r => ({...r}));
+    if (mode === 'replace') {
+      if (!confirm(`Yakin GANTI semua ${fmt(DATA.length)} PO di database dengan ${fmt(records.length)} PO dari file CSV?\n\nSemua data lama akan dihapus (termasuk hasil edit di web). Salinan cadangan CSV akan diunduh lebih dahulu.`)) return;
+      // Download backup untuk seluruh data, bukan hanya hasil filter tabel.
+      csvDownload(DATA, 'MERCY_BACKUP_SEBELUM_IMPORT');
+    }
+    IMPORT_BUSY = true;
+    csvValidation();
+    el('csvProgress').textContent = 'Menyimpan ke Firebase, jangan tutup halaman…';
+    try {
+      const result = await CLOUD.bulkImport(records, mode);
+      const message = mode === 'replace'
+        ? `Selesai! ${fmt(result.added)} PO dimasukkan, ${fmt(result.deleted)} PO lama diganti.`
+        : `Selesai! ${fmt(result.added)} PO baru ditambahkan, ${fmt(result.skipped)} duplikat dilewati.`;
+      IMPORT_BUSY = false;
+      closeCsvModal();
+      showToast(message);
+    } catch (error) {
+      el('csvProgress').textContent = '';
+      el('csvError').textContent = 'Gagal mengimpor: ' + String(error.message || error) + '. Database tidak diubah jika gagal sebelum penyimpanan.';
+      el('csvError').hidden = false;
+    } finally {
+      IMPORT_BUSY = false;
+      csvValidation();
+    }
+  }
+
+  // Filter pabrik: update ringkasan dan tabel tanpa mengubah data di Firebase.
+  el('factoryTabs').addEventListener('click', event => {
+    const button=event.target.closest('[data-factory]'); if(!button) return;
+    const choice=button.dataset.factory;
+    if(choice!=='SEMUA'&&!FACTORIES.includes(choice)) return;
+    FACTORY_SCOPE=choice; renderAll();
+  });
+  const resetTableFilters = () => {
+    ['q','month','customer','ageFilter','arrivalFilter'].forEach(id=>el(id).value='');
+    SELECTED_STATUSES.clear(); renderStatusControls(); renderTable();
+  };
+  ['q','month','customer','ageFilter','arrivalFilter'].forEach(id=>el(id).addEventListener(id==='q'?'input':'change',renderTable));
+  el('statusToggle').addEventListener('click',()=>{
+    const now=el('statusOptions').hidden;
+    el('statusOptions').hidden=!now;
+    el('statusToggle').setAttribute('aria-expanded',String(now));
+  });
+  el('statusChecks').addEventListener('change',event=>{
+    const checkbox=event.target.closest('input[type="checkbox"]'); if(!checkbox)return;
+    if(checkbox.checked) SELECTED_STATUSES.add(checkbox.value);
+    else SELECTED_STATUSES.delete(checkbox.value);
+    renderStatusControls(); renderTable();
+  });
+  el('statusClearBtn').addEventListener('click',()=>{SELECTED_STATUSES.clear();renderStatusControls();renderTable()});
+  document.addEventListener('click',event=>{if(!el('statusMenu').contains(event.target)){el('statusOptions').hidden=true;el('statusToggle').setAttribute('aria-expanded','false')}});
+  el('clearBtn').addEventListener('click',resetTableFilters);
+  el('seeAllWaiting').addEventListener('click',()=>{
+    resetTableFilters();el('arrivalFilter').value='pending';renderTable();el('database').scrollIntoView({behavior:'smooth'});
+  });
+  el('viewAgedBtn').addEventListener('click',()=>{
+    resetTableFilters();el('ageFilter').value='aged';el('arrivalFilter').value='pending';renderTable();el('database').scrollIntoView({behavior:'smooth'});
+  });
+  el('exportBtn').addEventListener('click',()=>csvDownload());
+  el('csvImportBtn').addEventListener('click',openCsvModal);
+  el('csvDefaultFactory').addEventListener('change',()=>{if(el('csvFile').files?.length)handleCsvFile()});
+  el('csvFile').addEventListener('change',handleCsvFile);
+  el('closeCsvBtn').addEventListener('click',closeCsvModal);
+  el('cancelCsvBtn').addEventListener('click',closeCsvModal);
+  el('csvBackdrop').addEventListener('click',event=>{if(event.target===el('csvBackdrop'))closeCsvModal()});
+  el('replaceKeyword').addEventListener('input',csvValidation);
+  document.querySelectorAll('input[name="csvMode"]').forEach(input=>input.addEventListener('change',csvValidation));
+  el('importConfirmBtn').addEventListener('click',confirmCsvImport);
+  el('loginBtn').addEventListener('click',login);
+  el('logoutBtn').addEventListener('click',async()=>{
+    if(!CLOUD)return;try{await CLOUD.logout()}catch(err){showToast('Gagal keluar: '+err.message,true)}
+  });
+  el('addBtn').addEventListener('click',()=>openModal());
+  el('addBtnSecondary').addEventListener('click',()=>openModal());
+  el('importBtn').addEventListener('click',importInitial);
+  el('poForm').addEventListener('submit',saveForm);
+  el('fieldStatus').addEventListener('change',syncCancelStatus);
+  el('closeModalBtn').addEventListener('click',closeModal);
+  el('cancelModalBtn').addEventListener('click',closeModal);
+  el('poBackdrop').addEventListener('click',e=>{if(e.target===el('poBackdrop'))closeModal()});
+  document.addEventListener('keydown',e=>{
+    if(e.key!=='Escape')return;
+    if(!el('reportBackdrop').hidden)closeReportModal();
+    else if(!el('csvBackdrop').hidden)closeCsvModal();
+    else if(!el('poBackdrop').hidden)closeModal();
+    else {el('statusOptions').hidden=true;el('statusToggle').setAttribute('aria-expanded','false');}
+  });
+  el('tbody').addEventListener('click',e=>{
+    const button=e.target.closest('button[data-op]');if(!button)return;
+    if(button.dataset.op==='edit')openModal(button.dataset.id);
+    else if(button.dataset.op==='delete')removeRow(button.dataset.id);
+  });
+
+  // Cetak berdasarkan filter tabel aktif, tanpa perlu memilih baris per PO.
+  const reportRecords=()=>filtered().filter(r=>!cancelled(r) && (!el('printOnlyPending').checked || pendingArrival(r)))
+    .sort((a,b)=>(poAgeDays(b)??-1)-(poAgeDays(a)??-1)||a.tgl.localeCompare(b.tgl));
+  const reportScopeText=()=>[
+    SELECTED_STATUSES.size?`Status: ${[...SELECTED_STATUSES].join(', ')}`:'',
+    el('printOnlyPending').checked?'Barang belum datang':el('arrivalFilter').value==='arrived'?'Barang sudah datang':el('arrivalFilter').value==='pending'?'Barang belum datang':'',
+    el('ageFilter').value?`Usia: ${el('ageFilter').selectedOptions[0].textContent}`:'',
+    el('month').value?`Bulan: ${el('month').selectedOptions[0].textContent}`:'',
+    el('q').value.trim()?`Pencarian: ${el('q').value.trim()}`:''
+  ].filter(Boolean).join(' · ');
+  function renderReportPreview(){
+    const records=reportRecords();
+    el('reportTotal').textContent=fmt(records.length);
+    el('reportQty').textContent=fmt(records.reduce((n,r)=>n+(r.qty??0),0));
+    el('reportOld').textContent=fmt(records.filter(r=>(poAgeDays(r)??-1)>=30).length);
+    el('reportFilterRecap').textContent=reportScopeText();
+    el('reportPreviewBody').innerHTML=records.length?records.slice(0,7).map(r=>`<tr><td>${escapeHtml(r.design)}</td><td>${escapeHtml(r.status||'—')}</td><td class="${(poAgeDays(r)??0)>=30?'priority-red':''}">${poAgeDays(r)===null?'—':fmt(poAgeDays(r))+' hari'}</td></tr>`).join(''):'<tr><td colspan="3">Tidak ada PO yang cocok. Ubah filter tabel atau pilihan Barang Datang.</td></tr>';
+    el('printNowBtn').disabled=records.length===0;
+  }
+  function openReportModal(){
+    el('printOnlyPending').checked=true;
+    renderReportPreview();el('reportBackdrop').hidden=false;document.body.classList.add('modal-open');
+  }
+  function closeReportModal(){
+    el('reportBackdrop').hidden=true;document.body.classList.remove('modal-open');
+  }
+  function buildPrintableReport(records){
+    const now=jakartaToday();
+    const currentDate=dateFmt(now);
+    const summary=reportScopeText();
+    const totalQty=records.reduce((n,r)=>n+(r.qty??0),0);
+    const body=records.map((r,i)=>{
+      const age=poAgeDays(r);const ageClass=age!==null&&age>=30?'print-age-old':age!==null&&age>=14?'print-age-watch':'print-age-normal';
+      return `<tr><td>${i+1}</td><td>${dateFmt(r.tgl)}</td><td><div class="print-name">${escapeHtml(r.design)}</div><div class="print-sub">${escapeHtml(r.warna||'—')} · ${escapeHtml(r.nomorPo||r.kode||'Tanpa kode')}</div></td><td>${r.qty===null?'—':fmt(r.qty)}</td><td>${escapeHtml(r.status||'—')}</td><td class="${ageClass}">${arrived(r)?'Sudah datang':age===null?'—':fmt(age)+' hari'}</td></tr>`;
+    }).join('');
+    el('printRoot').innerHTML=`<div class="print-header"><div><div class="print-logo">MERCY.</div></div><div class="print-date">Dicetak: ${escapeHtml(currentDate)}</div></div>
+      <div class="print-title-bar"><h1>DAFTAR FOLLOW UP PO</h1><p>${escapeHtml(summary)}</p></div>
+      <div class="print-overview"><div>Total <strong>${fmt(records.length)} PO</strong> · QTY tercatat <strong>${fmt(totalQty)} pcs</strong></div><div>Urutan: PO paling lama</div></div>
+      <table class="print-table"><colgroup><col style="width:6%"><col style="width:14%"><col style="width:41%"><col style="width:12%"><col style="width:12%"><col style="width:15%"></colgroup>
+      <thead><tr><th>No</th><th>Tanggal</th><th>Desain / Kode</th><th>QTY</th><th>Status</th><th>Usia PO</th></tr></thead><tbody>${body}</tbody></table>
+      <div class="print-foot"><strong>© ${escapeHtml(now.slice(0,4))} MERCY</strong><span>Dokumen Pemantauan PO</span></div>`;
+  }
+  el('reportBtn').addEventListener('click',openReportModal);
+  el('factoryPrintBtn').addEventListener('click',openReportModal);
+  el('navPrintBtn').addEventListener('click',event=>{event.preventDefault();openReportModal()});
+  el('printOnlyPending').addEventListener('change',renderReportPreview);
+  el('closeReportBtn').addEventListener('click',closeReportModal);
+  el('cancelReportBtn').addEventListener('click',closeReportModal);
+  el('reportBackdrop').addEventListener('click',event=>{if(event.target===el('reportBackdrop'))closeReportModal()});
+  el('printNowBtn').addEventListener('click',()=>{
+    const records=reportRecords();if(!records.length)return;
+    buildPrintableReport(records);closeReportModal();
+    // @page margin:0 meminta browser mencetak tanpa header/footer otomatis.
+    // Beberapa versi browser masih memerlukan opsi "Header dan footer" dimatikan.
+    const previousPageTitle=document.title;
+    const restorePageTitle=()=>{document.title=previousPageTitle;window.removeEventListener('afterprint',restorePageTitle)};
+    window.addEventListener('afterprint',restorePageTitle);
+    // Nama tab sementara menjadi nama PDF yang disarankan saat "Simpan sebagai PDF".
+    // Memakai tanggal Asia/Jakarta agar nama berkas tidak bergantung zona waktu perangkat.
+    const [year,month,day]=jakartaToday().split('-');
+    const namaBulan=['JANUARI','FEBRUARI','MARET','APRIL','MEI','JUNI','JULI','AGUSTUS','SEPTEMBER','OKTOBER','NOVEMBER','DESEMBER'];
+    document.title=`LAPORAN PO PER TANGGAL ${Number(day)} ${namaBulan[Number(month)-1]} ${year}`;
+    try{window.print()}catch(error){restorePageTitle();throw error}
+  });
+
+  renderAll(); refreshBanner();
+  if (isConfigured()) {
+    // Di halaman contoh tanpa Firebase, chart tetap tampil; data belum bisa diubah online.
+    const watchdog = setTimeout(() => {
+      if (!REMOTE_READY) {
+        sourceState('error', 'Koneksi Firebase belum berhasil',
+          'Data contoh tetap terlihat. Periksa Firestore Database dan koneksi internet. Jika sudah aktif, muat ulang halaman.');
+      }
+    }, 12000);
+    startFirebase(CONFIG, {
+      onAuth: authChanged, onRows: cloudDataChanged, onError: cloudFailed
+    }).then(client => {
+      CLOUD = client;
+    }).catch(error => cloudFailed(error));
+  }
+})();
+</script>
+</body></html>
