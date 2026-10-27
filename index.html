@@ -191,6 +191,27 @@ body.motion-off .nav-items::before{transition:none}
 
 .motif-card.no-photo .motif-hover-actions{opacity:1;transform:translateY(0)}
 .file-ready{margin:8px 0 13px;padding:10px 12px;background:#e9f9f3;color:#159a75;font-size:11px;font-weight:750;border-radius:10px;display:flex;align-items:center;gap:8px}
+
+/* MERCY reporting filters — multi-status selection (ACC + REPEAT PO, etc.) */
+.report-filter-card{padding:17px 18px;margin:17px 0 19px}
+.report-filter-card .catalog-toolbar{position:static;top:auto;margin:0;padding:0;background:transparent;backdrop-filter:none}
+.report-filter-card .catalog-toolbar .search-box{min-width:210px}
+.report-filter-card .catalog-toolbar select{max-width:190px}
+.report-filter-card input[type="month"]{height:42px;border:1px solid #e3e8f4;border-radius:11px;background:white;color:#61708b;padding:0 12px;font-size:11px;min-width:155px}
+.report-filter-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:13px}
+.report-filter-top strong{font-size:12px;color:#394563}
+.report-filter-tip{color:#98a3b7;font-size:11px;line-height:1.5}
+.report-preset-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:14px 0 13px;padding:13px 0 12px;border-top:1px solid #eef0f8;border-bottom:1px solid #eef0f8}
+.report-preset-bar .filter-pill{font-size:11px}
+.report-filter-card .status-filters{margin:9px 0 0}
+.report-filter-card .filter-pill[aria-pressed="true"]{background:#f0ecff;color:#7555f6;border-color:#cbbfff}
+.report-filter-summary{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:15px;padding:11px 13px;background:#f6f4ff;color:#6650bd;font-size:11px;font-weight:690;border-radius:10px;line-height:1.6}
+.report-filter-summary b{color:#4534a6}
+.report-filter-bottom{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:15px}
+.report-filter-bottom .btn{height:32px}
+.report-filter-bottom .micro{margin-left:auto;text-align:right}
+.report-empty{padding:27px;text-align:center;color:#97a3b6;font-size:12px}
+@media(max-width:680px){.report-filter-card{padding:13px}.report-filter-card .catalog-toolbar .search-box{flex-basis:100%}.report-filter-card input[type="month"],.report-filter-card .catalog-toolbar select{min-width:0;width:calc(50% - 5px);max-width:none;flex:1}.report-filter-bottom .micro{margin-left:0;text-align:left}}
 </style>
 </head>
 <body>
@@ -254,7 +275,7 @@ const state = {
   page:'overview', modal:null, selected:'', saving:false, pendingImage:null,
   motifQuery:'', motifFactory:'ALL', motifImageFilter:'all',
   poQuery:'', poFactory:'ALL', poStatuses:[], poPage:1,
-  factory:'TRIDAYA', followFactory:'ALL', reportFactory:'ALL', poMonth:'', sceneZoom:1,scenePaused:false,
+  factory:'TRIDAYA', followFactory:'ALL', reportFactory:'ALL', reportQuery:'', reportMonth:'', reportArrival:'ALL', reportStatuses:[], reportPage:1, poMonth:'', sceneZoom:1,scenePaused:false,
   importRows:null, imageMode:'file', quickPhotoFor:null
 };
 function nowID(){return new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Jakarta'});}
@@ -332,8 +353,59 @@ function factoriesPage(){let f=state.factory,rows=state.rows.filter(r=>r.pabrik=
 function followPage(){const filtered=state.rows.filter(r=>isPending(r)&&(state.followFactory==='ALL'||r.pabrik===state.followFactory));const red=filtered.filter(r=>age(r)>=30).sort((a,b)=>age(b)-age(a));const yellow=filtered.filter(r=>age(r)>=14&&age(r)<30).sort((a,b)=>age(b)-age(a));const fresh=filtered.filter(r=>age(r)<14).sort((a,b)=>age(b)-age(a));
  return heading('OPERATIONS / PRIORITY QUEUE','Daily priorities','Usia PO dihitung otomatis. 30+ hari bukan bukti lewat tenggat kontrak.',`<button class="btn" data-action="export">${I('download')} Ekspor CSV</button><button class="btn primary" data-action="print">${I('print')} Cetak laporan</button>`)+initGuard()+`<div class="catalog-toolbar" style="margin:17px 0"><select data-filter="followFactory"><option value="ALL">Semua pabrik</option>${FACTORIES.map(f=>`<option ${state.followFactory===f?'selected':''}>${f}</option>`).join('')}</select></div><div class="focus-banner"><div class="focus-icon">${I('alert',25)}</div><div><strong>${red.length} PO perlu follow up</strong><p>PO belum datang dengan usia 30 hari atau lebih.</p></div></div><div class="task-grid">${followCard('Urgent · 30 hari ke atas',red,'red')}${followCard('Pantau · 14–29 hari',yellow,'yellow')}${followCard('Baru · Kurang dari 14 hari',fresh,'green')}</div>`;}
 function followCard(title,rows,tone){return `<section class="card cardpad"><div class="section-row" style="margin:0 0 11px"><h2>${title}</h2><span class="badge ${tone}">${rows.length} PO</span></div>${rows.slice(0,30).map(orderItem).join('')||'<p class="muted">Tidak ada PO di kelompok ini.</p>'}${rows.length>30?`<p class="micro">+ ${rows.length-30} PO lagi (lihat daftar PO).</p>`:''}</section>`;}
-function reportsPage(){const rows=state.rows.filter(r=>state.reportFactory==='ALL'||r.pabrik===state.reportFactory);let statuses=[...new Set(rows.map(r=>r.status))].map(s=>({s,n:rows.filter(r=>r.status===s).length})).sort((a,b)=>b.n-a.n).slice(0,8);let max=Math.max(1,...statuses.map(r=>r.n));let total=rows.length,arrived=rows.filter(isArrived).length,urgent=rows.filter(r=>isPending(r)&&age(r)>=30).length;
- return heading('ANALYTICS / REPORTING','Production reports','Laporan otomatis dihitung dari PO Firebase saat ini.',`<button class="btn" data-action="backup">${I('download')} Backup JSON</button><button class="btn" data-action="export">${I('download')} CSV</button><button class="btn primary" data-action="print">${I('print')} Cetak PDF</button>`)+initGuard()+`<div class="catalog-toolbar" style="margin:16px 0"><select data-filter="reportFactory"><option value="ALL">Semua pabrik</option>${FACTORIES.map(f=>`<option ${state.reportFactory===f?'selected':''}>${f}</option>`).join('')}</select></div><div class="kpi-grid">${stat('Total PO',state.ready?fmt(total):'—','clipboard','','Baris dalam periode data')}${stat('Sudah datang',state.ready?fmt(arrived):'—','check','green','Tanggal datang terisi')}${stat('Belum datang',state.ready?fmt(rows.filter(isPending).length):'—','clock','blue','Tidak termasuk cancel')}${stat('Urgent 30+',state.ready?fmt(urgent):'—','alert','red','Memerlukan follow up')}</div><div class="chart-grid" style="margin-top:20px"><section class="card cardpad"><div class="section-row" style="margin:0"><h2>Distribusi status</h2><span class="micro">${fmt(total)} PO</span></div>${statuses.map(({s,n})=>`<div class="bar-report"><label title="${E(s)}">${E(s)}</label><div class="track"><div style="width:${n/max*100}%;background:#8168ee"></div></div><strong>${n}</strong></div>`).join('')||'<div class="empty">Belum ada data</div>'}</section><section class="card cardpad"><div class="section-row" style="margin:0"><h2>Ringkasan pabrik</h2></div>${FACTORIES.map(f=>{let a=rows.filter(r=>r.pabrik===f);let d=a.filter(isArrived).length;return `<div class="factory-line"><div class="factory-line-top"><span><i class="factory-dot" style="background:${factoryColor(f)}"></i>${f}</span><span>${d}/${a.length} PO datang</span></div><div class="track"><div style="width:${a.length?d/a.length*100:0}%;background:${factoryColor(f)}"></div></div></div>`}).join('')}<div class="studio-note">${I('info',18)} Backup JSON mencakup seluruh field PO termasuk gambar motif, untuk disimpan sebelum perubahan besar.</div></section></div><div class="section-row"><h2>Rincian PO <small>Terbaru</small></h2></div>${listTable([...rows].sort((a,b)=>b.tgl.localeCompare(a.tgl)),12)}`;}
+/* Report filtering is independent from PO filters; all report outputs use the same rows. */
+function reportStatusLabel(status){return status==='REPEAT'?'REPEAT PO':status;}
+function reportBaseRows(){
+ const q=state.reportQuery.trim().toLowerCase();
+ return state.rows.filter(r=>(state.reportFactory==='ALL'||r.pabrik===state.reportFactory)
+   &&(!state.reportMonth||r.tgl.startsWith(state.reportMonth))
+   &&(!q||[r.design,r.warna,r.kode,r.nomorPo,r.id,r.customer].join(' ').toLowerCase().includes(q))
+   &&(state.reportArrival==='ALL'||(state.reportArrival==='ARRIVED'&&isArrived(r))||(state.reportArrival==='PENDING'&&isPending(r))||(state.reportArrival==='CANCELED'&&isCanceled(r))));
+}
+function filteredReports(){
+ return reportBaseRows().filter(r=>!state.reportStatuses.length||state.reportStatuses.includes(r.status))
+  .sort((a,b)=>b.tgl.localeCompare(a.tgl)||b.id.localeCompare(a.id));
+}
+function reportMatchesPreset(items){return state.reportStatuses.length===items.length&&items.every(s=>state.reportStatuses.includes(s));}
+function reportStatusSummary(){return state.reportStatuses.length?state.reportStatuses.map(reportStatusLabel).join(' + '):'Semua status';}
+function reportFilterDescription(){
+ const arrivalNames={ALL:'Semua kondisi datang',ARRIVED:'Sudah datang',PENDING:'Belum datang',CANCELED:'Batal'};
+ const parts=['Status: '+reportStatusSummary(),'Pabrik: '+(state.reportFactory==='ALL'?'Semua pabrik':state.reportFactory)];
+ parts.push('Bulan: '+(state.reportMonth||'Semua bulan'));
+ parts.push('Kedatangan: '+(arrivalNames[state.reportArrival]||'Semua kondisi datang'));
+ if(state.reportQuery.trim())parts.push('Pencarian: '+state.reportQuery.trim());
+ return parts.join('  |  ');
+}
+function reportsPage(){
+ const base=reportBaseRows(),rows=filteredReports();
+ const allStatuses=[...new Set([...APP_STATUS,...state.rows.map(r=>r.status)])];
+ const statuses=[...new Set(rows.map(r=>r.status))].map(s=>({s,n:rows.filter(r=>r.status===s).length})).sort((a,b)=>b.n-a.n).slice(0,8);
+ const max=Math.max(1,...statuses.map(r=>r.n)),total=rows.length;
+ const arrived=rows.filter(isArrived).length,urgent=rows.filter(r=>isPending(r)&&age(r)>=30).length;
+ const pages=Math.max(1,Math.ceil(total/35));state.reportPage=Math.max(1,Math.min(state.reportPage,pages));
+ const shown=rows.slice((state.reportPage-1)*35,state.reportPage*35);
+ const presets=[{id:'ALL',label:'Semua status',list:[]},{id:'ACC',label:'ACC saja',list:['ACC']},{id:'REPEAT',label:'Repeat PO saja',list:['REPEAT']},{id:'ACC_REPEAT',label:'ACC + Repeat PO',list:['ACC','REPEAT']}];
+ return heading('ANALYTICS / REPORTING','Production reports','Pilih status seperti di menu PO. Data pada layar, CSV, dan cetak PDF mengikuti filter yang sama.',`<button class="btn" data-action="backup" title="Backup seluruh data Firebase; tidak mengikuti filter">${I('download')} Backup JSON</button><button class="btn" data-action="export">${I('download')} Ekspor CSV</button><button class="btn primary" data-action="print">${I('print')} Cetak PDF</button>`)
+ +initGuard()+`<section class="card report-filter-card" aria-label="Pengaturan laporan">
+  <div class="report-filter-top"><strong>${I('layers',16)} Pengaturan jenis laporan</strong><span class="report-filter-tip">Pilih satu atau beberapa status PO sesuai laporan yang ingin dicetak.</span></div>
+  <div class="catalog-toolbar">
+   <label class="search-box">${I('search',16)}<input type="search" data-filter="reportQuery" value="${E(state.reportQuery)}" placeholder="Cari motif, nomor PO, customer..." aria-label="Cari dalam laporan"></label>
+   <select data-filter="reportFactory" aria-label="Pabrik laporan"><option value="ALL">Semua pabrik</option>${FACTORIES.map(f=>`<option value="${f}" ${state.reportFactory===f?'selected':''}>${f}</option>`).join('')}</select>
+   <input type="month" data-filter="reportMonth" value="${E(state.reportMonth)}" aria-label="Filter bulan PO" title="Bulan tanggal PO; kosong berarti semua bulan">
+   <select data-filter="reportArrival" aria-label="Kondisi barang datang"><option value="ALL">Semua kedatangan</option><option value="PENDING" ${state.reportArrival==='PENDING'?'selected':''}>Belum datang</option><option value="ARRIVED" ${state.reportArrival==='ARRIVED'?'selected':''}>Sudah datang</option><option value="CANCELED" ${state.reportArrival==='CANCELED'?'selected':''}>Batal</option></select>
+  </div>
+  <div class="report-preset-bar"><span class="labelcaps" style="margin-right:4px">PILIHAN CEPAT</span>${presets.map(p=>`<button type="button" class="filter-pill ${reportMatchesPreset(p.list)?'selected':''}" data-action="report-preset" data-id="${p.id}" aria-pressed="${reportMatchesPreset(p.list)}">${E(p.label)}</button>`).join('')}</div>
+  <div class="report-filter-top" style="margin-bottom:6px"><strong>Filter status PO</strong><span class="report-filter-tip">Bisa pilih beberapa sekaligus, seperti pada Daftar PO.</span></div>
+  <div class="status-filters">${allStatuses.map(s=>{const selected=state.reportStatuses.includes(s);return `<button type="button" class="filter-pill ${selected?'selected':''}" data-action="toggle-report-status" data-id="${E(s)}" aria-pressed="${selected}">${E(reportStatusLabel(s))}<small>${fmt(base.filter(r=>r.status===s).length)}</small></button>`;}).join('')}</div>
+  <div class="report-filter-bottom"><button type="button" class="btn small" data-action="reset-report">${I('close',13)} Reset semua filter</button><span class="micro">Backup JSON tetap berisi seluruh data, tanpa filter.</span></div>
+  <div class="report-filter-summary">${I('check',16)} <span><b>${fmt(total)} PO cocok</b> · ${E(reportFilterDescription())}</span></div>
+ </section>
+ <div class="kpi-grid">${stat('PO pada hasil',state.ready?fmt(total):'—','clipboard','','Sesuai jenis laporan terpilih')}${stat('Sudah datang',state.ready?fmt(arrived):'—','check','green','Sesuai filter')}${stat('Belum datang',state.ready?fmt(rows.filter(isPending).length):'—','clock','blue','Tidak termasuk cancel')}${stat('Urgent 30+',state.ready?fmt(urgent):'—','alert','red','Perlu follow up')}</div>
+ <div class="chart-grid" style="margin-top:20px"><section class="card cardpad"><div class="section-row" style="margin:0"><h2>Distribusi status</h2><span class="micro">${fmt(total)} PO terfilter</span></div>${statuses.map(({s,n})=>`<div class="bar-report"><label title="${E(reportStatusLabel(s))}">${E(reportStatusLabel(s))}</label><div class="track"><div style="width:${n/max*100}%;background:#8168ee"></div></div><strong>${n}</strong></div>`).join('')||'<div class="report-empty">Tidak ada PO sesuai filter.</div>'}</section>
+ <section class="card cardpad"><div class="section-row" style="margin:0"><h2>Ringkasan pabrik</h2></div>${FACTORIES.map(f=>{const a=rows.filter(r=>r.pabrik===f),d=a.filter(isArrived).length;return `<div class="factory-line"><div class="factory-line-top"><span><i class="factory-dot" style="background:${factoryColor(f)}"></i>${f}</span><span>${d}/${a.length} PO datang</span></div><div class="track"><div style="width:${a.length?d/a.length*100:0}%;background:${factoryColor(f)}"></div></div></div>`;}).join('')}<div class="studio-note">${I('info',18)} Grafik dan rincian menggunakan status, pabrik, bulan, dan kondisi kedatangan yang dipilih.</div></section></div>
+ <div class="section-row"><h2>Rincian laporan <small>${fmt(total)} PO sesuai filter</small></h2><span class="micro">PDF / CSV memuat semua PO hasil filter, bukan hanya halaman ini.</span></div>
+ ${listTable(shown,35)}<div class="table-pagination"><span>Menampilkan ${total?(state.reportPage-1)*35+1:0}–${Math.min(total,state.reportPage*35)} dari ${fmt(total)} PO</span><div><button class="btn small" data-action="prev-report-page" ${state.reportPage<=1?'disabled':''}>Sebelumnya</button><span>Hal ${state.reportPage} / ${pages}</span><button class="btn small" data-action="next-report-page" ${state.reportPage>=pages?'disabled':''}>Berikutnya</button></div></div>`;
+}
 function textInput(title,name,value='',type='text',req=false,placeholder=''){return `<label class="field"><span>${E(title)}${req?' *':''}</span><input name="${E(name)}" type="${type}" value="${E(value)}" placeholder="${E(placeholder)}" ${req?'required':''} ${type==='number'?'min="0" step="1"':''}></label>`;}
 function selectInput(title,name,opts,value=''){return `<label class="field"><span>${E(title)}</span><select name="${E(name)}">${opts.map(v=>`<option value="${E(v)}" ${v===value?'selected':''}>${E(v)}</option>`).join('')}</select></label>`;}
 function footerForm(label){return `<div class="modal-foot"><button type="button" class="btn" data-action="close-modal">Batal</button><button type="submit" class="btn primary" ${state.saving?'disabled':''}>${I('check',16)} ${label}</button></div>`;}
@@ -432,8 +504,11 @@ async function removePhoto(id){if(!safeWrite())return;let m=state.motifs.find(x=
 function safeCSVCell(value){let s=String(value??'');if(/^\s*[=+@\-]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"';}
 function downloadFile(filename,contents,type){let blob=new Blob([contents],{type});let uri=URL.createObjectURL(blob);let a=document.createElement('a');a.href=uri;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(uri),1500);}
 function exportRows(){if(!state.ready){toast('Data Firebase belum selesai dibaca.','error');return null;}
- if(state.page==='orders')return filteredOrders();if(state.page==='factories')return state.rows.filter(r=>r.pabrik===state.factory);if(state.page==='followup')return state.rows.filter(r=>isPending(r)&&(state.followFactory==='ALL'||r.pabrik===state.followFactory));if(state.page==='reports')return state.rows.filter(r=>state.reportFactory==='ALL'||r.pabrik===state.reportFactory);return state.rows;}
-function exportCSV(){let rows=exportRows();if(!rows)return;let data=[['TGL','DESIGN','WARNA','QTY','CUSTOMER','BARANG DATANG','KODE','KET','HARGA','JUMLAH','TURUN','CATATAN DATANG','PABRIK','NOMOR PO'],...rows.map(r=>[r.tgl,r.design,r.warna,r.qty??'',r.customer,r.barangDatang,r.kode,r.status,r.harga??'',r.jumlah??'',r.turun,r.barangDatangCatatan,r.pabrik,r.nomorPo])].map(a=>a.map(safeCSVCell).join(';')).join('\r\n');downloadFile(`MERCY_PO_${nowID()}.csv`,'\ufeff'+data,'text/csv;charset=utf-8');toast(rows.length+' PO diekspor ke CSV.');}
+ if(state.page==='orders')return filteredOrders();if(state.page==='factories')return state.rows.filter(r=>r.pabrik===state.factory);if(state.page==='followup')return state.rows.filter(r=>isPending(r)&&(state.followFactory==='ALL'||r.pabrik===state.followFactory));if(state.page==='reports')return filteredReports();return state.rows;}
+function exportCSV(){let rows=exportRows();if(!rows)return;
+ let data=[['TGL','DESIGN','WARNA','QTY','CUSTOMER','BARANG DATANG','KODE','KET','HARGA','JUMLAH','TURUN','CATATAN DATANG','PABRIK','NOMOR PO'],...rows.map(r=>[r.tgl,r.design,r.warna,r.qty??'',r.customer,r.barangDatang,r.kode,r.status,r.harga??'',r.jumlah??'',r.turun,r.barangDatangCatatan,r.pabrik,r.nomorPo])].map(a=>a.map(safeCSVCell).join(';')).join('\r\n');
+ const type=state.page==='reports'?'MERCY_LAPORAN_'+(state.reportStatuses.length?state.reportStatuses.map(reportStatusLabel).join('_'):'SEMUA_STATUS').replace(/[^A-Z0-9_]+/gi,'_'):'MERCY_PO';
+ downloadFile(`${type}_${nowID()}.csv`,'\ufeff'+data,'text/csv;charset=utf-8');toast(rows.length+' PO diekspor ke CSV.');}
 function backupJSON(){if(!state.ready||state.cache){toast('Backup penuh harus dibuat saat koneksi Firebase live.','error');return;}
  const out={generatedAt:new Date().toISOString(),firebaseProject:CONFIG.firebase.projectId,collection:'mercy_orders',count:state.rows.length,records:state.rows.map(r=>({id:r.id,...r.raw}))};downloadFile(`MERCY_FIREBASE_BACKUP_${nowID()}.json`,JSON.stringify(out,(k,v)=>{if(v?.toDate instanceof Function)return v.toDate().toISOString();if(k==='seconds'&&typeof v==='number')return v;return v;},2),'application/json');toast('Backup JSON lengkap berhasil diunduh.');}
 function parseCSV(contents){let str=contents.replace(/^\ufeff/,'');let first=str.split(/\r?\n/)[0]||'';let sep=first.split(';').length>first.split(',').length?';':',';let rows=[],row=[],field='',quoted=false;
@@ -450,13 +525,21 @@ async function commitCSV(){if(!safeWrite())return;let draft=state.importRows;if(
  try{state.saving=true;let online=await cloud.fs.getDocsFromServer(cloud.fs.collection(cloud.db,'mercy_orders'));let counts=new Map();online.docs.forEach(doc=>{let key=identity(normalize({id:doc.id,...doc.data()}));counts.set(key,(counts.get(key)||0)+1);});let seen=new Map();let fresh=draft.filter(r=>{let key=identity(r);let c=(seen.get(key)||0)+1;seen.set(key,c);return c>(counts.get(key)||0);});for(let i=0;i<fresh.length;i+=200){let batch=cloud.fs.writeBatch(cloud.db);fresh.slice(i,i+200).forEach(record=>{batch.set(cloud.fs.doc(cloud.fs.collection(cloud.db,'mercy_orders')),{...record,importedFrom:'CSV',createdAt:cloud.fs.serverTimestamp(),updatedAt:cloud.fs.serverTimestamp()});});await batch.commit();}
  closeModal();navigate('orders');toast(`Impor selesai: ${fresh.length} baru, ${draft.length-fresh.length} duplikat dilewati.`);
  }catch(err){toast('Impor gagal: '+errorText(err),'error');}finally{state.saving=false;}}
-function printReport(){let rows=exportRows();if(!rows)return;let date=new Date().toLocaleDateString('id-ID',{timeZone:'Asia/Jakarta',day:'numeric',month:'long',year:'numeric'}),urgent=rows.filter(r=>isPending(r)&&age(r)>=30).length;
- let popup=window.open('','_blank');if(!popup){toast('Izinkan pop-up untuk mencetak laporan.','error');return;}
- let html=`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>LAPORAN PO ${E(date)}</title><style>body{font:12px Arial,sans-serif;padding:24px;color:#182035}h1{font-size:23px;margin:0}p{color:#68718c}table{border-collapse:collapse;width:100%;font-size:10px;margin-top:18px}th,td{border:1px solid #d9dee8;padding:7px;text-align:left;vertical-align:top}th{background:#f2f3fa}tr{break-inside:avoid}@page{size:A4 landscape;margin:11mm}
-/* Small screens: swipe the panning map instead of displaying tiny buildings. */
-@media(max-width:600px){.world-canvas{overflow-x:auto;overflow-y:hidden;justify-content:flex-start;height:300px;scrollbar-width:thin}.world-svg{min-width:730px;width:730px;max-width:none;height:300px;flex:none;transform-origin:35% center}.world-wrap{min-height:320px}.world-hint{display:flex;left:10px;bottom:7px;font-size:9px;padding:6px 8px;max-width:90%;opacity:.9}}
-</style></head><body><h1>MERCY · LAPORAN FOLLOW UP</h1><p>${E(date)} &nbsp; | &nbsp; ${rows.length} PO &nbsp; | &nbsp; ${urgent} perlu follow up 30+</p><table><thead><tr><th>TGL</th><th>PABRIK</th><th>DESAIN</th><th>WARNA</th><th>QTY</th><th>PELANGGAN</th><th>BARANG DATANG</th><th>KODE</th><th>NOMOR PO</th><th>STATUS</th><th>USIA</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${E(r.tgl)}</td><td>${E(r.pabrik)}</td><td>${E(r.design)}</td><td>${E(r.warna)}</td><td>${r.qty===null?'—':fmt(r.qty)}</td><td>${E(r.customer)}</td><td>${E(r.barangDatang)}</td><td>${E(r.kode)}</td><td>${E(r.nomorPo)}</td><td>${E(r.status)}</td><td>${isArrived(r)?'Datang':isPending(r)?age(r)+' hari':'Batal'}</td></tr>`).join('')}</tbody></table></body></html>`;
- popup.document.open();popup.document.write(html);popup.document.close();popup.focus();setTimeout(()=>popup.print(),350);}
+function printReport(){
+ const rows=exportRows();if(!rows)return;
+ if(!rows.length){toast('Tidak ada PO sesuai pilihan filter. Ubah filter sebelum mencetak.','error');return;}
+ const isReport=state.page==='reports', isFollow=state.page==='followup';
+ const title=isReport?'LAPORAN PRODUKSI':isFollow?'LAPORAN FOLLOW UP':'LAPORAN PO';
+ const date=new Date().toLocaleDateString('id-ID',{timeZone:'Asia/Jakarta',day:'numeric',month:'long',year:'numeric'});
+ const urgent=rows.filter(r=>isPending(r)&&age(r)>=30).length;
+ const qty=rows.reduce((n,r)=>n+(r.qty||0),0),arrived=rows.filter(isArrived).length;
+ const detail=isReport?reportFilterDescription():isFollow?'Pabrik: '+(state.followFactory==='ALL'?'Semua pabrik':state.followFactory)+' | Belum datang / belum batal':'Mengikuti filter tampilan';
+ const popup=window.open('','_blank');if(!popup){toast('Izinkan pop-up browser untuk membuka halaman cetak PDF.','error');return;}
+ const html=`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MERCY ${E(title)} — ${E(date)}</title><style>
+ *{box-sizing:border-box}body{font:11px Arial,sans-serif;padding:0;color:#20263c;margin:0;background:white}h1{font-size:22px;margin:0 0 5px;letter-spacing:-.6px}h1 span{color:#7257e9}.top{border-bottom:2px solid #8170e6;padding-bottom:12px;margin-bottom:14px}.sub{color:#66708a;font-size:10px;line-height:1.6;margin:4px 0}.metrics{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0}.metric{border:1px solid #e0e3eb;background:#f7f7ff;border-radius:6px;padding:9px 12px;min-width:100px}.metric b{display:block;font-size:16px;margin-top:3px}.metric small{font-size:9px;color:#64718b}table{border-collapse:collapse;width:100%;table-layout:fixed;font-size:9px;margin-top:15px}th,td{border:1px solid #d9dee8;padding:6px 5px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f0effb;color:#313d57}thead{display:table-header-group}tr{break-inside:avoid}tbody tr:nth-child(even){background:#fafafe}.bottom{color:#94a0b4;font-size:9px;margin-top:12px}.no{width:3%}.tgl{width:8%}.pabrik{width:7%}.desain{width:17%}.warna{width:9%}.qty{width:6%}.pelanggan{width:11%}.datang{width:9%}.kode{width:8%}.po{width:10%}.status{width:9%}.usia{width:8%}@page{size:A4 landscape;margin:11mm}
+ </style></head><body><div class="top"><h1>MERCY <span>· ${E(title)}</span></h1><div class="sub">Dicetak ${E(date)}</div><div class="sub">${E(detail)}</div></div><div class="metrics"><div class="metric"><small>Total PO</small><b>${fmt(rows.length)}</b></div><div class="metric"><small>Total QTY</small><b>${fmt(qty)} pcs</b></div><div class="metric"><small>Sudah datang</small><b>${fmt(arrived)}</b></div><div class="metric"><small>Follow up 30+</small><b>${fmt(urgent)}</b></div></div><table><thead><tr><th class="no">#</th><th class="tgl">TGL</th><th class="pabrik">PABRIK</th><th class="desain">DESAIN</th><th class="warna">WARNA</th><th class="qty">QTY</th><th class="pelanggan">PELANGGAN</th><th class="datang">BARANG DATANG</th><th class="kode">KODE</th><th class="po">NOMOR PO</th><th class="status">STATUS</th><th class="usia">USIA</th></tr></thead><tbody>${rows.map((r,i)=>`<tr><td>${i+1}</td><td>${E(r.tgl)}</td><td>${E(r.pabrik)}</td><td>${E(r.design)}</td><td>${E(r.warna)}</td><td>${r.qty===null?'—':fmt(r.qty)}</td><td>${E(r.customer)}</td><td>${E(r.barangDatang)}</td><td>${E(r.kode)}</td><td>${E(r.nomorPo)}</td><td>${E(reportStatusLabel(r.status))}</td><td>${isArrived(r)?'Datang':isPending(r)?age(r)+' hari':'Batal'}</td></tr>`).join('')}</tbody></table><div class="bottom">MERCY Studio · Data sumber: mercy_orders · ${fmt(rows.length)} baris sesuai pilihan laporan</div></body></html>`;
+ popup.document.open();popup.document.write(html);popup.document.close();popup.focus();setTimeout(()=>popup.print(),350);
+}
 function errorText(err){let str=String(err?.message||err||'Kesalahan tidak diketahui');if(str.includes('permission-denied'))return 'Akses ditolak oleh aturan Firebase. Gunakan akun Google admin.';if(str.includes('unauthorized-domain'))return 'Domain ini belum diizinkan untuk login Firebase. Gunakan alamat GitHub Pages yang sudah diotorisasi.';return str.slice(0,220);}
 async function connectFirebase(){state.error='';render();try{const base='https://www.gstatic.com/firebasejs/13.0.0/';const [fbapp,fbauth,fs]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
  const app=fbapp.getApps().find(a=>a.name==='mercy-live')||fbapp.initializeApp(CONFIG.firebase,'mercy-live');const db=fs.getFirestore(app),auth=fbauth.getAuth(app);
@@ -466,7 +549,7 @@ async function connectFirebase(){state.error='';render();try{const base='https:/
  }catch(err){state.error=errorText(err);state.ready=false;render();toast('Koneksi gagal: '+errorText(err),'error');}}
 async function login(){if(!cloud){toast('Firebase belum siap.','error');return;}try{if(state.user){await cloud.fbauth.signOut(cloud.auth);toast('Berhasil keluar dari akun.');}else{await cloud.fbauth.signInWithPopup(cloud.auth,new cloud.fbauth.GoogleAuthProvider());if(!state.admin)toast('Login selesai. Hanya akun admin yang dapat mengedit.');}}catch(err){toast('Login gagal: '+errorText(err),'error');}}
 function rerenderAfterFilter(e){let id=e.target.dataset.filter,v=e.target.value;if(!id)return;
- if(['motifQuery','poQuery','motifFactory','motifImageFilter','poFactory','followFactory','reportFactory'].includes(id)){state[id]=v;if(id==='poQuery'||id==='poFactory')state.poPage=1;render({keepFocus:e.type==='input'});}}
+ if(['motifQuery','poQuery','motifFactory','motifImageFilter','poFactory','followFactory','reportFactory','reportQuery','reportMonth','reportArrival'].includes(id)){state[id]=v;if(id==='poQuery'||id==='poFactory')state.poPage=1;if(['reportFactory','reportQuery','reportMonth','reportArrival'].includes(id))state.reportPage=1;render({keepFocus:e.type==='input'});}}
 function selectMotif(id,showPanel=true){
  const m=state.motifs.find(x=>x.id===id);if(!m)return;
  state.selected=id;
@@ -511,6 +594,19 @@ root.addEventListener('click',async event=>{const element=event.target.closest('
  if(act==='motif-step'){const seq=activeMotifs(),current=seq.findIndex(m=>m.id===state.modal?.id);if(!seq.length)return;const offset=Number(id)||1;const next=seq[(current+offset+seq.length)%seq.length];selectMotif(next.id,false);openModal('image-detail',next.id);return;}
  if(act==='remove-photo'){removePhoto(id);return;}
  if(act==='toggle-status'){state.poStatuses=state.poStatuses.includes(id)?state.poStatuses.filter(s=>s!==id):[...state.poStatuses,id];state.poPage=1;render();return;}
+ if(act==='report-preset'){
+  state.reportStatuses=id==='ACC'?['ACC']:id==='REPEAT'?['REPEAT']:id==='ACC_REPEAT'?['ACC','REPEAT']:[];
+  state.reportPage=1;render();return;
+ }
+ if(act==='toggle-report-status'){
+  state.reportStatuses=state.reportStatuses.includes(id)?state.reportStatuses.filter(s=>s!==id):[...state.reportStatuses,id];
+  state.reportPage=1;render();return;
+ }
+ if(act==='reset-report'){
+  state.reportFactory='ALL';state.reportMonth='';state.reportQuery='';state.reportArrival='ALL';state.reportStatuses=[];state.reportPage=1;render();return;
+ }
+ if(act==='prev-report-page'){state.reportPage=Math.max(1,state.reportPage-1);render();return;}
+ if(act==='next-report-page'){state.reportPage++;render();return;}
  if(act==='reset-filters'){state.poStatuses=[];state.poQuery='';state.poFactory='ALL';state.poMonth='';state.poPage=1;render();return;}
  if(act==='prev-page'){state.poPage=Math.max(1,state.poPage-1);render();return;}
  if(act==='next-page'){state.poPage++;render();return;}
@@ -532,7 +628,7 @@ root.addEventListener('click',async event=>{const element=event.target.closest('
  if(act==='factory-fullscreen'){const el=document.getElementById('animated-factory');if(!el){navigate('factories');return;}if(document.fullscreenElement)document.exitFullscreen?.();else el.requestFullscreen?.().catch(()=>toast('Layar penuh tidak didukung browser ini.','error'));return;}
  if(act==='toggle-all-motion'){document.body.classList.toggle('motion-off');const off=document.body.classList.contains('motion-off');const scene=root.querySelector('.world-svg');try{if(off)scene?.pauseAnimations();else if(!state.scenePaused)scene?.unpauseAnimations();}catch(e){}const b=root.querySelector('[data-action=toggle-all-motion]');if(b)b.title=off?'Hidupkan animasi':'Matikan animasi';toast(off?'Animasi dijeda.':'Animasi diaktifkan.');return;}
 });
-root.addEventListener('input',event=>{if(event.target.dataset.commandQuery!==undefined){const list=root.querySelector('#command-results');if(list)list.innerHTML=commandResults(event.target.value);return;}if(event.target.dataset.filter&&['motifQuery','poQuery'].includes(event.target.dataset.filter))rerenderAfterFilter(event);});
+root.addEventListener('input',event=>{if(event.target.dataset.commandQuery!==undefined){const list=root.querySelector('#command-results');if(list)list.innerHTML=commandResults(event.target.value);return;}if(event.target.dataset.filter&&['motifQuery','poQuery','reportQuery'].includes(event.target.dataset.filter))rerenderAfterFilter(event);});
 root.addEventListener('change',async event=>{
  const target=event.target;
  if(target.dataset.filter){rerenderAfterFilter(event);return;}
