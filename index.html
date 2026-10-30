@@ -279,9 +279,56 @@ const state = {
   importRows:null, imageMode:'file', quickPhotoFor:null
 };
 function nowID(){return new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Jakarta'});}
-function dateISO(v){if(!v)return '';let s=String(v).trim();if(/^\d{4}-\d{2}-\d{2}$/.test(s))return s;
-  let m=s.match(/^(\d{4})[/-](\d{1,2})[/-](\d{1,2})/);if(m)return m[1]+'-'+m[2].padStart(2,'0')+'-'+m[3].padStart(2,'0');
-  m=s.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/);if(m)return m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0');return '';
+function dateISO(v) {
+  if (v === null || v === undefined || v === '') return '';
+  const text = String(v).normalize('NFKC')
+    .replace(/[\u200B-\u200D\uFEFF]/g, '')
+    .trim().toUpperCase()
+    .replace(/^[\s✅✓✔☑\uFE0E\uFE0F]+|[\s✅✓✔☑\uFE0E\uFE0F]+$/g, '')
+    .replace(/\s+/g, ' ').trim();
+  if (!text) return '';
+
+  // A two-digit year belongs to 2000–2099 for these production records.
+  function validISO(year, month, day) {
+    year = String(year).length === 2 ? 2000 + Number(year) : Number(year);
+    month = Number(month);
+    day = Number(day);
+    if (!Number.isInteger(year) || year < 1000 || year > 9999 ||
+        !Number.isInteger(month) || month < 1 || month > 12 ||
+        !Number.isInteger(day) || day < 1 || day > 31) return '';
+    const check = new Date(Date.UTC(year, month - 1, day));
+    if (check.getUTCFullYear() !== year || check.getUTCMonth() !== month - 1 ||
+        check.getUTCDate() !== day) return '';
+    return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  }
+
+  // Keep the numeric formats already used by the app and date inputs.
+  let match = text.match(/^(\d{4})([-/])(\d{1,2})\2(\d{1,2})(?:[T ](?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d{1,9})?)?(?:Z|[+-](?:[01]\d|2[0-3]):?[0-5]\d)?)?$/);
+  if (match) return validISO(match[1], match[3], match[4]);
+  match = text.match(/^(\d{1,2})([-/])(\d{1,2})\2(\d{4}|\d{2})$/);
+  if (match) return validISO(match[4], match[3], match[1]);
+
+  // Legacy values include "✅ 06 OKT 26", "11 AGS 26", and "4 JUL 26".
+  const months = {
+    JAN: 1, JANUARI: 1, JANUARY: 1,
+    FEB: 2, FEBRUARI: 2, FEBRUARY: 2,
+    MAR: 3, MARET: 3, MARCH: 3,
+    APR: 4, APRIL: 4,
+    MEI: 5, MAY: 5,
+    JUN: 6, JUNI: 6, JUNE: 6,
+    JUL: 7, JULI: 7, JULY: 7,
+    AGS: 8, AGT: 8, AGU: 8, AGST: 8, AGUST: 8, AGUSTUS: 8, AUG: 8, AUGUST: 8,
+    SEP: 9, SEPT: 9, SEPTEMBER: 9,
+    OKT: 10, OKTOBER: 10, OCT: 10, OCTOBER: 10,
+    NOV: 11, NOVEMBER: 11,
+    DES: 12, DESEMBER: 12, DEC: 12, DECEMBER: 12
+  };
+  match = text.match(/^(\d{1,2})[\s./-]*([A-Z]+)\.?[\s./-]*(\d{4}|\d{2})$/);
+  if (match && Object.prototype.hasOwnProperty.call(months, match[2])) {
+    return validISO(match[3], months[match[2]], match[1]);
+  }
+  // Unknown/partial-delivery notes (including SISA 100) are NOT full arrival dates.
+  return '';
 }
 function dateText(v){let d=dateISO(v);if(!d)return '—';return new Date(d+'T12:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});}
 function num(v){if(v===null||v===undefined||String(v).trim()==='')return null;if(typeof v==='number')return Number.isFinite(v)?v:null;
