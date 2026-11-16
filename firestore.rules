@@ -4,12 +4,11 @@ service cloud.firestore {
     function isAdmin() {
       return request.auth != null
         && request.auth.token.email_verified == true
-        && request.auth.token.email == "nuryads701@gmail.com";
+        // Tambahkan email-email lain di dalam daftar array ini
+        && request.auth.token.email in ["nuryads701@gmail.com", "adminmercy01@gmail.com"];
     }
     match /mercy_orders/{poId} {
-      // Siapa pun yang membuka dashboard dapat melihat data MERCY.
       allow read: if true;
-      // Hanya akun Google admin yang boleh membuat, mengubah, atau menghapus PO.
       allow create, update, delete: if isAdmin();
     }
     match /{document=**} {
