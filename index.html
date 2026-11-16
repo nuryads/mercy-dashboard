@@ -229,7 +229,10 @@ const CONFIG = {
     messagingSenderId: '93407858743',
     appId: '1:93407858743:web:5d852eeecb30c8035f2fb2'
   },
-  adminEmail: 'nuryads701@gmail.com'
+  adminEmails: [
+    'nuryads701@gmail.com',
+    'adminmercy01@gmail.com'
+  ]
 };
 const E = s => String(s ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt = n => new Intl.NumberFormat('id-ID').format(Number(n)||0);
@@ -591,7 +594,15 @@ function errorText(err){let str=String(err?.message||err||'Kesalahan tidak diket
 async function connectFirebase(){state.error='';render();try{const base='https://www.gstatic.com/firebasejs/13.0.0/';const [fbapp,fbauth,fs]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
  const app=fbapp.getApps().find(a=>a.name==='mercy-live')||fbapp.initializeApp(CONFIG.firebase,'mercy-live');const db=fs.getFirestore(app),auth=fbauth.getAuth(app);
  cloud={app,db,auth,fs,fbauth};
- fbauth.onAuthStateChanged(auth,user=>{state.user=user;state.admin=!!(user?.emailVerified&&String(user.email||'').toLowerCase()===CONFIG.adminEmail.toLowerCase());renderSafe();},err=>{state.error='Autentikasi: '+errorText(err);renderSafe();});
+ fbauth.onAuthStateChanged(auth,user=>{
+  state.user=user;
+  const email=String(user?.email||'').trim().toLowerCase();
+  const adminEmails=(Array.isArray(CONFIG.adminEmails)?CONFIG.adminEmails:[CONFIG.adminEmail])
+    .map(value=>String(value||'').trim().toLowerCase())
+    .filter(Boolean);
+  state.admin=!!(user?.emailVerified&&adminEmails.includes(email));
+  renderSafe();
+ },err=>{state.error='Autentikasi: '+errorText(err);renderSafe();});
  fs.onSnapshot(fs.collection(db,'mercy_orders'),{includeMetadataChanges:true},snapshot=>{state.rows=snapshot.docs.map(doc=>normalize({id:doc.id,...doc.data()}));state.cache=snapshot.metadata.fromCache;state.pending=snapshot.metadata.hasPendingWrites;state.ready=true;state.error='';rebuildMotifs();renderSafe();},err=>{state.ready=false;state.error=errorText(err);renderSafe();toast('Firebase: '+errorText(err),'error');});
  }catch(err){state.error=errorText(err);state.ready=false;render();toast('Koneksi gagal: '+errorText(err),'error');}}
 async function login(){if(!cloud){toast('Firebase belum siap.','error');return;}try{if(state.user){await cloud.fbauth.signOut(cloud.auth);toast('Berhasil keluar dari akun.');}else{await cloud.fbauth.signInWithPopup(cloud.auth,new cloud.fbauth.GoogleAuthProvider());if(!state.admin)toast('Login selesai. Hanya akun admin yang dapat mengedit.');}}catch(err){toast('Login gagal: '+errorText(err),'error');}}
