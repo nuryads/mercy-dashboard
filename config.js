@@ -11,5 +11,8 @@ window.MERCY_CONFIG = {
     appId: "1:93407858743:web:5d852eeecb30c8035f2fb2",
     measurementId: "G-LZDF4HZCJ7"
   },
-  adminEmail: "nuryads701@gmail.com"
+  adminEmails: [
+  "nuryads701@gmail.com",
+  "email-akun-lain@gmail.com"
+]
 };
